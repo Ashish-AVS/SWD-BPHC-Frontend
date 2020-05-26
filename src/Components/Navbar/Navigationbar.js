@@ -1,24 +1,26 @@
 import React from 'react';
-import {Nav, Navbar} from 'react-bootstrap';
+import {Nav, Navbar,NavDropdown} from 'react-bootstrap';
+
 
 const Navigationbar=()=>{
 return(
-     <Navbar bg="dark">
-         <NavbarBrand href="/" >SWD</NavbarBrand>
-         <NavbarToggle aria-controls="basic-navbar-nav"></NavbarToggle>
-         <NavbarCollapse id="basic-navbar-nav">
-             <Nav className="ml-auto">
-                 <NavItem><NavLink href='#'>Documents</NavLink></NavItem>
-                 <NavItem><NavLink href='#'>Scholarship</NavLink></NavItem>
-                 <NavDropdown title="Complaints" id="basic-nav-dropdown">
-                     <NavDropdown.Item href="#">Maintenance Complaint</NavDropdown.Item>
+     <Navbar expand='md' className="navbar navbar-fixed-top" style={{backgroundColor:"#2c3e50"}}>
+         <Navbar.Brand style={{fontSize:25,color:'#ffffff'}} href="/" ><b>SWD</b></Navbar.Brand>
+         <Navbar.Toggle aria-controls="basic-navbar-nav"></Navbar.Toggle>
+         <Navbar.Collapse id="basic-navbar-nav">
+             <Nav style={{fontSize:18,fontWeight: 500}} className="m-3 ml-auto">
+                 <Nav.Item ><Nav.Link style={{color:'#ffffff'}}href='#'>Documents</Nav.Link></Nav.Item>
+                 <Nav.Item><Nav.Link style={{color:'#ffffff'}} href='#'>Scholarship</Nav.Link></Nav.Item>
+                 <NavDropdown style={{color:'#ffffff'}} title="Complaints" id="basic-nav-dropdown">
+                     <NavDropdown.Item style={{fontSize:15,padding:7}} href="#">Maintenance Complaint</NavDropdown.Item>
                  </NavDropdown>
-                 <NavDropdown title="Registrations" id="basic-nav-dropdown">
-                     <NavDropdown.Item href="#">Grace</NavDropdown.Item>
+                 <NavDropdown style={{color:'#ffffff'}} title="Registrations" id="basic-nav-dropdown">
+                     <NavDropdown.Item style={{fontSize:15,padding:7}} href="#">Grace</NavDropdown.Item>
                  </NavDropdown>
-                 <NavItem><NavLink href='#'>Edit</NavLink></NavItem>
+                 <Nav.Item><Nav.Link style={{color:'#ffffff'}} href='#'>Edit</Nav.Link></Nav.Item>
+                 <Nav.Item className="ml-3 mt-2 "><span style={{color:'#ffffff'}} className="glyphicon glyphicon-off"></span>&nbsp;&nbsp;&nbsp;&nbsp;</Nav.Item>
              </Nav>
-         </NavbarCollapse>
+         </Navbar.Collapse>
      </Navbar>
     );
 }
