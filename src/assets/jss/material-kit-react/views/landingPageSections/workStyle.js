@@ -13,8 +13,9 @@ const workStyle = {
     textAlign: "center"
   },
   description: {
-    color: "#999",
-    textAlign: "center"
+    color: "rgb(13, 39, 74)",
+    textAlign: "justify",
+    textJustify: "inter-word"
   },
   textCenter: {
     textAlign: "center"
