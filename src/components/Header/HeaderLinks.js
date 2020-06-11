@@ -221,8 +221,8 @@ export default function HeaderLinks(props) {
         
           <Button
             color="transparent"
-            href="#"
-            target="_blank"
+            href="/official"
+            
             className={classes.navLink}
           >
             {"For Officials"}
@@ -246,8 +246,8 @@ export default function HeaderLinks(props) {
           <Button
             color="info"
             round
-            href="#"
-            target="_blank"
+            href="/login-page"
+            
             className={classes.navLink}
           >
            <VpnKeyIcon className={classes.icons} /> {"Login"}
