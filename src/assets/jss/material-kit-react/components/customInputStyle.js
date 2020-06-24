@@ -56,6 +56,17 @@ const customInputStyle = {
   labelRootSuccess: {
     color: successColor + " !important"
   },
+  feedback: {
+    position: "absolute",
+    top: "18px",
+    right: "0",
+    zIndex: "2",
+    display: "block",
+    width: "24px",
+    height: "24px",
+    textAlign: "center",
+    pointerEvents: "none"
+  },
   formControl: {
     margin: "0 0 17px 0",
     paddingTop: "27px",

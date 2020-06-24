@@ -13,8 +13,8 @@ import People from "@material-ui/icons/People";
 //import Header from "components/Header/Header.js";
 //import HeaderLinks from "components/Header/HeaderLinks.js";
 import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer0.js";
+import GridItem from "components/Grid/GridItem0.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -57,7 +57,7 @@ export default function Official(props) {
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
+                  <CardHeader color="info" className={classes.cardHeader}>
                     <h4><strong>Official Login</strong></h4>
                     {/*<div className={classes.socialLine}>
                       <Button
@@ -141,7 +141,7 @@ export default function Official(props) {
                     />
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button round color="primary" size="lg">
+                    <Button round color="info" size="lg">
                      Login
                     </Button>
                   </CardFooter>

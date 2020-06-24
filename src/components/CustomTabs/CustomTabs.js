@@ -39,8 +39,11 @@ export default function CustomTabs(props) {
           onChange={handleChange}
           classes={{
             root: classes.tabsRoot,
-            indicator: classes.displayNone
+            indicator: classes.displayNone,
+            scrollButtons: classes.displayNone
           }}
+          variant="scrollable"
+          scrollButtons="auto"
         >
           {tabs.map((prop, key) => {
             var icon = {};

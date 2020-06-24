@@ -10,8 +10,8 @@ import People from "@material-ui/icons/People";
 //import Header from "components/Header/Header.js";
 //import HeaderLinks from "components/Header/HeaderLinks.js";
 import Footer from "components/Footer/Footer.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer0.js";
+import GridItem from "components/Grid/GridItem0.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -54,8 +54,8 @@ export default function LoginPage(props) {
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4><strong>Student Login</strong></h4>
+                  <CardHeader color="rose" className={classes.cardHeader}>
+                    <h4><strong>STUDENT LOGIN</strong></h4>
                     {/*<div className={classes.socialLine}>
                       <Button
                         justIcon
@@ -89,7 +89,8 @@ export default function LoginPage(props) {
                   {/*<p className={classes.divider}>Or Be Classical</p>*/}
                   <CardBody>
                     <CustomInput
-                      labelText="f20XXXXXX"
+                      labelText="Username"
+                      placeholder="f201XXXXX"
                       id="first"
                       formControlProps={{
                         fullWidth: true
@@ -138,16 +139,23 @@ export default function LoginPage(props) {
                     />
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button round color="primary" size="lg">
-                     Login
-                    </Button>
+                    <GridContainer direction="column" justify="center" alignItems="center">
+                      <GridItem>
+                      <Button round color="rose" size="lg" href="/admin">
+                             Login
+                      </Button>
+                      </GridItem>
+                      <GridItem>
+                    <a href="#"><h6>Forgot Password? </h6></a>
+                    </GridItem>
+                    </GridContainer>
                   </CardFooter>
                 </form>
               </Card>
             </GridItem>
           </GridContainer>
         </div>
-        <Footer whiteFont />
+        
       </div>
     </div>
   );
