@@ -197,5 +197,31 @@ material-kit-react
 
 ## SWD WEBSITE FRONTEND
     Here are certain Screenshots of the SWD-Bphc Website
+  
+  ![Landing Page](Screenshots/LandingPage.JPG)
+
+![Login Page](Screenshots/LogingPage.JPG)
 
 
+![Dashboard](Screenshots/Dashboard-1.JPG)
+![](Screenshots/Dashboard2.JPG)
+
+![Student Profile](Screenshots/StudentProfile.JPG)
+
+![Connect](Screenshots/Connect.JPG)
+
+![Documents](Screenshots/Documents.JPG)
+
+![Goodies](Screenshots/Goodies.JPG)
+
+![Deductions](Screenshots/Deductions.JPG)
+
+![Scholarship](Screenshots/Scholarship.JPG)
+
+![Medical Insurance Claim](Screenshots/Medical.JPG)
+
+![Achievements](Screenshots/Award.JPG)
+
+
+
+  
