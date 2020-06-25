@@ -127,7 +127,7 @@ Within the download you'll find the following directories and files:
   
   ![Landing Page](Screenshots/LandingPage.JPG)
 
-![Login Page](Screenshots/LogingPage.JPG)
+![Login Page](Screenshots/LoginPage.JPG)
 
 
 ![Dashboard](Screenshots/Dashboard-1.JPG)
