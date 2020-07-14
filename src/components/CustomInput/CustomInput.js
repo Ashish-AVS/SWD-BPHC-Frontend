@@ -22,6 +22,7 @@ export default function CustomInput(props) {
   const {
     formControlProps,
     labelText,
+    onChange,
     id,
     helperText,
     labelProps,
@@ -77,6 +78,7 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
+        onChange={onChange}
         {...inputProps}
       />
       <FormHelperText>{helperText}</FormHelperText>

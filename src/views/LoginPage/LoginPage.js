@@ -1,4 +1,5 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
+import {Link} from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -9,7 +10,7 @@ import People from "@material-ui/icons/People";
 // core components
 //import Header from "components/Header/Header.js";
 //import HeaderLinks from "components/Header/HeaderLinks.js";
-import Footer from "components/Footer/Footer.js";
+
 import GridContainer from "components/Grid/GridContainer0.js";
 import GridItem from "components/Grid/GridItem0.js";
 import Button from "components/CustomButtons/Button.js";
@@ -18,6 +19,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import { useAuth } from "context/auth";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
@@ -27,11 +29,70 @@ const useStyles = makeStyles(styles);
 
 export default function LoginPage(props) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const { setAuthTokens } = useAuth();
+  const [uid,setUid]= React.useState('Hi');
+  const [pwd,setPwd]=React.useState('Hi');
+  const [user,logUser]=React.useState({
+    name:'',
+    id:'',
+    token:''
+  })
+ useEffect(()=>{
+ 
+ });
+
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
-  const { ...rest } = props;
+  
+
+ function onUidChange(e){
+  setUid(e.target.value);
+ }
+
+ function onPwdChange(e){
+  setPwd(e.target.value);
+ }
+
+ function onSubmit(){
+  fetch("http://localhost:9000/api/auth",{
+    method:"post",
+    headers:{'Content-Type':"application/json"},
+    body:JSON.stringify({
+      uid:uid,
+      password:pwd
+    })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.token){
+     localStorage.removeItem("tokens");
+     setAuthTokens(data.token);
+     logUser({
+      id:data.id,
+      name:data.name,
+      token:data.token});}
+    if(user.token)
+     setLoggedIn(true);
+     
+  })
+  .catch(e=>{
+    setIsError(true);
+  })
+  if(isLoggedIn){  
+  console.log("hi");
+  props.history.push("/admin");
+ }
+  else {
+    console.log(isError);
+  console.log("Can't Login");
+ }
+ }
+ 
+
   return (
     <div>
      {/* <Header
@@ -89,6 +150,7 @@ export default function LoginPage(props) {
                   {/*<p className={classes.divider}>Or Be Classical</p>*/}
                   <CardBody>
                     <CustomInput
+                      onChange={onUidChange}
                       labelText="Username"
                       placeholder="f201XXXXX"
                       id="first"
@@ -122,6 +184,7 @@ export default function LoginPage(props) {
                     <CustomInput
                       labelText="Password"
                       id="pass"
+                      onChange={onPwdChange}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -141,12 +204,12 @@ export default function LoginPage(props) {
                   <CardFooter className={classes.cardFooter}>
                     <GridContainer direction="column" justify="center" alignItems="center">
                       <GridItem>
-                      <Button round color="rose" size="lg" href="/admin">
+                      <Button onClick={onSubmit} round color="rose" size="lg" >
                              Login
                       </Button>
                       </GridItem>
                       <GridItem>
-                    <a href="#"><h6>Forgot Password? </h6></a>
+                    <Link href="#" ><h6>Forgot Password? </h6></Link>
                     </GridItem>
                     </GridContainer>
                   </CardFooter>

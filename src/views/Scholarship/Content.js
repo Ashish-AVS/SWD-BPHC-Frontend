@@ -3,13 +3,9 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter";
 import Button from "components/CustomButtons/Button.js";
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
 
 const styles = {
   typo: {
