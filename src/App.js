@@ -6,7 +6,7 @@ import "assets/scss/material-kit-react.scss?v=1.9.0";
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 // Routing
 import PrivateRoute from './PrivateRoute';
-import { AuthContext } from "./context/auth";
+import { AuthContextProvider } from "./context/auth";
 
 // pages for this product
 import Components from "views/Components/Components.js";
@@ -20,19 +20,21 @@ export default function App(props){
 var hist = createBrowserHistory();
 
 
-const existingTokens = JSON.parse(localStorage.getItem("tokens"));
-const [authTokens, setAuthTokens] = useState(existingTokens);
+//const existingTokens = JSON.parse(localStorage.getItem("tokens"));
+//const [authTokens, setAuthTokens] = useState();
   
-const setTokens = (data) => {
-    localStorage.setItem("tokens", JSON.stringify(data));
-    setAuthTokens(data);
-  }
-
-
+//const setTokens = (data) => {
+   // localStorage.setItem("tokens",data);
+    //setAuthTokens(data);
+  //}
+  //const setUserName = (data) => {
+    //localStorage.setItem("name",data);    
+  //}
+  
 
 return(
-        <AuthContext.Provider value={{authTokens,setAuthTokens:setTokens}}>
-            <Router history={hist}>
+        <AuthContextProvider>
+            <Router history={hist} >
               <Switch>
                 <Route path="/landing-page" component={LandingPage} />
                 <Route path="/profile-page" component={ProfilePage} />
@@ -42,7 +44,7 @@ return(
                 <Route path="/" component={Components} />
               </Switch>
             </Router>
-        </AuthContext.Provider>
+        </AuthContextProvider>
 
     );
 }

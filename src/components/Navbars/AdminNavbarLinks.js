@@ -37,7 +37,10 @@ export default function AdminNavbarLinks(props) {
     setOpenProfile(null);
   };
   const logout=()=>{
-    localStorage.removeItem("tokens")
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("name");
+    localStorage.removeItem("id");
+    localStorage.removeItem("uid");
     console.log("Hiaa");
     return (<Redirect exact to='/login-page' />);
   }
@@ -80,7 +83,7 @@ export default function AdminNavbarLinks(props) {
               }}
             >
               <Paper>
-                <ClickAwayListener onClickAway={handleCloseProfile}>
+                <ClickAwayListener onClickAway={logout}>
                   <MenuList role="menu">
                     {/*<MenuItem
                       onClick={handleCloseProfile}
@@ -96,7 +99,7 @@ export default function AdminNavbarLinks(props) {
                     </MenuItem>
                     <Divider light />*/}
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={logout}
                       className={classes.dropdownItem}
                     >
                       Logout

@@ -4,6 +4,7 @@ import {
   grayColor,
   hexToRgb
 } from "assets/jss/material-dashboard-react.js";
+import modalStyle from "assets/jss/material-kit-react/modalStyle.js";
 
 const dashboardStyle = {
   successText: {
@@ -108,6 +109,7 @@ const dashboardStyle = {
       lineHeight: "1"
     }
   },
+  ...modalStyle,
   cardTitleWhite: {
     color: whiteColor,
     marginTop: "0px",

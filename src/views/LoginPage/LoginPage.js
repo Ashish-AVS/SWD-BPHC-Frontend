@@ -27,37 +27,91 @@ import image from "assets/img/bgimg.jpg";
 
 const useStyles = makeStyles(styles);
 
-export default function LoginPage(props) {
-  const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const { setAuthTokens } = useAuth();
-  const [uid,setUid]= React.useState('Hi');
-  const [pwd,setPwd]=React.useState('Hi');
-  const [user,logUser]=React.useState({
-    name:'',
-    id:'',
-    token:''
-  })
- useEffect(()=>{
- 
- });
+let data={
+  name:'',
+  id:'',
+  uid:'',
+  isComplete:''}
 
-  setTimeout(function() {
+export default function LoginPage(props) {
+  let fetching=false;
+  const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  const {authTokens,onLogin} = useAuth();
+  const [isLoggingIn, setLoggingIn]=useState(false);
+  const [isLoggedIn, setLoggedIn]=useState(false);
+  const [isError, setIsError] = useState(false);
+  //const { setTokens,setUser } = useAuth();
+  const [uid,setUid]= React.useState();
+  const [pwd,setPwd]=React.useState();
+  
+ useEffect(()=>{
+   if(isLoggingIn){  
+    console.log("hi1");
+   fetchData(); 
+    return (()=>{
+
+      setLoggingIn(false);
+    })
+    
+   }
+ },[isLoggingIn,setLoggingIn]);
+
+ useEffect(()=>{
+  console.log(authTokens);
+   if(isLoggedIn===true){
+    localStorage.setItem("tokens",JSON.stringify(authTokens)); 
+    localStorage.setItem("data",JSON.stringify(data));
+    console.log("hi2");
+    
+    props.history.push("/admin/dashboard"); 
+   }
+ },[isLoggedIn])
+ 
+const fetchData= async ()=>{  
+  try{  
+  const result= await fetch("http://localhost:9000/api/auth",{
+       method:"post",
+       headers:{'Content-Type':"application/json"},
+       body:JSON.stringify({
+         uid:uid,
+         password:pwd
+      })      
+    })
+    const res =await result.json();
+    if(res.token){ 
+       onLogin(res.token); 
+       data.name=res.name;
+       data.id=res.id;
+       data.isComplete=res.isComplete;
+       data.uid=uid;
+
+       setLoggedIn(true);
+      }      
+    }catch(err){
+      
+      console.log(err)
+    }
+   }
+ setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
   
 
- function onUidChange(e){
-  setUid(e.target.value);
- }
+ //function onUidChange(e){
+  //setUid(e.target.value);
+  //console.log(uid);
+ //}
 
  function onPwdChange(e){
   setPwd(e.target.value);
  }
 
  function onSubmit(){
+ 
+  /* localStorage.removeItem("token");
+  localStorage.removeItem("id");
+  localStorage.removeItem("name");
   fetch("http://localhost:9000/api/auth",{
     method:"post",
     headers:{'Content-Type':"application/json"},
@@ -69,28 +123,22 @@ export default function LoginPage(props) {
   .then(res=>res.json())
   .then(data=>{
     if(data.token){
-     localStorage.removeItem("tokens");
-     setAuthTokens(data.token);
-     logUser({
-      id:data.id,
-      name:data.name,
-      token:data.token});}
-    if(user.token)
-     setLoggedIn(true);
      
-  })
+     setUser("name",data.name);
+     setLoggedIn(true);
+     setTokens(data.token);
+  }})
   .catch(e=>{
     setIsError(true);
-  })
-  if(isLoggedIn){  
-  console.log("hi");
-  props.history.push("/admin");
- }
-  else {
-    console.log(isError);
-  console.log("Can't Login");
- }
- }
+  })*/
+    
+  //setLoggedIn(true);
+  console.log("last main yaahan");
+  
+    setLoggingIn(true);
+   
+    
+  }
  
 
   return (
@@ -117,40 +165,13 @@ export default function LoginPage(props) {
                 <form className={classes.form}>
                   <CardHeader color="rose" className={classes.cardHeader}>
                     <h4><strong>STUDENT LOGIN</strong></h4>
-                    {/*<div className={classes.socialLine}>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-google-plus-g"} />
-                      </Button>
-                      </div> */}
                   </CardHeader>
                   {/*<p className={classes.divider}>Or Be Classical</p>*/}
                   <CardBody>
                     <CustomInput
-                      onChange={onUidChange}
+                      onChange={(e)=>{
+                        setUid(e.target.value);
+                        }}
                       labelText="Username"
                       placeholder="f201XXXXX"
                       id="first"
