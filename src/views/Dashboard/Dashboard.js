@@ -2,18 +2,12 @@ import React from "react";
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
 import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 
 // @material-ui/icons
 import InfoIcon from '@material-ui/icons/Info';
 import Restaurant from "@material-ui/icons/Restaurant";
 import EventNoteIcon from '@material-ui/icons/EventNote';
-import Close from "@material-ui/icons/Close";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -23,12 +17,13 @@ import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
-import CardBody from "components/Card/CardBody.js";
+//import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
-import Table from "components/Table/Table";
 
-
+import GraceModal from "views/Modals/GraceModal";
+import ComplaintsModal from "views/Modals/ComplaintsModal";
+import MenuModal from "views/Modals/MenuModal";
 
 
 import { official,
@@ -52,7 +47,8 @@ Transition.displayName = "Transition";
 export default function Dashboard() {
  
   const [Modal, openModal] = React.useState(false);
-  const  [Mess,openMess]= React.useState(false);
+  const [Mess,openMess] = React.useState(false);
+  const  [Grace,openGrace]= React.useState(false);
   const user=JSON.parse(localStorage.getItem("data"));
   const [messDetails,setMessDetails]=React.useState({});
   let messNo=messDetails.mess;
@@ -63,10 +59,7 @@ export default function Dashboard() {
     const fetchData= async ()=>{
       const result= await fetch(`http://localhost:9000/api/mess/menu?uid=${user.uid}`) ;
       const res = await result.json();
-      setMessDetails(res);
-      
-    
-   
+      setMessDetails(res);   
   }
     fetchData();
     
@@ -81,8 +74,9 @@ export default function Dashboard() {
     setMessMenu(messDetails.menu.map((item)=>{
       let menu=[];
       menu.push(item.Day,item.Breakfast,item.Lunch,item.Tiffin,item.Dinner);
-      return menu;}))
-      
+      return menu;
+    })
+    ) 
     }
   },[messDetails])
 
@@ -114,7 +108,7 @@ export default function Dashboard() {
                 </Button>
               </div>
               <div className={classes.stats}>
-                <Button round color="rose">
+                <Button round color="rose" onClick={()=>{openGrace(true)}}>
                   Grace
                 </Button>
               </div>
@@ -128,7 +122,7 @@ export default function Dashboard() {
                 <EventNoteIcon /> 
               </CardIcon>
               <h2 className={classes.cardCategory}>Events</h2>
-              <h4 className={classes.cardTitle}>No recent Events </h4>
+              <h4 className={classes.cardTitle}>No recent Events</h4>
             </CardHeader>
             {/*<CardBody>
               <h5>No New Events in between</h5>
@@ -274,143 +268,10 @@ export default function Dashboard() {
             </CardBody>
               </Card>
         </GridItem>*/}
-      </GridContainer>
-   {                                      /*COMPLAINTS MODAL*/                          }
-      <Dialog
-                  classes={{
-                    root: classes.center,
-                    paper: classes.modal
-                  }}
-                  open={Modal}
-                  TransitionComponent={Transition}
-                  keepMounted
-                  onClose={() => openModal(false)}
-                  aria-labelledby="classic-modal-slide-title"
-                  aria-describedby="classic-modal-slide-description"
-                >
-                  <DialogTitle
-                    id="classic-modal-slide-title"
-                    disableTypography
-                    className={classes.modalHeader}
-                  >
-                    <IconButton
-                      className={classes.modalCloseButton}
-                      key="close"
-                      aria-label="Close"
-                      color="inherit"
-                      onClick={() => openModal(false)}
-                    >
-                      <Close className={classes.modalClose} />
-                    </IconButton>
-                    <h3 className={classes.modalTitle}><strong>Procees to send Complaints</strong></h3>
-                  </DialogTitle>
-                  <DialogContent
-                    id="classic-modal-slide-description"
-                    className={classes.modalBody}
-                  >
-                   <h4>
-                    A cloud-based solution has been purchased for maintenance and IT services. From now on, this system will be utilized to submit requests associated with all the maintenance division and IPC support activities
-                    </h4>
-                    <div>
-  
-                       <ol>
-                          <li>Log-in using the "G Sign in" box on the bottom-left of the page. Use the official (institute) gmail account to sign-in. This is based on google authentication and we do not have to create a new sign-in information.</li>
-
- 
-
-                          <li>On the QuickFMS home page, click on the top-left located "Help Desk" button. Then click on the "Raise Request" button.</li>
-
- 
-
-                          <li>Select the main category - sub-category - child category for a specific service request. In the case a specific job description is not found in the pre-existing drop down menu, please select "others" in the child category. Then describe the service request in "description" box along with "location."</li>
-
- 
-
-                          <li>Click submit request.</li>
-
-                       </ol> 
-
-                       The respective help-desk incharge and user will receive email notification after a request is submitted.<br />
-                      <div align="center">
-                        The link to access the portal is given below<br />
-                      </div>
-                    </div>
-                    <div align="center">
-                          <h4> <u><a href ="https://live.quickfms.com/login.aspx" target="blank">https://live.quickfms.com/login.aspx</a></u></h4>
-                    </div>
-
-
-
-                  </DialogContent>
-                  <DialogActions className={classes.modalFooter}>
-                   
-                    <Button
-                      onClick={() => openModal(false)}
-                      color="danger"
-                      simple
-                    >
-                      Close
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-
-            {/********** MESS MODAL **********/}
-            <Dialog
-                  classes={{
-                    root: classes.center,
-                    paper: classes.modal
-                  }}
-                  maxWidth="lg"
-                  fullWidth={true}
-                  open={Mess}
-                  TransitionComponent={Transition}
-                  keepMounted
-                  onClose={() => openMess(false)}
-                  aria-labelledby="classic-modal-slide-title"
-                  aria-describedby="classic-modal-slide-description"
-                >
-                  <DialogTitle
-                    id="classic-modal-slide-title"
-                    disableTypography
-                    className={classes.modalHeader}
-                  >
-                    <IconButton
-                      className={classes.modalCloseButton}
-                      key="close"
-                      aria-label="Close"
-                      color="inherit"
-                      onClick={() => openMess(false)}
-                    >
-                      <Close className={classes.modalClose} />
-                    </IconButton>
-                    <h3 className={classes.modalTitle}><strong>Mess Menu</strong></h3>
-                  </DialogTitle>
-                  <DialogContent
-                    id="classic-modal-slide-description"
-                    className={classes.modalBody}
-                  >
-                                           
-                   <Table
-                tableHeaderColor="primary"
-                tableHead={["Day", "Breakfast", "Lunch", "Tiffin","Dinner"]}
-                tableData={messMenu}
-              />         
-               
-
-
-
-                  </DialogContent>
-                  <DialogActions className={classes.modalFooter}>
-                   
-                    <Button
-                      onClick={() => openMess(false)}
-                      color="danger"
-                      simple
-                    >
-                      Close
-                    </Button>
-                  </DialogActions>
-                </Dialog>    
+      </GridContainer> 
+      <ComplaintsModal Modal={Modal} openModal={openModal} />
+      <MenuModal Mess={Mess} openMess={openMess} messMenu={messMenu}/>    
+      <GraceModal Grace={Grace} openGrace={openGrace} uid={user.uid} />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import React from "react";
+import DateTime from "react-datetime";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -63,9 +65,13 @@ export default function UserProfile() {
                   
                   <CustomInput
                     labelText="Name"
-                    id="name"
+                    id="name"                    
                     formControlProps={{
                       fullWidth: true
+                    }}
+                    inputProps={{
+                      value:"Gaurav Dash",
+                      disabled:true
                     }}
                     />
                 </GridItem>
@@ -98,13 +104,15 @@ export default function UserProfile() {
                   />                  
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
-                  <CustomInput
-                    labelText="Birthdate"
-                    id="birthdate"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />                  
+                 <InputLabel className={classes.label}>
+                      Birth-Date
+                  </InputLabel>
+                 <Datetime
+                    dateFormat="YYYY-MM-DD" 
+                    isValidDate={valid}
+                    timeFormat={false}
+                    inputProps={{ placeholder: "Select Your BirthDate"}}
+                  />          
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
