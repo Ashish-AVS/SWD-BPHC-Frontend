@@ -19,7 +19,7 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import Button from "components/CustomButtons/Button.js";
 
 //Auth Components
-//import { useAuth } from "context/auth";
+import { useAuth } from "context/auth";
 
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
@@ -28,7 +28,7 @@ const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks(props) {
   const classes = useStyles();
-  //const { setAuthTokens } = useAuth();
+  const { onLogin } = useAuth();
   const [openProfile, setOpenProfile] = React.useState(null);
   
   
@@ -38,10 +38,8 @@ export default function AdminNavbarLinks(props) {
   };
   const logout=()=>{
     localStorage.removeItem("tokens");
-    localStorage.removeItem("name");
-    localStorage.removeItem("id");
-    localStorage.removeItem("uid");
-    console.log("Hiaa");
+    localStorage.removeItem("data");
+    onLogin(false);  
     return (<Redirect exact to='/login-page' />);
   }
   return (
