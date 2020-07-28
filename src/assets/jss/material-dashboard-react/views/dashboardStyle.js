@@ -5,6 +5,7 @@ import {
   hexToRgb
 } from "assets/jss/material-dashboard-react.js";
 import modalStyle from "assets/jss/material-kit-react/modalStyle.js";
+import imagesStyles from "assets/jss/material-kit-react/imagesStyles.js";
 
 const dashboardStyle = {
   successText: {
@@ -15,7 +16,7 @@ const dashboardStyle = {
     height: "16px"
   },
   typo: {
-    paddingLeft: "25%",
+    paddingLeft: "15%",
     marginBottom: "30px",
     position: "relative",
     
@@ -123,7 +124,8 @@ const dashboardStyle = {
       fontWeight: "400",
       lineHeight: "1"
     }
-  }
+  },
+  ...imagesStyles
 };
 
 export default dashboardStyle;

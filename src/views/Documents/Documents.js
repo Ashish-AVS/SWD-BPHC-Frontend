@@ -19,6 +19,33 @@ const useStyles = makeStyles(styles);
 
 export default function Documents() {
   const classes = useStyles();
+  const [isFetching,setIsFetching]=React.useState(true);
+  const [doc,setDoc]=React.useState([])
+  React.useEffect(()=>{
+    try{
+      const fetchData= async ()=>{
+        const result= await fetch(`http://40.121.181.70/api/doc/list`) ;
+        const res = await result.json();
+        if(result.status===200||result.status===200||result.status===304){
+        setDoc(res);
+        setIsFetching(false);
+      }
+    }
+    fetchData();
+  }catch(err){
+    console.log(err);
+  }
+  },[])
+const DocData=isFetching?<h4>Fetching Data...</h4>: 
+<GridContainer>
+ {doc.map((item)=>{
+   return(<DocItem 
+        docTitle={item.name}
+        docKey={item.key} 
+          />)
+        })
+ }
+</GridContainer>;
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -26,29 +53,8 @@ export default function Documents() {
       </div>
       <div className={classes.note}>
           <h3>Official Documents</h3>
-      </div>
-      
-      <GridContainer>
-        <DocItem 
-        docTitle="Bonafide Certificate" 
-         />
-         <DocItem 
-        docTitle="No Objection Certificate" 
-         />
-         <DocItem 
-        docTitle="Vacation Letter" 
-         />
-         <DocItem 
-        docTitle="Good Character Certificate" 
-         />
-         <DocItem 
-        docTitle="Medical Insurance Claim Form" 
-         />
-         <DocItem 
-        docTitle="Merit Certificate 19-20 Sem-1" 
-         />
-      </GridContainer>
-     
+      </div> 
+    {DocData}     
     </div>
   );
 }

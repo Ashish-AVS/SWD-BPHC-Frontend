@@ -54,7 +54,7 @@ export default function LoginPage(props) {
     })
     
    }
- },[isLoggingIn,setLoggingIn]);
+ },[isLoggingIn]);
 
  useEffect(()=>{
   console.log(authTokens);
@@ -69,7 +69,7 @@ export default function LoginPage(props) {
  
 const fetchData= async ()=>{  
   try{  
-  const result= await fetch("http://localhost:9000/api/auth",{
+  const result= await fetch("http://40.121.181.70/api/auth",{
        method:"post",
        headers:{'Content-Type':"application/json"},
        body:JSON.stringify({
@@ -225,7 +225,7 @@ const fetchData= async ()=>{
                   <CardFooter className={classes.cardFooter}>
                     <GridContainer direction="column" justify="center" alignItems="center">
                       <GridItem>
-                      <Button onClick={onSubmit} round color="rose" size="lg" >
+                      <Button onClick={()=>{setLoggingIn(true)}} round color="rose" size="lg" >
                              Login
                       </Button>
                       </GridItem>

@@ -47,7 +47,52 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Deductions() {
+  const [deduction,setDeduction]=React.useState({});
+  const [isFetching,setIsFetching]=React.useState(true);
+  const {uid}=JSON.parse(localStorage.getItem("data"));
+  const token=JSON.parse(localStorage.getItem("tokens"));
   const classes = useStyles();
+
+  React.useEffect(()=>{
+    try{
+      const fetchData= async ()=>{
+        const result= await fetch(`http://40.121.181.70/api/deductions?uid=${uid}&token=${token}`) ;
+        const res = await result.json();
+        if(result.status===200||result.status===200||result.status===304){
+        console.log(res);
+          setDeduction(res.map((item)=>{
+            let OrderedOn= new Date(parseInt(item.time));
+            let goodieDetails="";
+            if(item.g_type===0){
+            goodieDetails=parseInt(item.xs)?`${goodieDetails} XS-${item.xs}`:goodieDetails;
+            goodieDetails=parseInt(item.s)?`${goodieDetails} S-${item.s}`:goodieDetails;
+            goodieDetails=parseInt(item.m)?`${goodieDetails} M-${item.m}`:goodieDetails;
+            goodieDetails=parseInt(item.l)?`${goodieDetails} L-${item.l}`:goodieDetails;
+            goodieDetails=parseInt(item.xl)?`${goodieDetails} XL-${item.xl}`:goodieDetails;
+            goodieDetails=parseInt(item.xxl)?`${goodieDetails} XXL-${item.xxl}`:goodieDetails;
+            goodieDetails=parseInt(item.xxxl)?`${goodieDetails} XXXL-${item.xxxl}`:goodieDetails;
+            } 
+            else if(item.g_type===1){
+              goodieDetails=` Qty - ${item.net_quantity} `;
+            }    
+            else if(item.g_type===2){
+              goodieDetails= "Fund";
+            }      
+              let data=[];
+            data.push(item.g_name,goodieDetails,item.total_amount,OrderedOn.toDateString());
+            return data;
+          })
+        ) 
+        setIsFetching(false) ;  
+        }
+      }
+      fetchData();
+      
+    }catch(err){
+        console.log(err);
+      }
+  },[])
+
   return (
   <div>
           <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -64,15 +109,14 @@ export default function Deductions() {
            
           </CardHeader>
           <CardBody>
+            {isFetching?
+            <h5>Fetching Details</h5>:
             <Table
               tableHeaderColor="primary"
-              tableHead={["GoodieName", "Amount(in Rs)"]}
-              tableData={[
-                ["Varun Thakur Show ", 169],
-                ["SU Zipper", 550 ]
-                
-              ]}
-            />
+              tableHead={["Goodie Name","Goodie info.","Amount(in ₹)","Ordered On"]}
+              tableData={deduction}
+            />}
+            
           </CardBody>
         </Card>
       </GridItem>

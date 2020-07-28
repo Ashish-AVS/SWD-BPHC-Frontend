@@ -57,7 +57,7 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`http://localhost:9000/api/mess/menu?uid=${user.uid}`) ;
+      const result= await fetch(`http://40.121.181.70/api/mess/menu?uid=${user.uid}`) ;
       const res = await result.json();
       setMessDetails(res);   
   }
@@ -73,7 +73,7 @@ export default function Dashboard() {
     if(messDetails.menu!==undefined){
     setMessMenu(messDetails.menu.map((item)=>{
       let menu=[];
-      menu.push(item.Day,item.Breakfast,item.Lunch,item.Tiffin,item.Dinner);
+      menu.push(item.day,item.breakfast,item.lunch,item.snacks,item.dinner);
       return menu;
     })
     ) 

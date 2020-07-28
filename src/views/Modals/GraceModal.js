@@ -44,7 +44,8 @@ React.useEffect(()=>{
 
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`http://localhost:9000/api/mess/grace?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`http://40.121.181.70/api/mess/grace?uid=${uid}&token=${token}`) ;
+      if(result.status===200||result.status===201||result.status===304){
       const res = await result.json();
       setGr(res.map((item)=>{
         let currDate=new Date(`${item.date}`) 
@@ -52,7 +53,7 @@ React.useEffect(()=>{
           date.push(currDate.toDateString());
           return date;
       })) 
-  }
+  }}
     fetchData();
     
   }catch(err){
@@ -65,7 +66,7 @@ React.useEffect(()=>{
   if(applyingGrace===true){
     try{
       const sendData=async ()=>{
-        const result =await fetch('http://localhost:9000/api/mess/grace',{
+        const result =await fetch('http://40.121.181.70/api/mess/grace',{
           method:"post",
           headers:{'Content-Type':"application/json"},
           body:JSON.stringify({

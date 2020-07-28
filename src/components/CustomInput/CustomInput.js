@@ -78,6 +78,7 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
+        
         onChange={onChange}
         {...inputProps}
       />
