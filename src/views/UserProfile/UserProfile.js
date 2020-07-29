@@ -8,6 +8,8 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
+import Check from "@material-ui/icons/Check";
+import CircularProgress from '@material-ui/core/CircularProgress';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -18,6 +20,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import SnackbarContent from "components/Snackbar/SnackbarContent.js";
+import Clearfix from "components/Clearfix/Clearfix.js";
+
 
 import avatar from "assets/img/bitslogo.png";
 import {
@@ -122,8 +127,12 @@ export default function UserProfile() {
   const {uid}=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
   const [profile,setProfile]=React.useState({});
+  const [emptyError,setEmptyError]=React.useState(false);
+  const [isError, setIsError] = React.useState(false);
+ 
   const [isFetching,setIsFetching]=React.useState(true);
   const [isEnabled,setIsEnabled]=React.useState(false);
+  const [profileUpdated,setProfileUpdated]=React.useState(false);
  // const [valueChanged,setValueChanged]=React.useState(false);
   const [updatingProfile,setUpdatingProfile]=React.useState(false);
   React.useEffect(()=>{
@@ -197,13 +206,21 @@ export default function UserProfile() {
             })
            })
           if(result.status===200||result.status===201){
-            alert("SUCCESS");
+           
+            setProfileUpdated(true);
             setUpdatingProfile(false);
           }
-         
+         else if(result.status===422){
+          
+          setEmptyError(true);
+         }
+         else{
+          
+           setIsError(true);
+         }
         }
         sendData();
-        setUpdatingProfile(false);
+        setIsEnabled(false);
       }
       catch(err){
         console.log(err);
@@ -782,6 +799,7 @@ export default function UserProfile() {
     <FormControlLabel
         control=
         {<Checkbox 
+          checked={isEnabled}
           onChange={(e)=>{
             if(e.target.checked)
             setIsEnabled(true);
@@ -804,13 +822,51 @@ export default function UserProfile() {
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}><b>STUDENT PROFILE DETAILS</b></h4>
-              <p className={classes.cardCategoryWhite}>Your Profile Must Be Updated</p>
+              <p className={classes.cardCategoryWhite}>Your Profile Must Stay Updated</p>
             </CardHeader>
             <CardBody>
+           {profileUpdated?<div>
+             <SnackbarContent
+                message={
+                    <span>
+                      <b>PROFILE UPDATED SUCCESSFULLY</b>
+                    </span>}
+                close
+                color="success"
+                icon={Check}
+               />
+               <Clearfix />
+               </div>:null}
+               {emptyError?
+                  <div>
+                    <SnackbarContent
+                      message={
+                      <span >
+                        <b>EMPTY FIELDS</b>:Ensure that every field is filled or set to nil
+                      </span>
+                        }
+                      close
+                      color="danger"
+                      icon="info_outline"
+                    />
+                    <Clearfix /></div>:null}
+                    {isError?
+                  <div><SnackbarContent
+                    message={
+                      <span>
+                         <b>ERROR:</b>Try logging in again
+                       </span>
+                             }
+                    close
+                    color="danger"
+                    icon="info_outline"
+                    />
+                    <Clearfix /></div>:null}
              {UserComponent}
             </CardBody>
             <CardFooter>
               <Button color="info" disabled={!isEnabled} onClick={()=>{setUpdatingProfile(true)}}>Update Profile</Button>
+             
             </CardFooter>
           </Card>
         </GridItem>

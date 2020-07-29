@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
+import CircularProgress from '@material-ui/core/CircularProgress';
 // @material-ui/icons
 //import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
@@ -19,6 +20,8 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import SnackbarContent from "components/Snackbar/SnackbarContent";
+import Clearfix from "components/Clearfix/Clearfix";
 import { useAuth } from "context/auth";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
@@ -34,25 +37,21 @@ let data={
   isComplete:''}
 
 export default function LoginPage(props) {
-  let fetching=false;
+  const [emptyError,setEmptyError]=React.useState(false);
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   const {authTokens,onLogin} = useAuth();
   const [isLoggingIn, setLoggingIn]=useState(false);
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
-  //const { setTokens,setUser } = useAuth();
+  const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
   
  useEffect(()=>{
-   if(isLoggingIn){  
-    console.log("hi1");
-   fetchData(); 
-    return (()=>{
-
-      setLoggingIn(false);
-    })
-    
+   if(isLoggingIn===true){  
+     setLoading(true);
+     fetchData();
+     
    }
  },[isLoggingIn]);
 
@@ -62,14 +61,19 @@ export default function LoginPage(props) {
     localStorage.setItem("tokens",JSON.stringify(authTokens)); 
     localStorage.setItem("data",JSON.stringify(data));
     console.log("hi2");
-    
-    props.history.push("/admin/dashboard"); 
-   }
+    props.history.push("/admin/dashboard");
+    setLoading(false); 
+  return ()=>{
+    setLoggedIn(false);
+    } 
+  }
  },[isLoggedIn])
  
 const fetchData= async ()=>{  
-  try{  
-  const result= await fetch("http://40.121.181.70/api/auth",{
+  try{
+    setIsError(false);
+    setEmptyError(false);  
+    const result= await fetch("http://40.121.181.70/api/auth",{
        method:"post",
        headers:{'Content-Type':"application/json"},
        body:JSON.stringify({
@@ -78,15 +82,24 @@ const fetchData= async ()=>{
       })      
     })
     const res =await result.json();
-    if(res.token){ 
+    if(result.status===200||result.status===201||result.status===304){ 
        onLogin(res.token); 
        data.name=res.name;
        data.id=res.id;
        data.isComplete=res.isComplete;
        data.uid=uid;
-
        setLoggedIn(true);
-      }      
+      }
+      else if(result.status===422){
+        setLoggingIn(false);
+        setEmptyError(true);
+        setLoading(false);
+      } 
+      else if(result.status===401){
+        setLoggingIn(false);
+        setIsError(true);
+        setLoading(false);
+      }     
     }catch(err){
       
       console.log(err)
@@ -95,51 +108,7 @@ const fetchData= async ()=>{
  setTimeout(function() {
     setCardAnimation("");
   }, 700);
-  const classes = useStyles();
-  
-
- //function onUidChange(e){
-  //setUid(e.target.value);
-  //console.log(uid);
- //}
-
- function onPwdChange(e){
-  setPwd(e.target.value);
- }
-
- function onSubmit(){
- 
-  /* localStorage.removeItem("token");
-  localStorage.removeItem("id");
-  localStorage.removeItem("name");
-  fetch("http://localhost:9000/api/auth",{
-    method:"post",
-    headers:{'Content-Type':"application/json"},
-    body:JSON.stringify({
-      uid:uid,
-      password:pwd
-    })
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.token){
-     
-     setUser("name",data.name);
-     setLoggedIn(true);
-     setTokens(data.token);
-  }})
-  .catch(e=>{
-    setIsError(true);
-  })*/
-    
-  //setLoggedIn(true);
-  console.log("last main yaahan");
-  
-    setLoggingIn(true);
-   
-    
-  }
- 
+  const classes = useStyles(); 
 
   return (
     <div>
@@ -168,6 +137,31 @@ const fetchData= async ()=>{
                   </CardHeader>
                   {/*<p className={classes.divider}>Or Be Classical</p>*/}
                   <CardBody>
+                  {emptyError?
+                  <div>
+                    <SnackbarContent
+                      message={
+                      <span >
+                        <b>INVALID CREDENTIALS:</b>Provide valid input
+                      </span>
+                        }
+                      close
+                      color="danger"
+                      icon="info_outline"
+                    />
+                    <Clearfix /></div>:null}
+                    {isError?
+                  <div><SnackbarContent
+                    message={
+                      <span>
+                         <b>UN-AUTHORISED:</b>Incorrect credentials
+                       </span>
+                             }
+                    close
+                    color="danger"
+                    icon="info_outline"
+                    />
+                    <Clearfix /></div>:null}
                     <CustomInput
                       onChange={(e)=>{
                         setUid(e.target.value);
@@ -205,7 +199,9 @@ const fetchData= async ()=>{
                     <CustomInput
                       labelText="Password"
                       id="pass"
-                      onChange={onPwdChange}
+                      onChange={(e)=>{
+                        setPwd(e.target.value);
+                        }}
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -225,9 +221,11 @@ const fetchData= async ()=>{
                   <CardFooter className={classes.cardFooter}>
                     <GridContainer direction="column" justify="center" alignItems="center">
                       <GridItem>
-                      <Button onClick={()=>{setLoggingIn(true)}} round color="rose" size="lg" >
+                      <Button onClick={()=>{setLoggingIn(true)}} round color="rose" size="lg" disabled={loading}>
                              Login
                       </Button>
+
+                      {loading?<CircularProgress size={24} color="primary"/>:null}
                       </GridItem>
                       <GridItem>
                     <Link href="#" ><h6>Forgot Password? </h6></Link>

@@ -20,17 +20,7 @@ export default function App(props){
 var hist = createBrowserHistory();
 
 
-//const existingTokens = JSON.parse(localStorage.getItem("tokens"));
-//const [authTokens, setAuthTokens] = useState();
-  
-//const setTokens = (data) => {
-   // localStorage.setItem("tokens",data);
-    //setAuthTokens(data);
-  //}
-  //const setUserName = (data) => {
-    //localStorage.setItem("name",data);    
-  //}
-  
+
 
 return(
         <AuthContextProvider>
