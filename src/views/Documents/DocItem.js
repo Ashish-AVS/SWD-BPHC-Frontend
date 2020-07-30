@@ -23,37 +23,12 @@ export default function DocItem({docTitle,docKey}) {
   const [sendingData,setSendingData]=React.useState(false);
   const {uid}=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
+  const [loading,setLoading]=React.useState(false);
 
- {/* showFile(blob){
-    // It is necessary to create a new blob object with mime-type explicitly set
-    // otherwise only Chrome works like it should
-    var newBlob = new Blob([blob], {type: "application/pdf"})
-  
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
-    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(newBlob);
-      return;
-    } 
-  
-    // For other browsers: 
-    // Create a link pointing to the ObjectURL containing the blob.
-    const data = window.URL.createObjectURL(newBlob);
-    var link = document.createElement('a');
-    link.href = data;
-    link.download="file.pdf";
-    link.click();
-    setTimeout(function(){
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      window.URL.revokeObjectURL(data);
-    }, 100);
-  }
-*/} 
-  //fetch([url to fetch], {[options setting custom http-headers]})
-  //.then(r => r.blob())
-  //.then(showFile)
+ 
   React.useEffect(()=>{
     if(sendingData===true){
+      setLoading(true);
       try{
       const sendData=async ()=>{
           const result =await fetch(`http://40.121.181.70/api/doc?uid=${uid}&token=${token}&key=${docKey}`);
@@ -61,19 +36,19 @@ export default function DocItem({docTitle,docKey}) {
           if(result.status===200||result.status===201){  
           
             const pdfBlob=new Blob([res],{type:'application/pdf'});
-          saveAs(pdfBlob,`${uid}-${docKey}`);          
+          saveAs(pdfBlob,`${uid}-${docKey}`);
+          setLoading(false);          
           }
          
         }
       sendData();
-      //console.log(totalQty);
       setSendingData(false);  
       }
       catch(err){
         console.log(err);
       }
     }
-  },[sendingData])
+  },[sendingData,uid,docKey])
   return (
         <GridItem xs={12} sm={6} md={4}>
           <Card>
@@ -88,7 +63,7 @@ export default function DocItem({docTitle,docKey}) {
             </CardBody>
             <CardFooter style={{display:"flex",justifyContent:"center"}}>
               <div>
-                <Button round color="info" onClick={()=>{setSendingData(true)}}>
+                <Button round color="info" disabled={loading} onClick={()=>{setSendingData(true)}}>
                     Download
                 </Button>
               </div>

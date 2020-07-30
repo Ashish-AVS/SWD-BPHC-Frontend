@@ -86,7 +86,7 @@ else{
       <div className={classes.typo} style={{marginTop:"-50px"}}>
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
-      <div className={classes.note1}>
+      <div className={classes.note2}>
           <h5>This is the Funds and Goodies section of BPHC. </h5>
       </div>
       

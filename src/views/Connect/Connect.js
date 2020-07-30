@@ -1,5 +1,5 @@
 import React from "react";
-import {csv} from "d3";
+
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,27 +13,21 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
 
-import prof from "./professors.csv";
+import BusModal from "views/Modals/BusModal.js";
+import ProfConnect from "./ProfConnect";
+import OfficeConnect from "./OfficeConnect";
+import HostelConnect from "./HostelConnect";
+import PortalConnect from "./PortalConnect";
+import PorConnect from "./PorConnect";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
 
 export default function Connect() {
   const classes = useStyles();
-  const [isFetching,setIsFeching]=React.useState(true);
-  React.useEffect(()=>{
-    try{
-      const fetchData= async ()=>{
-      const result= await csv(prof) ;
-      console.log(result);
-     //console.log(res);
-      
-    }
-  fetchData();
-  }catch(err){
-      console.log(err);
-    }
-  },[])
+  const [busModal, setBusModal] = React.useState(false);
+  
+ 
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -44,99 +38,19 @@ export default function Connect() {
       </div>
       <GridContainer>
         <GridItem xs={12} sm={6} md={4}>
-          <Card>
-            <CardHeader color="primary">  
-               <h3 className={classes.cardTitleCon}>
-                RESPONSIBILITY BEARERS
-               </h3>
-            </CardHeader>
-            <CardBody>
-                <p>A complete Directory of all the students holding some position in various places</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info">
-                  View Directory
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
+         <PorConnect/>
         </GridItem>
         <GridItem xs={12} sm={6} md={4}>
-          <Card>
-            <CardHeader color="primary">  
-               <h3 className={classes.cardTitleCon}>
-                OFFICE DETAILS
-               </h3>
-            </CardHeader>
-            <CardBody>
-                <p>A complete Directory of all the office in-charges and administrative heads. </p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info">
-                  View Directory
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
+          <OfficeConnect/>
         </GridItem>
         <GridItem xs={12} sm={6} md={4}>
-          <Card>
-            <CardHeader color="primary">  
-               <h3 className={classes.cardTitleCon}>
-                FACULTY DETAILS
-               </h3>
-            </CardHeader>
-            <CardBody>
-                <p>A complete Directory of all the teaching faculties of our College</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info">
-                  View Directory
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
+          <ProfConnect  />
         </GridItem>
         <GridItem xs={12} sm={6} md={4}>
-          <Card>
-            <CardHeader color="primary">  
-               <h3 className={classes.cardTitleCon}>
-                WEBSITE AND PORTALS
-               </h3>
-            </CardHeader>
-            <CardBody>
-                <p>A complete Directory of all the websites and portals linked with BITS Pilani University</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info">
-                  View Directory
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
+          <PortalConnect />
         </GridItem>
         <GridItem xs={12} sm={6} md={4}>
-          <Card>
-            <CardHeader color="primary">  
-               <h3 className={classes.cardTitleCon}>
-                HOSTEL DETAILS
-               </h3>
-            </CardHeader>
-            <CardBody>
-                <p>A complete Directory of all contacts regarding hostel</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info">
-                  View Directory
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
+          <HostelConnect/>
         </GridItem>
         <GridItem xs={12} sm={6} md={4}>
           <Card>
@@ -150,16 +64,17 @@ export default function Connect() {
             </CardBody>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Button round color="info">
+                <Button round color="info" onClick={()=>{setBusModal(true)}}>
                   View Directory
                 </Button>
               </div>
+              <BusModal Modal={busModal} openModal={setBusModal}/>
             </CardFooter>
           </Card>
         </GridItem>
             </GridContainer>
 
-      
-    </div>
+    {//isFetched?<ConnectModal open={open} setOpen={setOpen} data={profData}/>:null}
+}</div>
   );
 }

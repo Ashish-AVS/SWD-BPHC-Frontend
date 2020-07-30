@@ -1,0 +1,15 @@
+Name,url,type
+SWD,172.16.100.66,lan
+CMS,172.16.100.125,lan
+ARCD,172.16.100.96,lan
+Placement Portal (Internal),172.16.59.100/2014,lan
+Placement portal (External), 111.93.5.198/2014,lan
+Library,172.16.100.169,lan
+BITS Pilani University,www.bits-pilani.ac.in,websites
+BITS Pilani Hyderabad Campus,www.bits-pilani.ac.in/Hyderabad/index.aspx,websites
+SWD,swd.bits-hyderabad.ac.in,websites
+PS Division Student Login,www.bits-pilani.ac.in:12355/student_notice_login.asp,websites
+Placement Division (Element94),placement.bits-pilani.ac.in/,websites
+IT Call Logging System,ipc.bits-hyderabad.ac.in/itcall/,websites
+Library,libraryopac.bits-hyderabad.ac.in/,websites
+CMS,http://id.bits-hyderabad.ac.in/,websites
