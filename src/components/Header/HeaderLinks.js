@@ -1,7 +1,5 @@
 /*eslint-disable*/
 import React from "react";
-import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 // react components for routing our app without refresh
 import { Link } from "react-router-dom";
 
@@ -9,17 +7,12 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Tooltip from "@material-ui/core/Tooltip";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Close from "@material-ui/icons/Close";
+
 import Slide from "@material-ui/core/Slide";
 //import IconButton from "@material-ui/core/IconButton";
 
 // @material-ui/icons
-import { Apps, CloudDownload} from "@material-ui/icons";
+import { Apps} from "@material-ui/icons";
 import BookIcon from '@material-ui/icons/Book';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
@@ -56,12 +49,12 @@ export default function HeaderLinks(props) {
           }}
           buttonIcon={Apps}
           dropdownList={[
-            <Link to="#" onClick={() => setClassicModal(true)} className={classes.dropdownLink}>
+            <Link to="#" onClick={() => setBusModal(true)} className={classes.dropdownLink}>
              <DirectionsBusIcon className={classes.icons} /> 212 Timings
             </Link>,
             <Link
               to="#"
-              onClick={() => setClassicModal1(true)}
+              onClick={() => setComplaintsModal(true)}
               className={classes.dropdownLink}
             >
               <AssignmentIcon className={classes.icons} />Complaints

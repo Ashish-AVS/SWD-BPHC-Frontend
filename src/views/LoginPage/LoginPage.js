@@ -8,9 +8,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // @material-ui/icons
 //import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
+
 // core components
-//import Header from "components/Header/Header.js";
-//import HeaderLinks from "components/Header/HeaderLinks.js";
+
 
 import GridContainer from "components/Grid/GridContainer0.js";
 import GridItem from "components/Grid/GridItem0.js";
@@ -46,12 +46,89 @@ export default function LoginPage(props) {
   const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
-  
+ useEffect(()=>{
+  var userInput = document.getElementById("uid");
+  userInput.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+     event.preventDefault();
+     document.getElementById("login").click();
+    }
+  });
+  return ()=>{
+    userInput.removeEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("login").click();
+      }
+    });
+  }
+ })
+ useEffect(()=>{
+  var pwdInput = document.getElementById("pwd");
+  pwdInput.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+     event.preventDefault();
+     document.getElementById("login").click();
+    }
+  });
+  return ()=>{
+    pwdInput.removeEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("login").click();
+      }
+    });
+  }
+ }) 
  useEffect(()=>{
    if(isLoggingIn===true){  
      setLoading(true);
-     fetchData();
+     const abortController = new AbortController();
+     const signal=abortController.signal;
+     try{
+     const fetchData= async ()=>{  
      
+      
+        setIsError(false);
+        setEmptyError(false);  
+        const result= await fetch("http://40.121.181.70/api/auth",{
+           method:"post",
+           headers:{'Content-Type':"application/json"},
+           body:JSON.stringify({
+             uid:uid,
+             password:pwd
+          }),
+          signal:signal      
+        })
+        const res =await result.json();
+        if(result.status===200||result.status===201||result.status===304){ 
+           onLogin(res.token); 
+           data.name=res.name;
+           data.id=res.id;
+           data.isComplete=res.isComplete;
+           data.uid=uid;
+           setLoggedIn(true);
+          }
+          else if(result.status===422){
+            setLoggingIn(false);
+            setEmptyError(true);
+            setLoading(false);
+          } 
+          else if(result.status===401){
+            setLoggingIn(false);
+            setIsError(true);
+            setLoading(false);
+          }     
+        }
+        fetchData();
+      }catch(err){
+          
+          console.log(err)
+        }
+       
+     return ()=>{
+       abortController.abort();
+     }
    }
  },[isLoggingIn]);
 
@@ -69,42 +146,7 @@ export default function LoginPage(props) {
   }
  },[isLoggedIn])
  
-const fetchData= async ()=>{  
-  try{
-    setIsError(false);
-    setEmptyError(false);  
-    const result= await fetch("http://40.121.181.70/api/auth",{
-       method:"post",
-       headers:{'Content-Type':"application/json"},
-       body:JSON.stringify({
-         uid:uid,
-         password:pwd
-      })      
-    })
-    const res =await result.json();
-    if(result.status===200||result.status===201||result.status===304){ 
-       onLogin(res.token); 
-       data.name=res.name;
-       data.id=res.id;
-       data.isComplete=res.isComplete;
-       data.uid=uid;
-       setLoggedIn(true);
-      }
-      else if(result.status===422){
-        setLoggingIn(false);
-        setEmptyError(true);
-        setLoading(false);
-      } 
-      else if(result.status===401){
-        setLoggingIn(false);
-        setIsError(true);
-        setLoading(false);
-      }     
-    }catch(err){
-      
-      console.log(err)
-    }
-   }
+
  setTimeout(function() {
     setCardAnimation("");
   }, 700);
@@ -112,13 +154,7 @@ const fetchData= async ()=>{
 
   return (
     <div>
-     {/* <Header
-        absolute
-        color="transparent"
-        brand="Material Kit React"
-        rightLinks={<HeaderLinks />}
-        {...rest}
-      />*/}
+     
       <div
         className={classes.pageHeader}
         style={{
@@ -166,9 +202,9 @@ const fetchData= async ()=>{
                       onChange={(e)=>{
                         setUid(e.target.value);
                         }}
-                      labelText="Username"
+                      labelText="UserID"
                       placeholder="f201XXXXX"
-                      id="first"
+                      id="uid"
                       formControlProps={{
                         fullWidth: true
                       }}
@@ -198,7 +234,7 @@ const fetchData= async ()=>{
                     />*/}
                     <CustomInput
                       labelText="Password"
-                      id="pass"
+                      id="pwd"
                       onChange={(e)=>{
                         setPwd(e.target.value);
                         }}
@@ -221,7 +257,7 @@ const fetchData= async ()=>{
                   <CardFooter className={classes.cardFooter}>
                     <GridContainer direction="column" justify="center" alignItems="center">
                       <GridItem>
-                      <Button onClick={()=>{setLoggingIn(true)}} round color="rose" size="lg" disabled={loading}>
+                      <Button id="login" onClick={()=>{setLoggingIn(true)}} round color="rose" size="lg" disabled={loading}>
                              Login
                       </Button>
 
