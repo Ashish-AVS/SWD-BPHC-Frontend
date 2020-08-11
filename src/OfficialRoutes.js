@@ -7,7 +7,7 @@
 */
 // @material-ui/icons
 
-import LocalPlay from '@material-ui/icons/LocalPlay';
+import SearchIcon from '@material-ui/icons/Search';
 
 // core components/views for Admin layout
 
@@ -19,7 +19,7 @@ const dashboardRoutes = [
   {
     path: "/search",
     name: "Search",
-    icon: LocalPlay,
+    icon: SearchIcon,
     component: Search,
     layout: "/official"
   }

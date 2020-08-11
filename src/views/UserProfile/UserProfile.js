@@ -9,7 +9,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Check from "@material-ui/icons/Check";
-import CircularProgress from '@material-ui/core/CircularProgress';
+//import CircularProgress from '@material-ui/core/CircularProgress';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -112,15 +112,6 @@ const styles = {
 };
 
 const useStyles = makeStyles(styles);
-{/*const useComponentWillMount = func => {
-  const willMount = React.useRef(true);
-
-  if (willMount.current) {
-    func();
-  }
-
-  willMount.current = false;
-};*/}
 
 export default function UserProfile() {
   const classes = useStyles();
@@ -314,6 +305,25 @@ export default function UserProfile() {
         timeFormat={false}
         className={classes.input+" "+classes.underline}
         isValidDate={valid}
+        onChange={(e)=>{
+          const date = new Date(`${e}`);
+          const {Date1,Month,Year}={
+            Date1:date.getDate(),
+            Month:date.getMonth()+1,
+            Year:date.getFullYear()
+          }
+          if(Month>9)
+          setProfile(prevState=>({
+            ...prevState,
+            dob:`${Year}-${Month}-${Date1}`
+          }));
+          else
+          setProfile(prevState=>({
+            ...prevState,
+            dob:`${Year}-0${Month}-${Date1}`
+          }));
+          
+        }}
       />
       </FormControl>          
     </GridItem>

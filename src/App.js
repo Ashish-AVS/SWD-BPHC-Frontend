@@ -27,13 +27,13 @@ return(
         <AuthContextProvider>
             <Router history={hist} >
               <Switch>
-                <Route path="/landing-page" component={LandingPage} />
+                <Route path="/components" component={Components}  />
                 <Route path="/profile-page" component={ProfilePage} />
                 <Route path="/login-page" component={LoginPage} />
                 <Route path="/official-login" component={OfficialLogin} />
                 <Route path="/official" component={Official} />
                 <PrivateRoute path="/admin" component={Admin} />
-                <Route path="/" component={Components} />
+                <Route path="/"  component={LandingPage}/>
               </Switch>
             </Router>
         </AuthContextProvider>

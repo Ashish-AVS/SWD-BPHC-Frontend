@@ -144,13 +144,19 @@ React.useEffect(()=>{
                           Month:date.getMonth()+1,
                           Year:date.getFullYear()
                         }
-                        if(Month>9)
-                        setPostDate(`${Year}-${Month}-${Date1}`);
+                        if(Month>9){
+                          if(Date1<10){
+                        setPostDate(`${Year}-${Month}-0${Date1}`);}
                         else
-                        setPostDate(`${Year}-0${Month}-${Date1}`);
-                        
+                        setPostDate(`${Year}-${Month}-${Date1}`);
+                        }else{
+                          if(Date1<10)
+                          setPostDate(`${Year}-0${Month}-0${Date1}`);
+                          else
+                          setPostDate(`${Year}-0${Month}-${Date1}`);
+                        }
                       }}                
-                      inputProps={{ placeholder: "Datetime Picker Here"}}
+                      inputProps={{ placeholder: "Select Date Here"}}
                     />
                   </FormControl>
                   
