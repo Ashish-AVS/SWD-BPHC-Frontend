@@ -91,7 +91,7 @@ export default function LoginPage(props) {
       
         setIsError(false);
         setEmptyError(false);  
-        const result= await fetch("http://40.121.181.70/api/auth",{
+        const result= await fetch("https://swdnucleus.ml/api/auth",{
            method:"post",
            headers:{'Content-Type':"application/json"},
            body:JSON.stringify({
@@ -130,7 +130,7 @@ export default function LoginPage(props) {
        abortController.abort();
      }
    }
- },[isLoggingIn]);
+ },[isLoggingIn,uid,pwd,onLogin]);
 
  useEffect(()=>{
   console.log(authTokens);
@@ -144,7 +144,7 @@ export default function LoginPage(props) {
     setLoggedIn(false);
     } 
   }
- },[isLoggedIn])
+ },[isLoggedIn,props.history,authTokens])
  
 
  setTimeout(function() {
@@ -217,21 +217,7 @@ export default function LoginPage(props) {
                         )
                       }}
                     />
-                    {/*<CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />*/}
+                   
                     <CustomInput
                       labelText="Password"
                       id="pwd"

@@ -109,6 +109,7 @@ const useStyles = makeStyles(styles);
 
 export default function Search() {
 
+ const token=JSON.parse(localStorage.getItem("officialtokens"));
   const [criteria,setCriteria]=React.useState({
     criteria_1:'name',
     criteria_2:'',
@@ -162,7 +163,7 @@ export default function Search() {
             value_1:criteria.value_1,
             criteria_2:criteria.criteria_2,
             value_2:criteria.value_2,
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1OTcyMzgxMDksImlkIjoic3dkIiwibWFpbmdhdGUiOjEsInNlYXJjaCI6MSwiZ29vZGllcyI6MCwiZG9jcyI6MCwibWNuIjowLCJjb3Vuc2Vsb3IiOjAsImlhdCI6MTU5NzE1MTcwOX0.jiEu5XIqHhRDooGUR5-CviumoU5dtnsMyIWGvJ1DBqI"
+            token:token
           })
          })
          const res = await result.json();
@@ -181,12 +182,12 @@ export default function Search() {
       console.log(err);
     } 
   } 
-  })
-  const tableIcon=<Button color="info">Open</Button>;
+  },[sendingData, criteria.criteria_1, criteria.value_1, criteria.criteria_2, criteria.value_2, token])
+  
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
-          <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
+          <h2><strong>BITS PILANI , HYDERABAD CAMPUS</strong></h2>
       </div>
       <GridContainer justify="center" alignItems="center">
         <GridItem xs={12} sm={12} md={10}>

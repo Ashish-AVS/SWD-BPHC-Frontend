@@ -49,7 +49,7 @@ export default function Dashboard() {
   const [Modal, openModal] = React.useState(false);
   const [Mess,openMess] = React.useState(false);
   const  [Grace,openGrace]= React.useState(false);
-  const user=JSON.parse(localStorage.getItem("data"));
+  const {uid,name}=JSON.parse(localStorage.getItem("data"));
   const [messDetails,setMessDetails]=React.useState({});
   let messNo=messDetails.mess;
   let [messMenu,setMessMenu]=React.useState([]);
@@ -57,7 +57,7 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`http://40.121.181.70/api/mess/menu?uid=${user.uid}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/mess/menu?uid=${uid}`) ;
       const res = await result.json();
       setMessDetails(res);   
   }
@@ -67,7 +67,7 @@ export default function Dashboard() {
       console.log(err);
     }
   
-  },[]);
+  },[uid]);
   
   React.useEffect(()=>{
     if(messDetails.menu!==undefined){
@@ -87,7 +87,7 @@ export default function Dashboard() {
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
       <div className={classes.note}>
-          <h3>Hello, {user.name}</h3>
+          <h3>Hello, {name}</h3>
       </div>
       <GridContainer>
         <GridItem xs={12} sm={6} md={4}>
@@ -271,7 +271,7 @@ export default function Dashboard() {
       </GridContainer> 
       <ComplaintsModal Modal={Modal} openModal={openModal} />
       <MenuModal Mess={Mess} openMess={openMess} messMenu={messMenu}/>    
-      <GraceModal Grace={Grace} openGrace={openGrace} uid={user.uid} />
+      <GraceModal Grace={Grace} openGrace={openGrace} uid={uid} />
     </div>
   );
 }

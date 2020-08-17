@@ -13,7 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
 import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
-import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.js";
+import OfficialNavbarLinks from "components/Navbars/OfficialNavbarLinks";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
 
@@ -25,7 +25,7 @@ export default function Sidebar(props) {
   function activeRoute(routeName) {
     return window.location.href.indexOf(routeName) > -1 ? true : false;
   }
-  const { color, logo, image, logoText, routes } = props;
+  const { color, logo, image, logoText, routes,layout } = props;
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
@@ -115,7 +115,7 @@ export default function Sidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            <AdminNavbarLinks />
+            {layout==='admin'?<AdminNavbarLinks />:layout==='official'?<OfficialNavbarLinks/>:null}
             {links}
           </div>
           {image !== undefined ? (
@@ -153,6 +153,7 @@ export default function Sidebar(props) {
 
 Sidebar.propTypes = {
   rtlActive: PropTypes.bool,
+  layout:PropTypes.string,
   handleDrawerToggle: PropTypes.func,
   bgColor: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
   logo: PropTypes.string,

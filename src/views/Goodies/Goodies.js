@@ -29,7 +29,7 @@ export default function Goodies() {
   React.useEffect(()=>{
     try{
         const fetchData= async ()=>{
-        const result= await fetch(`http://40.121.181.70/api/goodies`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/goodies`) ;
         const res = await result.json();
        //console.log(res);
         setGoodie(res);   
@@ -37,7 +37,7 @@ export default function Goodies() {
         
       }
       const fetchDeduction= async ()=>{
-        const result= await fetch(`http://40.121.181.70/api/deductions?uid=${user.uid}&token=${token}`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${user.uid}&token=${token}`) ;
         const res = await result.json();
         setDeductions(res);
         console.log(res);   
@@ -51,7 +51,7 @@ export default function Goodies() {
         console.log(err);
       }
      
-  },[isUpdated])
+  },[isUpdated,user.uid,token])
 let GoodieData=<></>;
 if(isFetching)
 GoodieData=<h4>Fetching data...</h4>

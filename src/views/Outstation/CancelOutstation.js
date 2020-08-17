@@ -28,7 +28,7 @@ Transition.displayName = "Transition";
 export default function CancelModal({
     open, 
     setOpen,
-    cancelOrder,
+    cancelId,
     setIsUpdated
    }){
 const classes=useStyles();
@@ -45,22 +45,27 @@ React.useEffect(()=>{
     try{
     const sendData=async ()=>{
       setLoading(true);  
-      const result =await fetch('https://swdnucleus.ml/api/deductions/cancel',{
+      const result =await fetch('https://swdnucleus.ml/api/outstation/cancel',{
           method:"post",
           headers:{'Content-Type':"application/json"},
           body:JSON.stringify({
              uid:uid,
              token:token,
-             transaction_id:cancelOrder.transaction_id
+             outstation_id:cancelId
           })
          })
         if(result.status===200||result.status===201){ 
-          setIsUpdated(`Cancel ${cancelOrder.g_id}`);
+          setIsUpdated(`Cancel ${cancelId}`);
           setLoading(false);
           setSendingData(false);
           setOpen(false);
         }
-       
+       if(result.status===401){
+        alert("Error sending data.Try logging in again");
+        setLoading(false);
+        setSendingData(false);
+        
+       }
       }
     sendData();
     //console.log(totalQty);
@@ -71,20 +76,8 @@ React.useEffect(()=>{
       console.log(err);
     }
   }
-},[sendingData,uid,token,cancelOrder,setOpen,setIsUpdated])
-let goodieDetails="";
-if(cancelOrder.g_type===0){
-    goodieDetails=parseInt(cancelOrder.xs)?`${goodieDetails} XS-${cancelOrder.xs}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.s)?`${goodieDetails} S-${cancelOrder.s}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.m)?`${goodieDetails} M-${cancelOrder.m}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.l)?`${goodieDetails} L-${cancelOrder.l}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.xl)?`${goodieDetails} XL-${cancelOrder.xl}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.xxl)?`${goodieDetails} XXL-${cancelOrder.xxl}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.xxxl)?`${goodieDetails} XXXL-${cancelOrder.xxxl}`:goodieDetails;
-    } 
-    else {
-        goodieDetails=null;
-    }
+},[sendingData,uid,token,cancelId,setOpen,setIsUpdated])
+
     
 
     return(
@@ -122,14 +115,9 @@ if(cancelOrder.g_type===0){
                     id="classic-modal-slide-description"
                     className={classes.modalBody}
                   >
-                      <div>
-                  <h4>Are you sure you want to cancel the order?</h4>
+                    <div>
+                        <h4>Are you sure you want to cancel the your pending Outstation Request?</h4>
                     
-                    
-                        <h5><b>Order Details:-</b></h5>
-                        <p>{goodieDetails}</p>
-                <p>Net Quantity: {cancelOrder.net_quantity}</p><p>Total Amount: ₹{cancelOrder.total_amount}</p>
-                        <p></p>
                     </div>
                   
                   </DialogContent>
@@ -138,18 +126,17 @@ if(cancelOrder.g_type===0){
                   <Button
                       onClick={() => setSendingData(true)}
                       color="info"
-                      solid
+                      solid="true"
                       round
                       disabled={loading}
                     >
-                    
                       Yes 
                     </Button>
                     
                     <Button
                       onClick={() => setOpen(false)}
                       color="danger"
-                      solid
+                      solid="true"
                       round
                     >
                       No

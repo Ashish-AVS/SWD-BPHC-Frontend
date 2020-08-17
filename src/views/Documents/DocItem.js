@@ -31,7 +31,7 @@ export default function DocItem({docTitle,docKey}) {
       setLoading(true);
       try{
       const sendData=async ()=>{
-          const result =await fetch(`http://40.121.181.70/api/doc?uid=${uid}&token=${token}&key=${docKey}`);
+          const result =await fetch(`https://swdnucleus.ml/api/doc?uid=${uid}&token=${token}&key=${docKey}`);
           const res= await result.blob();       
           if(result.status===200||result.status===201){  
           
@@ -48,7 +48,7 @@ export default function DocItem({docTitle,docKey}) {
         console.log(err);
       }
     }
-  },[sendingData,uid,docKey])
+  },[sendingData,uid,docKey,token])
   return (
         <GridItem xs={12} sm={6} md={4}>
           <Card>

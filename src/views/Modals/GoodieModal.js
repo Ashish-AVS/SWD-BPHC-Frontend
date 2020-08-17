@@ -69,7 +69,7 @@ React.useEffect(()=>{
     try{
     const sendData=async ()=>{
       setLoading(true); 
-      const result =await fetch('http://40.121.181.70/api/goodies',{
+      const result =await fetch('https://swdnucleus.ml/api/goodies',{
           method:"post",
           headers:{'Content-Type':"application/json"},
           body:JSON.stringify({
@@ -105,7 +105,7 @@ React.useEffect(()=>{
       console.log(err);
     }
   }
-},[sendingData])
+})
 
 function onChange(e){
     const { name,id} = e.target;
@@ -264,7 +264,7 @@ if(goodieType===0){
         <CustomInput
          labelText="Enter Quantity"
          id={goodieName}
-         onChange={onChange}
+        
          formControlProps={{
             fullWidth: true
           }}

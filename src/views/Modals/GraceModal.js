@@ -44,7 +44,7 @@ React.useEffect(()=>{
 
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`http://40.121.181.70/api/mess/grace?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/mess/grace?uid=${uid}&token=${token}`) ;
       if(result.status===200||result.status===201||result.status===304){
       const res = await result.json();
       setGr(res.map((item)=>{
@@ -60,7 +60,7 @@ React.useEffect(()=>{
       console.log(err);
     }
    
-  },[applied]);
+  },[applied,uid,token]);
  
 React.useEffect(()=>{
   if(applyingGrace===true){
@@ -88,7 +88,7 @@ React.useEffect(()=>{
       console.log(err);
     }
   }
-},[applyingGrace])  
+},[applyingGrace,uid,token,postDate])  
 
 
     return(
@@ -193,7 +193,7 @@ React.useEffect(()=>{
                   <Button
                       onClick={() => setApplyingGrace(true)}
                       color="success"
-                      solid
+                      solid="true"
                       round
                     >
                       Submit
@@ -201,7 +201,7 @@ React.useEffect(()=>{
                     <Button
                       onClick={() => openGrace(false)}
                       color="danger"
-                      solid
+                      solid="true"
                       round
                     >
                       Close

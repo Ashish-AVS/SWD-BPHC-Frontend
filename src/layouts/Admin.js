@@ -83,6 +83,7 @@ export default function Admin({ ...rest }) {
   return (
     <div className={classes.wrapper}>
       <Sidebar
+        layout='admin'
         routes={routes}
         logoText={"SWD"}
         logo={logo}
@@ -94,6 +95,7 @@ export default function Admin({ ...rest }) {
       />
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
+          layout='admin'
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}

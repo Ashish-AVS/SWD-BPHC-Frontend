@@ -30,16 +30,12 @@ import image from "assets/img/bg-official.jpg";
 
 const useStyles = makeStyles(styles);
 
-let data={
-  name:'',
-  id:'',
-  uid:'',
-  isComplete:''}
+
 
 export default function OfficialLogin(props) {
   const [emptyError,setEmptyError]=React.useState(false);
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  const {authTokens,onLogin} = useAuth();
+  const {officialAuthTokens,onOfficialLogin} = useAuth();
   const [isLoggingIn, setLoggingIn]=useState(false);
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
@@ -101,6 +97,7 @@ export default function OfficialLogin(props) {
         const res =await result.json();
         if(result.status===200||result.status===201||result.status===304){ 
            console.log(JSON.parse(atob(res.token.split('.')[1])));
+           onOfficialLogin(res.token);
            setLoggedIn(true);
           }
           else if(result.status===422){
@@ -124,21 +121,20 @@ export default function OfficialLogin(props) {
        abortController.abort();
      }
    }
- },[isLoggingIn]);
+ },[isLoggingIn,id,pwd,onOfficialLogin]);
 
  useEffect(()=>{
-  console.log(authTokens);
+  
    if(isLoggedIn===true){
-    //localStorage.setItem("tokens",JSON.stringify(authTokens)); 
-    //localStorage.setItem("data",JSON.stringify(data));
+    localStorage.setItem("officialtokens",JSON.stringify(officialAuthTokens)); 
     //console.log("hi2");
-    //props.history.push("/admin/dashboard");
+    props.history.push("/official");
     setLoading(false); 
   return ()=>{
     setLoggedIn(false);
     } 
   }
- },[isLoggedIn])
+ },[isLoggedIn,officialAuthTokens,props.history])
  
 
  setTimeout(function() {
@@ -162,10 +158,10 @@ export default function OfficialLogin(props) {
             <GridItem xs={12} sm={12} md={4}>
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4><strong>STUDENT LOGIN</strong></h4>
+                  <CardHeader color="danger" className={classes.cardHeader}>
+                    <h4><strong>OFFICIAL LOGIN</strong></h4>
                   </CardHeader>
-                  {/*<p className={classes.divider}>Or Be Classical</p>*/}
+                 
                   <CardBody>
                   {emptyError?
                   <div>
@@ -211,21 +207,6 @@ export default function OfficialLogin(props) {
                         )
                       }}
                     />
-                    {/*<CustomInput
-                      labelText="Email..."
-                      id="email"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Email className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    />*/}
                     <CustomInput
                       labelText="Password"
                       id="pwd"
@@ -251,7 +232,7 @@ export default function OfficialLogin(props) {
                   <CardFooter className={classes.cardFooter}>
                     <GridContainer direction="column" justify="center" alignItems="center">
                       <GridItem>
-                      <Button id="login" onClick={()=>{setLoggingIn(true)}} round color="primary" size="lg" disabled={loading}>
+                      <Button id="login" onClick={()=>{setLoggingIn(true)}} round color="danger" size="lg" disabled={loading}>
                              Login
                       </Button>
 

@@ -6,7 +6,7 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
-import Navbar from "components/Navbars/Navbar.js";
+import Navbar from "components/Navbars/Navbar";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
@@ -39,7 +39,7 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+export default function Official({ ...rest }) {
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -53,9 +53,7 @@ export default function Admin({ ...rest }) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  const getRoute = () => {
-    return window.location.pathname !== "/admin/maps";
-  };
+  
   const resizeFunction = () => {
     if (window.innerWidth >= 960) {
       setMobileOpen(false);
@@ -82,6 +80,7 @@ export default function Admin({ ...rest }) {
   return (
     <div className={classes.wrapper}>
       <Sidebar
+        layout='official'
         routes={OfficialRoutes}
         logoText={"SWD"}
         logo={logo}
@@ -93,6 +92,7 @@ export default function Admin({ ...rest }) {
       />
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
+          layout='official'
           routes={OfficialRoutes}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}

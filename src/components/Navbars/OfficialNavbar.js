@@ -10,9 +10,7 @@ import Hidden from "@material-ui/core/Hidden";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
 // core components
-import AdminNavbarLinks from "./AdminNavbarLinks.js";
-import OfficialNavbarLinks from "./OfficialNavbarLinks";
-
+import OfficialNavbarLinks from './OfficialNavbarLinks';
 import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/headerStyle.js";
@@ -31,7 +29,7 @@ export default function Header(props) {
     });
     return name;
   }
-  const { color,layout } = props;
+  const { color} = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color
   });
@@ -45,7 +43,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-           {layout==='admin'?<AdminNavbarLinks />:layout==='official'?<OfficialNavbarLinks />:null}
+        <OfficialNavbarLinks />
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton

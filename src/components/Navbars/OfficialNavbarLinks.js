@@ -28,17 +28,16 @@ const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks(props) {
   const classes = useStyles();
-  const { onLogin } = useAuth();
-  const openProfile=null; 
+  const { onOfficialLogin } = useAuth();
+  const openProfile=null;
   
   
   
  
   const logout=()=>{
-    localStorage.removeItem("tokens");
-    localStorage.removeItem("data");
-    onLogin(false);  
-    return (<Redirect exact to='/login-page' />);
+    localStorage.removeItem("officialtokens");
+    onOfficialLogin(false);  
+    return (<Redirect exact to='/' />);
   }
   return (
     <div>

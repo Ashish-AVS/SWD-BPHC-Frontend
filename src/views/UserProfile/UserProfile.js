@@ -130,7 +130,7 @@ export default function UserProfile() {
     try{
     const fetchData= async ()=>{
       
-      const result= await fetch(`http://40.121.181.70/api/usr/profile?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/usr/profile?uid=${uid}&token=${token}`) ;
       const res = await result.json();
       setProfile(res);
       setIsFetching(false);
@@ -141,13 +141,13 @@ export default function UserProfile() {
       console.log(err);
     }
    
-  },[]);
+  },[uid,token]);
   
   React.useEffect(()=>{
     if(updatingProfile===true){
       try{
         const sendData=async ()=>{
-          const result =await fetch('http://40.121.181.70/api/usr/profile',{
+          const result =await fetch('https://swdnucleus.ml/api/usr/profile',{
             method:"post",
             headers:{'Content-Type':"application/json"},
             body:JSON.stringify({
@@ -202,12 +202,12 @@ export default function UserProfile() {
             setUpdatingProfile(false);
           }
          else if(result.status===422){
-          
           setEmptyError(true);
+          setUpdatingProfile(false);
          }
          else{
-          
            setIsError(true);
+           setUpdatingProfile(false);
          }
         }
         sendData();
@@ -217,7 +217,7 @@ export default function UserProfile() {
         console.log(err);
       }
     }
-  },[updatingProfile])  
+  },[updatingProfile, uid, token, profile.aadhaar, profile.acno, profile.bank, profile.blood, profile.bonafide_no, profile.category, profile.city, profile.current_med, profile.dob, profile.email, profile.father, profile.fcomp, profile.fdesg, profile.fmail, profile.foccup, profile.fphone, profile.gender, profile.gphone, profile.guardian, profile.homeadd, profile.hphone, profile.id, profile.ifsc, profile.income, profile.localadd, profile.mcomp, profile.mdesg, profile.med_history, profile.mmail, profile.moccup, profile.mother, profile.name, profile.nation, profile.pan_card, profile.phone, profile.pimage, profile.room, profile.state, profile.time])  
   
 
   var today = Datetime.moment();

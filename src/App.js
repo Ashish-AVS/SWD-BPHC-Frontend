@@ -1,11 +1,12 @@
-import React,{ useState } from "react";
+import React from "react";
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch,} from "react-router-dom";
 
 import "assets/scss/material-kit-react.scss?v=1.9.0";
-import "assets/css/material-dashboard-react.css?v=1.9.0";
+//import "assets/css/material-dashboard-react.css?v=1.9.0";
 // Routing
-import PrivateRoute from './PrivateRoute';
+import StudentPrivateRoute from "./StudentPrivateRoute";
+import OfficialPrivateRoute from "./OfficialPrivateRoute";
 import { AuthContextProvider } from "./context/auth";
 
 // pages for this product
@@ -31,8 +32,8 @@ return(
                 <Route path="/profile-page" component={ProfilePage} />
                 <Route path="/login-page" component={LoginPage} />
                 <Route path="/official-login" component={OfficialLogin} />
-                <Route path="/official" component={Official} />
-                <PrivateRoute path="/admin" component={Admin} />
+                <OfficialPrivateRoute path="/official" component={Official} />
+                <StudentPrivateRoute path="/admin" component={Admin} />
                 <Route path="/"  component={LandingPage}/>
               </Switch>
             </Router>

@@ -14,6 +14,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import GradeIcon from '@material-ui/icons/Grade';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
+import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
@@ -25,6 +26,7 @@ import Deductions from "views/Deductions/Deductions.js";
 import Documents from "views/Documents/Documents.js";
 import Medclaim from "views/MedClaim/Medclaim.js";
 import Scholarship from "views/Scholarship/Scholarship.js";
+import Outstation from "views/Outstation/Outstation";
 
 const dashboardRoutes = [
   {
@@ -88,6 +90,13 @@ const dashboardRoutes = [
     name: "Achievements",
     icon: LocalPlay,
     component: Awards,
+    layout: "/admin"
+  },
+  {
+    path: "/outstation",
+    name: "Outstation",
+    icon:AirplanemodeActiveIcon,
+    component: Outstation,
     layout: "/admin"
   }
   /*
