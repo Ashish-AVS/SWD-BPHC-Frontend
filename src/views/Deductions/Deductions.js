@@ -104,8 +104,8 @@ export default function Deductions() {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="success">
-            <h4 className={classes.cardTitleWhite}>Goodies Bought From Portal</h4>
+          <CardHeader color="primary">
+            <h4 className={classes.cardTitleWhite}><b>GOODIES BOUGHT FROM SWD PORTAL</b></h4>
            
           </CardHeader>
           <CardBody>
@@ -122,79 +122,33 @@ export default function Deductions() {
       </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="success">
+          <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>
-              Mess Deductions
+              <b>MESS DEDUCTIONS</b>
             </h4>
             <p className={classes.cardCategoryWhite}>
-              Here you will see all the mess related deductions
+              Here you can see all the mess related deductions
             </p>
           </CardHeader>
           <CardBody>
             <h3>We haven't recieved any data for this semester</h3>
-            {/*<Table
-              tableHeaderColor="primary"
-              tableHead={["ID",""]}
-              tableData={[
-                ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                [
-                  "4",
-                  "Philip Chaney",
-                  "$38,735",
-                  "Korea, South",
-                  "Overland Park"
-                ],
-                [
-                  "5",
-                  "Doris Greene",
-                  "$63,542",
-                  "Malawi",
-                  "Feldkirchen in Kärnten"
-                ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
-              ]}
-            />*/}
+           
           </CardBody>
         </Card>
       </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="success">
+          <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>
-              Other Advances Deductions
+              <b>OTHER ADVANCE DEDUCTIONS</b>
             </h4>
             <p className={classes.cardCategoryWhite}>
-              Here you will see all the deductions from other advances
+              Here you can see all the deductions from other advances
             </p>
           </CardHeader>
           <CardBody>
             <h3>We haven't recieved any data for this semester</h3>
-            {/*<Table
-              tableHeaderColor="primary"
-              tableHead={["ID",""]}
-              tableData={[
-                ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                [
-                  "4",
-                  "Philip Chaney",
-                  "$38,735",
-                  "Korea, South",
-                  "Overland Park"
-                ],
-                [
-                  "5",
-                  "Doris Greene",
-                  "$63,542",
-                  "Malawi",
-                  "Feldkirchen in Kärnten"
-                ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
-              ]}
-            />*/}
+            
           </CardBody>
         </Card>
       </GridItem>

@@ -13,6 +13,8 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import Search from "views/OfficialComponents/Search/Search";
 
+import Mess from "views/OfficialComponents/Mess/MessMenu";
+
 
 const dashboardRoutes = [
   
@@ -21,6 +23,13 @@ const dashboardRoutes = [
     name: "Search",
     icon: SearchIcon,
     component: Search,
+    layout: "/official"
+  },
+  {
+    path: "/mess",
+    name: "Mess",
+    icon: SearchIcon,
+    component: Mess,
     layout: "/official"
   }
   /*

@@ -85,7 +85,7 @@ export default function OfficialLogin(props) {
      const fetchData= async ()=>{   
         setIsError(false);
         setEmptyError(false);  
-        const result= await fetch("http://40.121.181.70/api/o/auth/login",{
+        const result= await fetch("https://swdnucleus.ml/api/o/auth/login",{
            method:"post",
            headers:{'Content-Type':"application/json"},
            body:JSON.stringify({

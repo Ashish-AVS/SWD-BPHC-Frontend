@@ -208,6 +208,9 @@ export default function Outstation() {
           setEmptyError(true);
           setSendingData(false);
           setLoading(false);    
+      }
+      else if(result.status===500){
+        alert("Server Error Contact SWD Nucleus")
       }   
   }
     fetchData();
@@ -220,7 +223,7 @@ export default function Outstation() {
   },[sendingData, uid, token, outData.from, outData.to, outData.reason, outData.location]);
   function onChange(e){
     const { name, value } = e.target;
-    console.log(name)
+    
     setOutData(prevState=>({
          ...prevState,
          [name]: value
@@ -412,36 +415,33 @@ export default function Outstation() {
      <CancelOutstation open={open} setOpen={setOpen} cancelId={cancelId} setIsUpdated={setIsUpdated} /> 
     </Card>
     <MaterialTable
-                  title="PREVIOUSLY APPLIED OUTSTATIONS"
-                  columns={[
-                    {title:"S No.",field:"sno"},
-                   // {title:"Outstation ID",field:"outstation_id"},
-                    {title:"Travelling To",field:"location"},
-                    {title:"From Date",field:"from"},
-                    {title:"To Date",field:"to"},
-                    {title:"Duration",field:"duration"},
-                    {title:"Approval Status",field:"approved"}]}
-                    data={data}
-                    options={{
-                        search:false,
-                        pageSize:10,
-                        emptyRowsWhenPaging:false,
-                        actionsColumnIndex:-1
-                    }}
-                  actions={[
-                    rowData=>({                 
-                      icon:()=><Button disabled={rowData.status!==0} color="info">Cancel</Button>,
-                      disabled:rowData.status!==0,  
-                      onClick:(event,row)=>{
-                      setCancelId(row.outstation_id);
-                      setOpen(true);
-                      }
-                   })
-                  ]}
-                 // components={{
-                   // Actions:'MTableActions'
-                  //}}
-                  />
+      title="PREVIOUSLY APPLIED OUTSTATIONS"
+      columns={[
+       {title:"S No.",field:"sno"},
+       {title:"Travelling To",field:"location"},
+       {title:"From Date",field:"from"},
+       {title:"To Date",field:"to"},
+       {title:"Duration",field:"duration"},
+       {title:"Approval Status",field:"approved"}]}
+      data={data}
+      options={{
+        search:false,
+        pageSize:10,
+        emptyRowsWhenPaging:false,
+        actionsColumnIndex:-1
+        }}
+      actions={[
+        rowData=>({                 
+           icon:()=><Button disabled={rowData.status!==0} color="info">Cancel</Button>,
+           disabled:rowData.status!==0,  
+           onClick:(event,row)=>{
+           setCancelId(row.outstation_id);
+           setOpen(true);
+           }
+            })
+        ]}
+               
+    />
   </div>
     );
 }

@@ -18,13 +18,11 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import SearchDetails from "./SearchDetails";
 
 import {
   primaryColor,
   defaultFont
 } from "assets/jss/material-kit-react.js";
-import { Details } from "@material-ui/icons";
 
 
 const styles = {
@@ -110,21 +108,12 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Search() {
-  const [open,setOpen]=React.useState(false)
-  const token=JSON.parse(localStorage.getItem("officialtokens"));
-  const [criteria,setCriteria]=React.useState({
-    criteria_1:'name',
-    criteria_2:'',
-    value_1:'',
-    value_2:''
-  })
+
+ const token=JSON.parse(localStorage.getItem("officialtokens"));
+ 
   const [sendingData,setSendingData]=React.useState(false);
-  const [data,setData]=React.useState([]);
-  const [recievedData,setRecievedData]=React.useState(false);
-  const [recievedDetailsData,setRecievedDetailsData]=React.useState(false);
-  const [detailsData,setDetailsData]=React.useState({})
-  const [detailsReq,setDetailsReq]=React.useState(false);
-  const [uid,setUid]=React.useState()
+  const [messMenudata,setMessMenuData]=React.useState([]);
+  const [recievedData,setRecievedData]=React.useState(false)
   const classes = useStyles();
   var today = Datetime.moment();
   var valid = function( current ){
@@ -160,7 +149,7 @@ export default function Search() {
     setRecievedData(false);
     try{
       const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/search',{
+        const result =await fetch('http://40.121.181.70/api/o/search',{
           method:"post",
           headers:{'Content-Type':"application/json"},
           body:JSON.stringify({
@@ -188,36 +177,7 @@ export default function Search() {
     } 
   } 
   },[sendingData, criteria.criteria_1, criteria.value_1, criteria.criteria_2, criteria.value_2, token])
-  React.useEffect(()=>{
-    if(detailsReq===true){
-      try{
-        const sendData=async ()=>{
-          const result =await fetch('https://swdnucleus.ml/api/o/search/details',{
-            method:"post",
-            headers:{'Content-Type':"application/json"},
-            body:JSON.stringify({
-              id:"swd",
-              uid:uid,
-              token:token
-            })
-           })
-           const res = await result.json();
-          if(result.status===200||result.status===201){
-            setDetailsData(res);
-            setOpen(true);
-            setRecievedDetailsData(true)
-            setDetailsReq(false);
-          }
-         
-        }
-        sendData();
-        
-      }
-      catch(err){
-        console.log(err);
-      } 
-    }
-  },[detailsReq,uid,token])
+  
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -483,11 +443,7 @@ export default function Search() {
                       icon:()=><Button color="info" round >Open</Button>,
                       tooltip:'Open',
                       onClick:(event,row)=>{
-                    console.log(row.uid);
-                    setUid(row.uid);
-                    setDetailsReq(true);
-
-                    
+                    console.log(row.uid)
                       }
                    }
                   ]}
@@ -497,8 +453,6 @@ export default function Search() {
                   />:null} 
         </GridItem>
       </GridContainer>
-      {recievedDetailsData?
-      <SearchDetails open={open} setOpen={setOpen} data={detailsData} />:null}
     </div>
   );
 }
