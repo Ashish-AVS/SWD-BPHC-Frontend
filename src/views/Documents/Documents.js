@@ -16,15 +16,18 @@ import DocItem from "./DocItem";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
-
+  
 export default function Documents() {
   const classes = useStyles();
   const [isFetching,setIsFetching]=React.useState(true);
   const [doc,setDoc]=React.useState([])
+  const user=JSON.parse(localStorage.getItem("data"));
+  const token=JSON.parse(localStorage.getItem("tokens"));
+
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/doc/list`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/doc/list?uid=${user.uid}&token=${token}`) ;
         const res = await result.json();
         if(result.status===200||result.status===200||result.status===304){
         setDoc(res);

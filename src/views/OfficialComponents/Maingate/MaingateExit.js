@@ -1,8 +1,10 @@
 import React from "react";
-import MaterialTable from "material-table";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-
+import FormControl from '@material-ui/core/FormControl';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import InputLabel from '@material-ui/core/InputLabel';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -11,7 +13,7 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
+
 
 import {
   primaryColor,
@@ -104,17 +106,48 @@ const useStyles = makeStyles(styles);
 export default function Search() {
 
  const token=JSON.parse(localStorage.getItem("officialtokens"));
- 
-  //const [sendingData,setSendingData]=React.useState(false);
-  const [messMenuData,setMessMenuData]=React.useState([]);
-  const [messUpdate,setMessUpdate]=React.useState(false);
-  const [menuUpdated,setMenuUpdated]=React.useState(false);
-  const [recievedData,setRecievedData]=React.useState(false)
-  const classes = useStyles();
- 
- 
-  React.useEffect(()=>{
+ const data= JSON.parse(atob(token.split('.')[1]));
+ const [uid,setUid]=React.useState();
+ const [SendReq,setSendReq]=React.useState(false);
   
+  const classes = useStyles();
+  
+  React.useEffect(()=>{
+      if(SendReq===true){
+        try{
+            const sendData=async ()=>{
+              const result =await fetch('https://swdnucleus.ml/api/o/maingate/log',{
+                  method:"post",
+                  headers:{'Content-Type':"application/json"},
+                  body:JSON.stringify({
+                    id:data.id,
+                    uid:uid,
+                    token:token,
+                    action:"exit"
+                  })
+                 })
+               const res = await result.json();
+              if(result.status===200||result.status===201){
+                console.log(res);
+              }
+            
+          }
+            sendData();
+            setSendReq(false);
+          }
+          catch(err){
+            console.log(err);
+            
+          } 
+          
+      }
+  })
+ 
+ const onChange=(e)=>{setUid(e.target.value)}
+  /*
+  
+ React.useEffect(()=>{
+
     //setRecievedData(false);
     try{
       const fetchData=async ()=>{
@@ -141,7 +174,7 @@ export default function Search() {
    if(messUpdate===true){
     try{
       const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/messmenu',{
+        const result =await fetch('https://swdnucleus.ml/api/o/maingate/',{
             method:"post",
             headers:{'Content-Type':"application/json"},
             body:JSON.stringify({
@@ -168,92 +201,55 @@ export default function Search() {
     } 
   }
   },[messUpdate,token,messMenuData])
-  
+  */
   return (
-    <div>
-      <div className={classes.typo} style={{marginTop:"-50px"}}>
-          <h2><strong>BITS PILANI , HYDERABAD CAMPUS</strong></h2>
-      </div>
-      <GridContainer justify="center" alignItems="center">
-        <GridItem xs={12} sm={12} md={12}>
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>MESS OPERATIONS </b></h4>
-              
-            </CardHeader>
-            <CardBody>
-            <h5 style={{display:"flex",justifyContent:"center"}}><b>MESS MENU</b></h5>
-            
-              <GridContainer spacing={4} >
-                  <GridItem xs={12} sm={12} md={12}>
-              {recievedData?<MaterialTable
-                  title="MESS MENU"
-                  columns={[
-                    {title:"Day",field:"day",editable:"never"},
-                    {title:"Breakfast",field:"breakfast"},
-                    {title:"Lunch",field:"lunch"},
-                    {title:"Snacks",field:"snacks"},
-                    {title:"Dinner",field:"dinner"}]}
-                  data={messMenuData}
-                  options={{
-                    search:false,
-                    paging:false,
-                    pageSizeOptions:[7],
-                    pageSize:7,
-                    emptyRowsWhenPaging:false
-                  }}
-                  editable={{
-                    onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {
-                      setTimeout(() => {
-                        const dataUpdate = [...messMenuData];
-                        const index = oldData.tableData.id;
-                        dataUpdate[index] = newData;
-                        setMessMenuData([...dataUpdate]);
-          
-                        resolve();
-                      }, 1000)
-                    }),
-                  }}
-                  //actions={[
-                    //{                 
-                      //icon:()=><Button color="info" round >Open</Button>,
-                      //tooltip:'Open',
-                      //onClick:(event,row)=>{
-                    //console.log(row.uid)
-                      //}
-                   //}
-                  //]}
-                 // components={{
-                   // Actions:'MTableActions'
-                  //}}
-                  />
-              :<h5>Fetching Data...</h5>}  
+      <div>
+          <div className={classes.typo} style={{ marginTop: "-50px" }}>
+              <h2><strong>BITS PILANI , HYDERABAD CAMPUS</strong></h2>
+          </div>
+          <GridContainer justify="center" alignItems="center">
+              <GridItem xs={12} sm={12} md={8}>
+                  <Card>
+                      <CardHeader color="primary">
+                          <h4 className={classes.cardTitleWhite}><b>MAIN GATE </b></h4>
+
+                      </CardHeader>
+                      <CardBody>
+                          <h5 style={{ display: "flex", justifyContent: "center" }}><b>EXIT POINT</b></h5>
+
+                          <GridContainer>
+                              <GridItem xs={12} sm={12} md={12}>
+                                  <GridContainer direction="row" justify="center" alignItems="center">
+                                      <GridItem>
+                                  <FormControl variant="outlined">
+                                      <InputLabel htmlFor="component-outlined">Student UID</InputLabel>
+                                      <OutlinedInput id="component-outlined"  onChange={onChange} label="Student UID"  />
+                                  </FormControl>
+                                  </GridItem>
+                                  </GridContainer>
+                              </GridItem>
+                              <GridItem xs={12} sm={12} md={12}>
+                                  <GridContainer direction="row" justify="center" alignItems="center" >
+                                      <GridItem>
+                                          <Button color="success" onClick={()=>{setSendReq(true)}}
+                                          >
+                                              Submit
+                                           </Button>
+                                      </GridItem>
+                                      <GridItem>
+                                          <Button color="danger">
+                                              Discard
+                                          </Button>
+                                      </GridItem>
+                                  </GridContainer>
+                              </GridItem>
+
+                          </GridContainer>
+                      </CardBody>
+                  </Card>
               </GridItem>
-                <GridItem xs={12} sm={12} md={10}>
-                <GridContainer direction="row"  justify="center"  alignItems="center" >
-                  <GridItem>
-                    <Button color="success" onClick={()=>{
-                      console.log(messMenuData);
-                      setMessUpdate(true)
-                      }}>
-                      Submit
-                    </Button>
-                  </GridItem>
-                  <GridItem>
-                    <Button color="danger">
-                      Discard
-                    </Button>
-                  </GridItem>
-                </GridContainer>
-                </GridItem>
-                
-              </GridContainer>              
-            </CardBody>
-          </Card>
-        </GridItem>
-       
-      </GridContainer>
-    </div>
+
+          </GridContainer>
+      </div>
   );
 }

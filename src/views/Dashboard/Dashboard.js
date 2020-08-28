@@ -49,6 +49,7 @@ export default function Dashboard() {
   const [Modal, openModal] = React.useState(false);
   const [Mess,openMess] = React.useState(false);
   const  [Grace,openGrace]= React.useState(false);
+  const token=JSON.parse(localStorage.getItem("tokens"));
   const {uid,name}=JSON.parse(localStorage.getItem("data"));
   const [messDetails,setMessDetails]=React.useState({});
   let messNo=messDetails.mess;
@@ -57,7 +58,7 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/mess/menu?uid=${uid}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/mess/menu?uid=${uid}&token=${token}`) ;
       const res = await result.json();
       setMessDetails(res);   
   }
