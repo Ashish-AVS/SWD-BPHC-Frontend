@@ -498,7 +498,7 @@ export default function Search() {
         </GridItem>
       </GridContainer>
       {recievedDetailsData?
-      <SearchDetails open={open} setOpen={setOpen} data={detailsData} />:null}
+      <SearchDetails open={open} setOpen={setOpen} data={detailsData} setRecievedDetailsData={setRecievedDetailsData} />:null}
     </div>
   );
 }

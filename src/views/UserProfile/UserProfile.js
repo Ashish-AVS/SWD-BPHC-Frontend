@@ -118,9 +118,10 @@ export default function UserProfile() {
   const {uid}=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
   const [profile,setProfile]=React.useState({});
+  const [hostels,setHostels]=React.useState([]);
   const [emptyError,setEmptyError]=React.useState(false);
   const [isError, setIsError] = React.useState(false);
- 
+  const myref=React.useRef(null);
   const [isFetching,setIsFetching]=React.useState(true);
   const [isEnabled,setIsEnabled]=React.useState(false);
   const [profileUpdated,setProfileUpdated]=React.useState(false);
@@ -132,7 +133,8 @@ export default function UserProfile() {
       
       const result= await fetch(`https://swdnucleus.ml/api/usr/profile?uid=${uid}&token=${token}`) ;
       const res = await result.json();
-      setProfile(res);
+      setProfile(res.profile);
+      setHostels(res.hostels);
       setIsFetching(false);
   }
     fetchData();
@@ -190,6 +192,7 @@ export default function UserProfile() {
               pan_card: profile.pan_card,
               phone: profile.phone,
               pimage: profile.pimage,
+              hostel:profile.hostel,
               room: profile.room,
               state: profile.state,
               time:profile.time,
@@ -197,17 +200,19 @@ export default function UserProfile() {
             })
            })
           if(result.status===200||result.status===201){
-           
             setProfileUpdated(true);
             setUpdatingProfile(false);
+            myref.current.scrollTo(0, 0);
           }
          else if(result.status===422){
           setEmptyError(true);
           setUpdatingProfile(false);
-         }
+          myref.current.scrollTo(0, 0);
+        }
          else{
            setIsError(true);
            setUpdatingProfile(false);
+           myref.current.scrollTo(0, 0);
          }
         }
         sendData();
@@ -255,11 +260,29 @@ export default function UserProfile() {
         }}
         />
     </GridItem>
-    <GridItem xs={12} sm={12} md={4}>
+    <GridItem xs={12} sm={12} md={3}>
+     <FormControl fullWidth className={classes.formControl}>
+      <InputLabel className={classes.labelRoot}>Hostel</InputLabel>
+      <Select
+        name="hostel"
+        className={classes.input+" "+classes.underline}
+        defaultValue={profile.hostel}
+        onChange={onChange}
+       >
+         <MenuItem value={'NA'}>Select</MenuItem>
+         {hostels.map((item)=>{
+        return <MenuItem value={item.key}>{item.name}</MenuItem>
+       })
+         
+       }
+         </Select>
+     </FormControl>  
+    </GridItem>
+    <GridItem xs={12} sm={12} md={2}>
       <CustomInput
         labelText="Room No."
         id="room"
-        helperText="Please update your Room No."
+        
         formControlProps={{
           fullWidth: true
         }}
@@ -269,7 +292,7 @@ export default function UserProfile() {
         onChange={onChange}
       />
     </GridItem>
-    <GridItem xs={12} sm={12} md={4}>
+    <GridItem xs={12} sm={12} md={3}>
       <CustomInput
         labelText="Phone No."
         id="phone"
@@ -290,7 +313,7 @@ export default function UserProfile() {
           fullWidth: true
         }}
         inputProps={{
-          defaultValue:profile.id
+          defaultValue:profile.id,disabled:true
         }}
       />                  
     </GridItem>
@@ -824,7 +847,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <div className={classes.typo} style={{marginTop:"-50px"}}>
+      <div ref={myref} className={classes.typo} style={{marginTop:"-50px"}}>
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
       <GridContainer>

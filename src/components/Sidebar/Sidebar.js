@@ -6,6 +6,7 @@ import { NavLink } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Hidden from "@material-ui/core/Hidden";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -16,7 +17,9 @@ import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 import OfficialNavbarLinks from "components/Navbars/OfficialNavbarLinks";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
+const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
+//<SwipeableDrawer disableBackdropTransition={!iOS} disableDiscovery={iOS} />
 const useStyles = makeStyles(styles);
 
 export default function Sidebar(props) {
@@ -27,7 +30,7 @@ export default function Sidebar(props) {
   }
   const { color, logo, image, logoText, routes,layout } = props;
   var links = (
-    <List className={classes.list}>
+    <List className={classes.list} onTouchTap={props.handleDrawerToggle}>
       {routes.map((prop, key) => {
         var activePro = " ";
         var listItemClasses;
@@ -51,7 +54,7 @@ export default function Sidebar(props) {
             activeClassName="active"
             key={key}
           >
-            <ListItem button className={classes.itemLink + listItemClasses}>
+            <ListItem button className={classes.itemLink + listItemClasses} >
               {typeof prop.icon === "string" ? (
                 <Icon
                   className={classNames(classes.itemIcon, whiteFontClasses, {
@@ -80,10 +83,65 @@ export default function Sidebar(props) {
       })}
     </List>
   );
+  var moblinks = (
+    <List className={classes.list}>
+      {routes.map((prop, key) => {
+        var activePro = " ";
+        var listItemClasses;
+        if (prop.path === "/upgrade-to-pro") {
+          activePro = classes.activePro + " ";
+          listItemClasses = classNames({
+            [" " + classes[color]]: true
+          });
+        } else {
+          listItemClasses = classNames({
+            [" " + classes[color]]: activeRoute(prop.layout + prop.path)
+          });
+        }
+        const whiteFontClasses = classNames({
+          [" " + classes.whiteFont]: activeRoute(prop.layout + prop.path)
+        });
+        return (
+          <NavLink
+            to={prop.layout + prop.path}
+            className={activePro + classes.item}
+            activeClassName="active"
+            key={key}
+           // onTouchTap={props.setOpen(false)}
+          >
+            <ListItem button className={classes.itemLink + listItemClasses} >
+              {typeof prop.icon === "string" ? (
+                <Icon
+                  className={classNames(classes.itemIcon, whiteFontClasses, {
+                    [classes.itemIconRTL]:false
+                  })}
+                >
+                  {prop.icon}
+                </Icon>
+              ) : (
+                <prop.icon
+                  className={classNames(classes.itemIcon, whiteFontClasses, {
+                    [classes.itemIconRTL]:false
+                  })}
+                />
+              )}
+              <ListItemText 
+                primary={props.rtlActive ? prop.rtlName : prop.name}
+                className={classNames(classes.itemText, whiteFontClasses, {
+                  [classes.itemTextRTL]: false
+                })}
+                disableTypography={true}
+              />
+            </ListItem>
+          </NavLink>
+        );
+      })}
+    </List>
+  );
   var brand = (
     <div className={classes.logo}>
       <a
-        href="/admin/dashboard"
+        href={`/${layout}`}
         className={classNames(classes.logoLink, {
           [classes.logoLinkRTL]: false
         })}
@@ -99,9 +157,11 @@ export default function Sidebar(props) {
   return (
     <div>
       <Hidden mdUp implementation="css">
-        <Drawer
-          variant="temporary"
-          anchor={props.rtlActive ? "left" : "right"}
+        <SwipeableDrawer
+          disableBackdropTransition={!iOS} 
+          disableDiscovery={iOS}
+         
+          anchor={"right"}
           open={props.open}
           classes={{
             paper: classNames(classes.drawerPaper, {
@@ -116,7 +176,7 @@ export default function Sidebar(props) {
           {brand}
           <div className={classes.sidebarWrapper}>
             {layout==='admin'?<AdminNavbarLinks />:layout==='official'?<OfficialNavbarLinks/>:null}
-            {links}
+            {moblinks}
           </div>
           {image !== undefined ? (
             <div
@@ -124,7 +184,7 @@ export default function Sidebar(props) {
               style={{ backgroundImage: "url(" + image + ")" }}
             />
           ) : null}
-        </Drawer>
+        </SwipeableDrawer>
       </Hidden>
       <Hidden smDown implementation="css">
         <Drawer

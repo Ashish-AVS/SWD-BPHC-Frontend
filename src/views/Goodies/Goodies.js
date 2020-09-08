@@ -29,7 +29,7 @@ export default function Goodies() {
   React.useEffect(()=>{
     try{
         const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/goodies`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/goodies?uid=${user.uid}&token=${token}`) ;
         const res = await result.json();
        //console.log(res);
         setGoodie(res);   

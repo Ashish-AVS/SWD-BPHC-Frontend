@@ -8,12 +8,16 @@
 // @material-ui/icons
 
 import SearchIcon from '@material-ui/icons/Search';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
+import FastForwardIcon from '@material-ui/icons/FastForward';
+import FastRewindIcon from '@material-ui/icons/FastRewind';
 
 // core components/views for Admin layout
 
 import Search from "views/OfficialComponents/Search/Search";
-
+import Entry from "views/OfficialComponents/Maingate/MaingateEntry";
 import Mess from "views/OfficialComponents/Mess/MessMenu";
+import Exit from "views/OfficialComponents/Maingate/MaingateExit";
 
 
 const dashboardRoutes = [
@@ -28,8 +32,22 @@ const dashboardRoutes = [
   {
     path: "/mess",
     name: "Mess",
-    icon: SearchIcon,
+    icon: FastfoodIcon,
     component: Mess,
+    layout: "/official"
+  },
+  {
+    path: "/maingate/entry",
+    name: "Gate Entry",
+    icon: FastForwardIcon,
+    component: Entry ,
+    layout: "/official"
+  },
+  {
+    path: "/maingate/exit",
+    name: "Gate Exit",
+    icon: FastRewindIcon,
+    component: Exit ,
     layout: "/official"
   }
   /*

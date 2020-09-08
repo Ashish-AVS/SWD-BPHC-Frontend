@@ -11,7 +11,7 @@ import Person from "@material-ui/icons/Person";
 import DirectionsIcon from '@material-ui/icons/Directions';
 import CardGiftcardIcon from '@material-ui/icons/CardGiftcard';
 import DescriptionIcon from '@material-ui/icons/Description';
-import GradeIcon from '@material-ui/icons/Grade';
+import SchoolIcon from '@material-ui/icons/School';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
@@ -74,7 +74,7 @@ const dashboardRoutes = [
   {
     path: "/scholarship",
     name: "Scholarship",
-    icon: GradeIcon,
+    icon: SchoolIcon,
     component: Scholarship,
     layout: "/admin"
   },

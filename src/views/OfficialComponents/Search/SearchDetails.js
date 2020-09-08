@@ -25,7 +25,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 Transition.displayName = "Transition";
 
 
-export default function MenuModal({open,setOpen,data}){
+export default function MenuModal({open,setOpen,data,setRecievedDetailsData}){
 const classes=useStyles();
     return(
         <Dialog
@@ -37,7 +37,9 @@ const classes=useStyles();
             open={open}
             TransitionComponent={Transition}
             keepMounted
-            onClose={() => setOpen(false)}
+            onClose={() =>{
+                setOpen(false);
+                setRecievedDetailsData(false);}}
             aria-labelledby="classic-modal-slide-title"
             aria-describedby="classic-modal-slide-description"
         >
@@ -51,7 +53,9 @@ const classes=useStyles();
                     key="close"
                     aria-label="Close"
                     color="inherit"
-                    onClick={() => setOpen(false)}
+                    onClick={() =>{
+                        setOpen(false);
+                        setRecievedDetailsData(false);}}
                 >
                     <Close className={classes.modalClose} />
                 </IconButton>
@@ -604,7 +608,9 @@ const classes=useStyles();
                   <DialogActions className={classes.modalFooter}>
                    
                     <Button
-                      onClick={() => setOpen(false)}
+                      onClick={() =>{
+                        setOpen(false);
+                        setRecievedDetailsData(false);}}
                       color="danger"
                       
                       solid="true"
