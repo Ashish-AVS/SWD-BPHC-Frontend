@@ -15,6 +15,10 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.babelrc
+.eslintignore
+.eslintrc.js
+
 
 package-lock.json
 

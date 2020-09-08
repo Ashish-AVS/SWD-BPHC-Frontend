@@ -240,7 +240,7 @@ export default function UserProfile() {
       
   }
   const UserComponent=isFetching?
-  <h4>Fetching Users....</h4>
+  <h4>Fetching user profile....</h4>
   :
   <CardBody>
   <h3><b>PERSONAL DETAILS</b></h3>
