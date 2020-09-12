@@ -47,7 +47,7 @@ React.useEffect(()=>{
       setLoading(true);  
       const result =await fetch('https://swdnucleus.ml/api/outstation/cancel',{
           method:"post",
-          headers:{'Content-Type':"application/json"},
+          headers:{'Content-Type':"application/json",Authorization:token},
           body:JSON.stringify({
              uid:uid,
              token:token,

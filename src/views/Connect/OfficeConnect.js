@@ -67,7 +67,7 @@ setIsFetched(true);
                 root: classes.center,
                 paper: classes.modal
               }}
-              maxWidth="lg"
+              fullScreen
               fullWidth={true}
               open={open}
               TransitionComponent={Transition}
@@ -100,6 +100,10 @@ setIsFetched(true);
                   title="ADMINISTRATIVE HEADS"
                   columns={columns1}
                   data={data}
+                  options={{
+                    pageSize:20,
+                    emptyRowsWhenPaging:false
+                  }}
                   />           
 
 
@@ -110,7 +114,7 @@ setIsFetched(true);
                 <Button
                   onClick={() => setOpen(false)}
                   color="danger"
-                  simple
+                  solid="true"
                 >
                   Close
                 </Button>

@@ -28,66 +28,47 @@ Transition.displayName = "Transition";
 export default function CancelModal({
     open, 
     setOpen,
-    cancelOrder,
-    setIsUpdated
+    goodieId,
+    goodieType
    }){
 const classes=useStyles();
 
 const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("tokens"));
+const [goodieDetails,setGoodieDetails]=React.useState({});
+const [recievedData,setRecievedData]=React.useState(false);
 
-const [loading,setLoading]=React.useState(false);
-const [sendingData,setSendingData]=React.useState(false);
 
 
 React.useEffect(()=>{
-  if(sendingData===true){
-    try{
+   setRecievedData(false);
+    
+   try{
+    
     const sendData=async ()=>{
-      setLoading(true);  
-      const result =await fetch('https://swdnucleus.ml/api/deductions/cancel',{
-          method:"post",
+      
+      const result =await fetch(`https://swdnucleus.ml/api/goodies/info?uid=${uid}&g_id=${goodieId}`,{
           headers:{'Content-Type':"application/json",
           Authorization:token},
-          body:JSON.stringify({
-             uid:uid,
-             token:token,
-             transaction_id:cancelOrder.transaction_id
-          })
          })
+     const res = await result.json();
         if(result.status===200||result.status===201){ 
-          setIsUpdated(`Cancel ${cancelOrder.g_id}`);
-          setLoading(false);
-          setSendingData(false);
-          setOpen(false);
+         setGoodieDetails(res);
+         setRecievedData(true);                      
         }
-       
-      }
+    }
+      
     sendData();
     //console.log(totalQty);
    
-    setSendingData(false);  
+      
     }
     catch(err){
       console.log(err);
     }
-  }
-},[sendingData,uid,token,cancelOrder,setOpen,setIsUpdated])
-let goodieDetails="";
-if(cancelOrder.g_type===0){
-    goodieDetails=parseInt(cancelOrder.xs)?`${goodieDetails} XS-${cancelOrder.xs}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.s)?`${goodieDetails} S-${cancelOrder.s}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.m)?`${goodieDetails} M-${cancelOrder.m}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.l)?`${goodieDetails} L-${cancelOrder.l}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.xl)?`${goodieDetails} XL-${cancelOrder.xl}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.xxl)?`${goodieDetails} XXL-${cancelOrder.xxl}`:goodieDetails;
-    goodieDetails=parseInt(cancelOrder.xxxl)?`${goodieDetails} XXXL-${cancelOrder.xxxl}`:goodieDetails;
-    } 
-    else {
-        goodieDetails=null;
-    }
-    
 
+},[uid,token,goodieId])
+    
     return(
         <Dialog
                   classes={{
@@ -117,43 +98,56 @@ if(cancelOrder.g_type===0){
                     >
                       <Close className={classes.modalClose} />
                     </IconButton>
-                    <h3 className={classes.modalTitle}><strong>Cancel Order</strong></h3>
+                    <h3 className={classes.modalTitle}><strong>Goodie Sales Detail</strong></h3>
                   </DialogTitle>
                   <DialogContent
                     id="classic-modal-slide-description"
                     className={classes.modalBody}
                   >
                       <div>
-                  <h4>Are you sure you want to cancel the order?</h4>
+                  <h4>Here is the sales detail of your goodie till now:</h4>
                     
-                    
-                        <h5><b>Order Details:-</b></h5>
-                        <p>{goodieDetails}</p>
-                <p>Net Quantity: {cancelOrder.net_quantity}</p><p>Total Amount: ₹{cancelOrder.total_amount}</p>
-                        <p></p>
+                    {goodieType===0 && recievedData===true?
+                    <div>
+                        <p>XS- {goodieDetails.xs}</p>
+                        <p>S- {goodieDetails.s}</p>
+                        <p>M- {goodieDetails.m}</p>
+                        <p>L- {goodieDetails.l}</p>
+                        <p>XL- {goodieDetails.xl}</p>
+                        <p>XXL- {goodieDetails.xxl}</p>
+                        <p>XXXL- {goodieDetails.xxxl}</p>
+                    <h5>Net Quantity Ordered- {goodieDetails.net_quantity}</h5>
+                    <h5>Net Amount - ₹ {goodieDetails.total_amount}</h5>
+                    </div>
+                    :
+                    goodieType===1 && recievedData===true?
+                    <div>
+                    <h5>Quantity Ordered- {goodieDetails.net_quantity} </h5>
+                    <h5>Net Amount - ₹ {goodieDetails.total_amount}</h5>
+                    </div>
+                    :
+                    goodieType===2 && recievedData===true?
+                    <div>
+                    <h5>Net Amount Raised- ₹{goodieDetails.total_amount}</h5>
+                    </div>
+                    :
+                    <p>Loading Information...</p>
+                }
+                       
                     </div>
                   
                   </DialogContent>
                   <DialogActions className={classes.modalFooter}>
-                  {loading?<CircularProgress size={24} />:null}
-                  <Button
-                      onClick={() => setSendingData(true)}
-                      color="info"
-                      solid
-                      round
-                      disabled={loading}
-                    >
-                    
-                      Yes 
-                    </Button>
+                
+                  
                     
                     <Button
                       onClick={() => setOpen(false)}
                       color="danger"
-                      solid
+                      solid="true"
                       round
                     >
-                      No
+                      close
                     </Button>
                   </DialogActions>
                 </Dialog>

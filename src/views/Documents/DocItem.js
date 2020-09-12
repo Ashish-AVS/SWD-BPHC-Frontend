@@ -31,7 +31,9 @@ export default function DocItem({docTitle,docKey}) {
       setLoading(true);
       try{
       const sendData=async ()=>{
-          const result =await fetch(`https://swdnucleus.ml/api/doc?uid=${uid}&token=${token}&key=${docKey}`);
+          const result =await fetch(`https://swdnucleus.ml/api/doc?uid=${uid}&key=${docKey}`,{
+            headers:{Authorization:token}
+          });
           const res= await result.blob();       
           if(result.status===200||result.status===201){  
           

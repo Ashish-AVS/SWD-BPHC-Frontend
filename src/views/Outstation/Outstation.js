@@ -146,7 +146,9 @@ export default function Outstation() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/outstation/?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/outstation/?uid=${uid}`,{
+        headers:{Authorization:token}
+      }) ;
       const res = await result.json();
       if(result.status===200||result.status===201||result.status===304){
        setData(
@@ -181,9 +183,9 @@ export default function Outstation() {
        setEmptyError(false);
         try{
       const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/outstation/?uid=${uid}&token=${token}`,{
+      const result= await fetch(`https://swdnucleus.ml/api/outstation/?`,{
         method:"post",
-        headers:{'Content-Type':"application/json"},
+        headers:{'Content-Type':"application/json",Authorization:token},
         body:JSON.stringify({
           uid:uid,
           token:token,

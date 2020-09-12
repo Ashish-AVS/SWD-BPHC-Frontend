@@ -56,7 +56,9 @@ export default function Deductions() {
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${uid}&token=${token}`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${uid}`,{
+          headers:{Authorization:token}
+        }) ;
         const res = await result.json();
         if(result.status===200||result.status===200||result.status===304){
         console.log(res);

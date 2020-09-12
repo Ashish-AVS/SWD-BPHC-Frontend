@@ -67,7 +67,7 @@ setIsFetched(true);
                 root: classes.center,
                 paper: classes.modal
               }}
-              maxWidth="lg"
+              fullScreen
               fullWidth={true}
               open={open}
               TransitionComponent={Transition}
@@ -101,7 +101,8 @@ setIsFetched(true);
                   columns={columns1}
                   data={data}
                   options={{
-                      search:false
+                      search:false,
+                      
                   }}
                   />           
 

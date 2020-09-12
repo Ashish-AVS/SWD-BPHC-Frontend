@@ -1,5 +1,7 @@
 import React,{useState,useEffect} from "react";
 import {Link} from "react-router-dom";
+//import Cookie from "js.cookie";
+import axios from "axios";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -83,42 +85,44 @@ export default function LoginPage(props) {
  useEffect(()=>{
    if(isLoggingIn===true){  
      setLoading(true);
-     const abortController = new AbortController();
-     const signal=abortController.signal;
+    
      try{
      const fetchData= async ()=>{  
-     
-      
         setIsError(false);
         setEmptyError(false);  
-        const result= await fetch("https://swdnucleus.ml/api/auth",{
-           method:"post",
-           headers:{'Content-Type':"application/json"},
-           body:JSON.stringify({
+        axios.post("https://swdnucleus.ml/api/auth",{
              uid:uid,
-             password:pwd
-          }),
-          signal:signal      
-        })
-        const res =await result.json();
-        if(result.status===200||result.status===201||result.status===304){ 
-           onLogin(res.token); 
-           data.name=res.name;
-           data.id=res.id;
-           data.isComplete=res.isComplete;
-           data.uid=uid;
-           setLoggedIn(true);
+             password:pwd,
+             type:'0'        
+        }).then(result=>{
+          if(result.status===200||result.status===201||result.status===304){
+            //console.log(result.headers.get('Set-Cookie')); 
+             
+            onLogin(result.headers.authorization); 
+             data.name=result.data.name;
+             data.id=result.data.id;
+             data.isComplete=result.data.isComplete;
+             data.uid=uid;
+             setLoggedIn(true);
           }
-          else if(result.status===422){
+        
+        }).catch((result)=>{
+         
+           if(result.response.status===422){
+            
             setLoggingIn(false);
             setEmptyError(true);
             setLoading(false);
           } 
-          else if(result.status===401){
+        else if(result.response.status===401){
+            
             setLoggingIn(false);
             setIsError(true);
             setLoading(false);
-          }     
+          }
+        })      
+        
+            
         }
         fetchData();
       }catch(err){
@@ -126,18 +130,15 @@ export default function LoginPage(props) {
           console.log(err)
         }
        
-     return ()=>{
-       abortController.abort();
-     }
+    
    }
  },[isLoggingIn,uid,pwd,onLogin]);
 
  useEffect(()=>{
-  console.log(authTokens);
+ 
    if(isLoggedIn===true){
     localStorage.setItem("tokens",JSON.stringify(authTokens)); 
     localStorage.setItem("data",JSON.stringify(data));
-    console.log("hi2");
     props.history.push("/admin/dashboard");
     setLoading(false); 
   return ()=>{

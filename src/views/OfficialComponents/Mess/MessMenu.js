@@ -118,7 +118,9 @@ export default function Search() {
     //setRecievedData(false);
     try{
       const fetchData=async ()=>{
-        const result =await fetch(`https://swdnucleus.ml/api/o/messmenu?id=swd&token=${token}&messno=1`)
+        const result =await fetch(`https://swdnucleus.ml/api/o/messmenu?id=swd&messno=1`,{
+          headers:{Authorization:`Bearer ${token}`}
+        })
          const res = await result.json();
         if(result.status===200||result.status===201){
             setMessMenuData(res);
@@ -143,7 +145,8 @@ export default function Search() {
       const sendData=async ()=>{
         const result =await fetch('https://swdnucleus.ml/api/o/messmenu',{
             method:"post",
-            headers:{'Content-Type':"application/json"},
+            headers:{'Content-Type':"application/json",
+            Authorization:`Bearer ${token}`},
             body:JSON.stringify({
               id:"swd",
               messno:1,

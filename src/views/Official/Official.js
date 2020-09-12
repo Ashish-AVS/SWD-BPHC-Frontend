@@ -90,14 +90,15 @@ export default function OfficialLogin(props) {
            headers:{'Content-Type':"application/json"},
            body:JSON.stringify({
              id:id,
-             password:pwd
+             password:pwd,
+             type:"0"
           }),
           signal:signal      
         })
         const res =await result.json();
         if(result.status===200||result.status===201||result.status===304){ 
-           console.log(JSON.parse(atob(res.token.split('.')[1])));
-           onOfficialLogin(res.token);
+           //console.log(result.headers.authorisation);
+           onOfficialLogin(res.bearer_token);
            setLoggedIn(true);
           }
           else if(result.status===422){

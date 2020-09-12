@@ -44,7 +44,11 @@ React.useEffect(()=>{
 
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/mess/grace?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/mess/grace?uid=${uid}`,{
+        headers:{
+          Authorization:token
+        }
+      }) ;
       if(result.status===200||result.status===201||result.status===304){
       const res = await result.json();
       setGr(res.map((item)=>{
@@ -68,7 +72,8 @@ React.useEffect(()=>{
       const sendData=async ()=>{
         const result =await fetch('http://40.121.181.70/api/mess/grace',{
           method:"post",
-          headers:{'Content-Type':"application/json"},
+          headers:{'Content-Type':"application/json",
+          Authorization:token},
           body:JSON.stringify({
             uid:uid,
             token:token,

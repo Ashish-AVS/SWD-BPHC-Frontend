@@ -17,12 +17,12 @@ import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
 import OfficialNavbarLinks from "components/Navbars/OfficialNavbarLinks";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
-const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 //<SwipeableDrawer disableBackdropTransition={!iOS} disableDiscovery={iOS} />
 const useStyles = makeStyles(styles);
 
 export default function Sidebar(props) {
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const classes = useStyles();
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
@@ -30,7 +30,7 @@ export default function Sidebar(props) {
   }
   const { color, logo, image, logoText, routes,layout } = props;
   var links = (
-    <List className={classes.list} onTouchTap={props.handleDrawerToggle}>
+    <List className={classes.list} >
       {routes.map((prop, key) => {
         var activePro = " ";
         var listItemClasses;
@@ -157,10 +157,10 @@ export default function Sidebar(props) {
   return (
     <div>
       <Hidden mdUp implementation="css">
-        <SwipeableDrawer
-          disableBackdropTransition={!iOS} 
-          disableDiscovery={iOS}
-         
+        <SwipeableDrawer disableBackdropTransition={!iOS} disableDiscovery={iOS}
+          //disableBackdropTransition={!iOS} 
+          //disableDiscovery={iOS}
+          onOpen={props.handleDrawerToggle}
           anchor={"right"}
           open={props.open}
           classes={{

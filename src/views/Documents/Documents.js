@@ -27,7 +27,9 @@ export default function Documents() {
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/doc/list?uid=${user.uid}&token=${token}`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/doc/list?uid=${user.uid}`,{
+          headers:{Authorization:token}
+        }) ;
         const res = await result.json();
         if(result.status===200||result.status===200||result.status===304){
         setDoc(res);

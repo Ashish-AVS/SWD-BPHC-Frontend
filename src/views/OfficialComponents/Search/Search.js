@@ -162,7 +162,10 @@ export default function Search() {
       const sendData=async ()=>{
         const result =await fetch('https://swdnucleus.ml/api/o/search',{
           method:"post",
-          headers:{'Content-Type':"application/json"},
+          headers:{
+            'Content-Type':"application/json",
+             Authorization:`Bearer ${token}`
+            },
           body:JSON.stringify({
             id:"swd",
             criteria_1:criteria.criteria_1,
@@ -194,7 +197,10 @@ export default function Search() {
         const sendData=async ()=>{
           const result =await fetch('https://swdnucleus.ml/api/o/search/details',{
             method:"post",
-            headers:{'Content-Type':"application/json"},
+            headers:{
+              'Content-Type':"application/json",
+               Authorization:`Bearer ${token}`
+              },
             body:JSON.stringify({
               id:"swd",
               uid:uid,

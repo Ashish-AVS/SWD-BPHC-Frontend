@@ -29,16 +29,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 Transition.displayName = "Transition";
 export default function GoodieModal({
     open, 
-    setOpen,
-    goodieType,
-    goodieName,
-    goodieId, 
-    goodieImage,            
-    goodiePrice,
-    minAmount,
-    maxAmount,
-    limit,
-    setIsUpdated}){
+    setOpen
+    }){
 const classes=useStyles();
 
 const {uid}=JSON.parse(localStorage.getItem("data"));

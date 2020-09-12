@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from "axios";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -58,9 +58,11 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/mess/menu?uid=${uid}&token=${token}`) ;
-      const res = await result.json();
-      setMessDetails(res);   
+      const result= await axios.get(`https://swdnucleus.ml/api/mess/menu?uid=${uid}`,{headers:{
+        Authorization:token
+      }}) ;
+      //const res = await result.json();
+      setMessDetails(result.data);   
   }
     fetchData();
     

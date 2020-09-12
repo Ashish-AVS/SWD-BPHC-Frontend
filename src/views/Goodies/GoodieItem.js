@@ -19,6 +19,7 @@ import Badge from "components/Badge/Badge.js";
 
 import GoodieModal from "views/Modals/GoodieModal.js";
 import CancelModal from "views/Modals/CancelModal.js";
+import GoodieInfoModal from "views/Modals/GoodieInfoModal";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 
@@ -26,6 +27,7 @@ const useStyles = makeStyles(styles);
 
 export default function GoodieItem({
   goodieId,
+  goodieHostId,
   goodieType, 
   goodieName,
   goodieImage,
@@ -41,7 +43,8 @@ export default function GoodieItem({
   setIsUpdated}) {
   const [goodieModal, openGoodieModal] = React.useState(false);
   const [cancelModal, openCancelModal] = React.useState(false);
-   
+  const [infoModal,openInfoModal]=React.useState(false);
+  const {uid}=JSON.parse(localStorage.getItem("data"));
   const classes = useStyles();
   let match=false;
   let cancelOrder={};
@@ -88,21 +91,30 @@ export default function GoodieItem({
                             </div>
                             </GridItem>
                             <GridItem>
-                            
                             {orderButton}
+                            </GridItem>
+                            
                              
-                             </GridItem>
                   </GridContainer>
                   </GridItem>
                  </GridContainer>
             </CardBody>
             <CardFooter stats>
-              <div className={classes.stats}>
+             <GridContainer spacing={5}>
+               <GridItem>
                 <Button round>
                  View Size Chart
                 </Button>
-              </div>
-            </CardFooter>
+                </GridItem>
+                <GridItem>
+                  {uid === goodieHostId ? 
+                    <Button round color="rose" onClick={()=>{openInfoModal(true)}}>
+                      Get Sales Info  
+                    </Button>
+                       :null}
+                </GridItem>
+              </GridContainer>
+           </CardFooter>
           </Card>
           <GoodieModal 
             open={goodieModal} 
@@ -125,6 +137,13 @@ export default function GoodieItem({
           cancelOrder={cancelOrder}
           setIsUpdated={setIsUpdated}
            />
+           {uid===goodieHostId?
+           <GoodieInfoModal 
+          open={infoModal} 
+          setOpen={openInfoModal}
+          goodieType={goodieType}
+          goodieId={goodieId}
+           />:null}
         </GridItem>
         
 

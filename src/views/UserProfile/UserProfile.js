@@ -131,7 +131,9 @@ export default function UserProfile() {
     try{
     const fetchData= async ()=>{
       
-      const result= await fetch(`https://swdnucleus.ml/api/usr/profile?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`https://swdnucleus.ml/api/usr/profile?uid=${uid}&token=${token}`,{
+        headers:{Authorization:token}
+      }) ;
       const res = await result.json();
       setProfile(res.profile);
       setHostels(res.hostels);
@@ -150,8 +152,8 @@ export default function UserProfile() {
       try{
         const sendData=async ()=>{
           const result =await fetch('https://swdnucleus.ml/api/usr/profile',{
-            method:"post",
-            headers:{'Content-Type':"application/json"},
+            method:"post",            
+            headers:{'Content-Type':"application/json",Authorization:token},
             body:JSON.stringify({
               uid:uid,
               token:token,
@@ -240,7 +242,7 @@ export default function UserProfile() {
       
   }
   const UserComponent=isFetching?
-  <h4>Fetching Users....</h4>
+  <h4>Loading Your Profile....</h4>
   :
   <CardBody>
   <h3><b>PERSONAL DETAILS</b></h3>
@@ -860,6 +862,7 @@ export default function UserProfile() {
             <CardBody>
            {profileUpdated?<div>
              <SnackbarContent
+               
                 message={
                     <span>
                       <b>PROFILE UPDATED SUCCESSFULLY</b>

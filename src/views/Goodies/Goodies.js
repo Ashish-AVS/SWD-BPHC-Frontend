@@ -6,11 +6,14 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
+import Button from "components/CustomButtons/Button.js";
+import GridItem from "components/Grid/GridItem";
 
 
 //Created Components
 import GoodieItem from "./GoodieItem";
 
+import {swdUid} from "variables/swdmembers.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
@@ -29,7 +32,9 @@ export default function Goodies() {
   React.useEffect(()=>{
     try{
         const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/goodies?uid=${user.uid}&token=${token}`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/goodies?uid=${user.uid}`,{
+          headers:{Authorization:token}
+        }) ;
         const res = await result.json();
        //console.log(res);
         setGoodie(res);   
@@ -37,7 +42,9 @@ export default function Goodies() {
         
       }
       const fetchDeduction= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${user.uid}&token=${token}`) ;
+        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${user.uid}`,{
+          headers:{Authorization:token}
+        }) ;
         const res = await result.json();
         setDeductions(res);
         console.log(res);   
@@ -65,6 +72,7 @@ else{
          goodieType={item.g_type}
          goodieName={item.g_name}
          goodieImage={item.g_img}
+         goodieHostId={item.host_id}
          goodieContactName={item.host_name}
          goodieContactNo={item.host_mobile}
          goodieSeller={item.g_host}
@@ -90,8 +98,24 @@ else{
           <h5>This is the Funds and Goodies section of BPHC. </h5>
       </div>
       
-      {GoodieData}  
- 
+      {GoodieData}
+     { swdUid.map(item=>{
+       if(item===user.uid){
+       return(
+        
+        <GridContainer direction='column' justify='center' alignItems='center'>
+        <GridItem xs={12} sm={12} md={8} >
+          <Button size='lg' round color="rose">
+            Add Goodie
+          </Button>
+        </GridItem>
+      </GridContainer>
+     
+       )
+      }
+     })   
+      
+}
     </div>
   );
 }

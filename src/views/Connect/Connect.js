@@ -34,7 +34,7 @@ export default function Connect() {
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
       <div className={classes.note}>
-          <h5>Wanna contact someone?</h5>
+          <h5>Want to contact someone?</h5>
       </div>
       <GridContainer>
         <GridItem xs={12} sm={6} md={4}>
