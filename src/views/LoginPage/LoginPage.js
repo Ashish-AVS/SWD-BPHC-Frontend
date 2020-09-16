@@ -29,6 +29,7 @@ import { useAuth } from "context/auth";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bgimg.jpg";
+import { TimelapseOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles(styles);
 
@@ -45,6 +46,7 @@ export default function LoginPage(props) {
   const [isLoggingIn, setLoggingIn]=useState(false);
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
+  const [conError,setConError]=useState(false);
   const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
@@ -85,9 +87,10 @@ export default function LoginPage(props) {
  useEffect(()=>{
    if(isLoggingIn===true){  
      setLoading(true);
-    
+
      try{
      const fetchData= async ()=>{  
+        setConError(false)
         setIsError(false);
         setEmptyError(false);  
         axios.post("https://swdnucleus.ml/api/auth",{
@@ -107,23 +110,25 @@ export default function LoginPage(props) {
           }
         
         }).catch((result)=>{
-         
-           if(result.response.status===422){
-            
-            setLoggingIn(false);
-            setEmptyError(true);
-            setLoading(false);
-          } 
-        else if(result.response.status===401){
-            
-            setLoggingIn(false);
-            setIsError(true);
-            setLoading(false);
+          if (result.response !== undefined) {
+            if (result.response.status === 422) {
+
+              setLoggingIn(false);
+              setEmptyError(true);
+              setLoading(false);
+            }
+            else if (result.response.status === 401) {
+
+              setLoggingIn(false);
+              setIsError(true);
+              setLoading(false);
+            }
           }
         })      
         
             
         }
+        timeUp();
         fetchData();
       }catch(err){
           
@@ -147,7 +152,13 @@ export default function LoginPage(props) {
   }
  },[isLoggedIn,props.history,authTokens])
  
-
+const timeUp=()=>{
+  setTimeout(()=>{
+    setLoading(false);
+    setLoggingIn(false);
+    setConError(true);
+  },12000)
+}
  setTimeout(function() {
     setCardAnimation("");
   }, 700);
@@ -187,6 +198,19 @@ export default function LoginPage(props) {
                       icon="info_outline"
                     />
                     <Clearfix /></div>:null}
+                    {conError?
+                  <div>
+                    <SnackbarContent
+                      message={
+                      <span >
+                        <b>CONNECTION ERROR:</b>Server Timed Out
+                      </span>
+                        }
+                      close
+                      color="danger"
+                      icon="info_outline"
+                    />
+                    <Clearfix /></div>:null}
                     {isError?
                   <div><SnackbarContent
                     message={
@@ -199,6 +223,7 @@ export default function LoginPage(props) {
                     icon="info_outline"
                     />
                     <Clearfix /></div>:null}
+                    
                     <CustomInput
                       onChange={(e)=>{
                         setUid(e.target.value);

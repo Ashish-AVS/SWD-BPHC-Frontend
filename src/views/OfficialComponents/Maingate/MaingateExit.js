@@ -335,7 +335,7 @@ export default function Search() {
               <GridItem xs={12} sm={12} md={7}>
                             <div ><GridContainer direction="column" justify="center" alignItems="center" >
                                 <GridItem xs={12} sm={12} md={12} >
-                                   <h3 style={{color:"white"}}>NAME :<span style={{fontWeight:"600"}}> GAURAV DASH</span></h3> 
+                                   <h3 style={{color:"white"}}>{exitData.name}</h3> 
                                 </GridItem >
                                 <GridItem xs={12} sm={12} md={12}>
                                   <h4 style={{color:"white"}}>ID :<span style={{fontWeight:"500"}}>2019AAPS0274H</span></h4>

@@ -17,6 +17,7 @@ import BookIcon from '@material-ui/icons/Book';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import ComplaintsModal from "views/Modals/ComplaintsModal";
 import BusModal from "views/Modals/BusModal.js";
 // core components
@@ -58,6 +59,9 @@ export default function HeaderLinks(props) {
               className={classes.dropdownLink}
             >
               <AssignmentIcon className={classes.icons} />Complaints
+            </Link>,
+             <Link to="/know-your-dept" className={classes.dropdownLink}>
+             <ImportContactsIcon className={classes.icons} /> Know Your Dept.
             </Link>
           ]}
         />
