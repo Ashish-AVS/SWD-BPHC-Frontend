@@ -15,7 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 //Core Components
 import Button from "components/CustomButtons/Button.js";
 
-
+import {BaseUrl} from "variables/BaseUrl";
 
 import styles from "assets/jss/material-kit-react/modalStyle";
 
@@ -47,7 +47,7 @@ React.useEffect(()=>{
     
     const sendData=async ()=>{
       
-      const result =await fetch(`https://swdnucleus.ml/api/goodies/info?uid=${uid}&g_id=${goodieId}`,{
+      const result =await fetch(`${BaseUrl}/api/goodies/info?uid=${uid}&g_id=${goodieId}`,{
           headers:{'Content-Type':"application/json",
           Authorization:token},
          })

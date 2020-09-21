@@ -19,6 +19,7 @@ import GridItem from "components/Grid/GridItem.js";
 //import CustomInput from "components/CustomInput/CustomInput";
 import Table from "components/Table/Table";
 
+import {BaseUrl} from "variables/BaseUrl";
 import styles from "assets/jss/material-kit-react/modalStyle";
 
 const useStyles = makeStyles(styles);
@@ -44,7 +45,7 @@ React.useEffect(()=>{
 
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/mess/grace?uid=${uid}`,{
+      const result= await fetch(`${BaseUrl}/api/mess/grace?uid=${uid}`,{
         headers:{
           Authorization:token
         }
@@ -70,7 +71,7 @@ React.useEffect(()=>{
   if(applyingGrace===true){
     try{
       const sendData=async ()=>{
-        const result =await fetch('http://40.121.181.70/api/mess/grace',{
+        const result =await fetch(`${BaseUrl}/api/mess/grace`,{
           method:"post",
           headers:{'Content-Type':"application/json",
           Authorization:token},

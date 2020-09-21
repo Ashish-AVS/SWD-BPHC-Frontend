@@ -31,6 +31,7 @@ import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import image from "assets/img/bgimg.jpg";
 import { TimelapseOutlined } from "@material-ui/icons";
 
+import {BaseUrl} from "variables/BaseUrl";
 const useStyles = makeStyles(styles);
 
 let data={
@@ -93,7 +94,7 @@ export default function LoginPage(props) {
         setConError(false)
         setIsError(false);
         setEmptyError(false);  
-        axios.post("https://swdnucleus.ml/api/auth",{
+        axios.post(`${BaseUrl}/api/auth`,{
              uid:uid,
              password:pwd,
              type:'0'        

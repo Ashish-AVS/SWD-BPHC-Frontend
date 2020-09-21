@@ -9,6 +9,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
+import {BaseUrl} from "variables/BaseUrl";
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -56,7 +57,7 @@ export default function Deductions() {
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${uid}`,{
+        const result= await fetch(`${BaseUrl}/api/deductions?uid=${uid}`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();

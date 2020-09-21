@@ -23,7 +23,7 @@ import CardFooter from "components/Card/CardFooter.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
 
-
+import {BaseUrl} from "variables/BaseUrl";
 import avatar from "assets/img/bitslogo.png";
 import {
   primaryColor,
@@ -131,7 +131,7 @@ export default function UserProfile() {
     try{
     const fetchData= async ()=>{
       
-      const result= await fetch(`https://swdnucleus.ml/api/usr/profile?uid=${uid}&token=${token}`,{
+      const result= await fetch(`${BaseUrl}/api/usr/profile?uid=${uid}&token=${token}`,{
         headers:{Authorization:token}
       }) ;
       const res = await result.json();
@@ -151,7 +151,7 @@ export default function UserProfile() {
     if(updatingProfile===true){
       try{
         const sendData=async ()=>{
-          const result =await fetch('https://swdnucleus.ml/api/usr/profile',{
+          const result =await fetch(`${BaseUrl}/api/usr/profile`,{
             method:"post",            
             headers:{'Content-Type':"application/json",Authorization:token},
             body:JSON.stringify({

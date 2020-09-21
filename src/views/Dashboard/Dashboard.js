@@ -24,7 +24,7 @@ import Button from "components/CustomButtons/Button.js";
 import GraceModal from "views/Modals/GraceModal";
 import ComplaintsModal from "views/Modals/ComplaintsModal";
 import MenuModal from "views/Modals/MenuModal";
-
+import {BaseUrl} from "variables/BaseUrl";
 
 import { official,
   department,
@@ -58,7 +58,7 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await axios.get(`https://swdnucleus.ml/api/mess/menu?uid=${uid}`,{headers:{
+      const result= await axios.get(`${BaseUrl}/api/mess/menu?uid=${uid}`,{headers:{
         Authorization:token
       }}) ;
       //const res = await result.json();

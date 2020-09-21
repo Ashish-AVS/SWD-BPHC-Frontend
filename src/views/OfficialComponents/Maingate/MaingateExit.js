@@ -17,7 +17,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
-
+import {BaseUrl} from "variables/BaseUrl";
 import {
   primaryColor,
   defaultFont
@@ -124,7 +124,7 @@ export default function Search() {
       if(SendReq===true){
         try{
             const sendData=async ()=>{
-              const result =await fetch('https://swdnucleus.ml/api/o/maingate/log',{
+              const result =await fetch(`${BaseUrl}/api/o/maingate/log`,{
                   method:"post",
                   headers:{
                     'Content-Type':"application/json",
@@ -169,64 +169,7 @@ export default function Search() {
   }
  
  const onChange=(e)=>{setUid(e.target.value)}
-  /*
-  
- React.useEffect(()=>{
-
-    //setRecievedData(false);
-    try{
-      const fetchData=async ()=>{
-        const result =await fetch(`https://swdnucleus.ml/api/o/messmenu?id=swd&token=${token}&messno=1`)
-         const res = await result.json();
-        if(result.status===200||result.status===201){
-            setMessMenuData(res);
-          setRecievedData(true);
-          //setSendingData(false);
-        }
-       if(result.status===401)
-       console.log(atob(token.split('.')[1]));
-    }
-      fetchData();
-      
-    }
-    catch(err){
-      console.log(err);
-      console.log(atob(token.split('.')[1]))
-    } 
-  
-  },[token,menuUpdated])
-  React.useEffect(()=>{
-   if(messUpdate===true){
-    try{
-      const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/maingate/',{
-            method:"post",
-            headers:{'Content-Type':"application/json"},
-            body:JSON.stringify({
-              id:"swd",
-              messno:1,
-              token:token,
-              menu:JSON.stringify(messMenuData)
-            })
-           })
-         const res = await result.json();
-        if(result.status===200||result.status===201){
-          console.log("hi");
-          setMenuUpdated(true);
-          setMessUpdate(false);
-        }
-      
-    }
-      sendData();
-      
-    }
-    catch(err){
-      console.log(err);
-      
-    } 
-  }
-  },[messUpdate,token,messMenuData])
-  */
+ 
   return ( <div>
     <div className={classes.typo} style={{ marginTop: "-50px" }}>
         <h2><strong>BITS-PILANI,HYDERABAD CAMPUS</strong></h2>
@@ -329,7 +272,7 @@ export default function Search() {
                         </GridItem>
                       </GridContainer>
                     </div> : 
-                     (recievedData === true) && (exitData.error === true) &&(blacklist===false)?
+                     (recievedData === true) && (exitData.error === true) &&(blacklist===true)?
                      <div style={{background:"#9e0b03",borderRadius:'16px',border:'1px solid black'}}>
             <GridContainer direction="row"  >
               <GridItem xs={12} sm={12} md={7}>
@@ -338,7 +281,7 @@ export default function Search() {
                                    <h3 style={{color:"white"}}>{exitData.name}</h3> 
                                 </GridItem >
                                 <GridItem xs={12} sm={12} md={12}>
-                                  <h4 style={{color:"white"}}>ID :<span style={{fontWeight:"500"}}>2019AAPS0274H</span></h4>
+                                  <h4 style={{color:"white"}}>ID :<span style={{fontWeight:"500"}}>{exitData.id}</span></h4>
                                 </GridItem>
                                 </GridContainer></div>
                                 </GridItem>

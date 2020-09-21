@@ -18,6 +18,7 @@ import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 //import CustomInput from "components/CustomInput/CustomInput";
 
+import {BaseUrl} from "variables/BaseUrl";
 
 import styles from "assets/jss/material-kit-react/modalStyle";
 
@@ -69,7 +70,7 @@ React.useEffect(()=>{
     try{
     const sendData=async ()=>{
       setLoading(true); 
-      const result =await fetch('https://swdnucleus.ml/api/goodies',{
+      const result =await fetch(`${BaseUrl}/api/goodies`,{
           method:"post",
           headers:{'Content-Type':"application/json",
           Authorization:token},
@@ -273,7 +274,7 @@ if(goodieType===0){
          inputProps={{
          type:"number",
          name:'net_quantity',
-         inputProps: { min: parseInt(minAmount), max: parseInt(maxAmount) },
+         inputProps: { min: parseInt(minAmount), max: parseInt(limit) },
          defaultValue:0
            }}
  

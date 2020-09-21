@@ -25,7 +25,7 @@ import {
   defaultFont
 } from "assets/jss/material-kit-react.js";
 import { Details } from "@material-ui/icons";
-
+import {BaseUrl} from "variables/BaseUrl";
 
 const styles = {
   cardCategoryWhite: {
@@ -160,7 +160,7 @@ export default function Search() {
     setRecievedData(false);
     try{
       const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/search',{
+        const result =await fetch(`${BaseUrl}/api/o/search`,{
           method:"post",
           headers:{
             'Content-Type':"application/json",
@@ -195,7 +195,7 @@ export default function Search() {
     if(detailsReq===true){
       try{
         const sendData=async ()=>{
-          const result =await fetch('https://swdnucleus.ml/api/o/search/details',{
+          const result =await fetch(`${BaseUrl}/api/o/search/details`,{
             method:"post",
             headers:{
               'Content-Type':"application/json",

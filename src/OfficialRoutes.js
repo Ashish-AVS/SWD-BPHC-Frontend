@@ -11,6 +11,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
+import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
+
 
 // core components/views for Admin layout
 
@@ -18,12 +20,13 @@ import Search from "views/OfficialComponents/Search/Search";
 import Entry from "views/OfficialComponents/Maingate/MaingateEntry";
 import Mess from "views/OfficialComponents/Mess/MessMenu";
 import Exit from "views/OfficialComponents/Maingate/MaingateExit";
-
+import Outstation from "views/OfficialComponents/Outstation/Outstation"
 
 const dashboardRoutes = [
   
   {
     path: "/search",
+    id:"search",
     name: "Search",
     icon: SearchIcon,
     component: Search,
@@ -31,6 +34,7 @@ const dashboardRoutes = [
   },
   {
     path: "/mess",
+    id:"messmenu",
     name: "Mess",
     icon: FastfoodIcon,
     component: Mess,
@@ -38,6 +42,7 @@ const dashboardRoutes = [
   },
   {
     path: "/maingate/entry",
+    id:"maingate",
     name: "Gate Entry",
     icon: FastForwardIcon,
     component: Entry ,
@@ -45,11 +50,21 @@ const dashboardRoutes = [
   },
   {
     path: "/maingate/exit",
+    id:"maingate",
     name: "Gate Exit",
     icon: FastRewindIcon,
     component: Exit ,
     layout: "/official"
+  },
+  {
+    path: "/outstation",
+    id:"outstation",
+    name: "Outstation Request",
+    icon: AirplanemodeActiveIcon,
+    component: Outstation ,
+    layout: "/official"
   }
+
   /*
   {
     path: "/typography",

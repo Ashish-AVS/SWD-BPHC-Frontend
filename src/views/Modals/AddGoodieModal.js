@@ -17,7 +17,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 //import CustomInput from "components/CustomInput/CustomInput";
-
+import {BaseUrl} from "variables/BaseUrl";
 
 import styles from "assets/jss/material-kit-react/modalStyle";
 
@@ -61,7 +61,7 @@ React.useEffect(()=>{
     try{
     const sendData=async ()=>{
       setLoading(true); 
-      const result =await fetch('https://swdnucleus.ml/api/goodies',{
+      const result =await fetch(`${BaseUrl}/api/goodies`,{
           method:"post",
           headers:{'Content-Type':"application/json",
           Authorization:token},

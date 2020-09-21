@@ -20,6 +20,7 @@ import Badge from "components/Badge/Badge.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
 import CancelOutstation from "./CancelOutstation.js";
+import {BaseUrl} from "variables/BaseUrl";
 import {
     primaryColor,
     defaultFont
@@ -146,7 +147,7 @@ export default function Outstation() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/outstation/?uid=${uid}`,{
+      const result= await fetch(`${BaseUrl}/api/outstation/?uid=${uid}`,{
         headers:{Authorization:token}
       }) ;
       const res = await result.json();
@@ -183,7 +184,7 @@ export default function Outstation() {
        setEmptyError(false);
         try{
       const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/outstation/?`,{
+      const result= await fetch(`${BaseUrl}/api/outstation/?`,{
         method:"post",
         headers:{'Content-Type':"application/json",Authorization:token},
         body:JSON.stringify({

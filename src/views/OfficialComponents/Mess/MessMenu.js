@@ -12,7 +12,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import {BaseUrl} from "variables/BaseUrl";
 import {
   primaryColor,
   defaultFont
@@ -118,7 +118,7 @@ export default function Search() {
     //setRecievedData(false);
     try{
       const fetchData=async ()=>{
-        const result =await fetch(`https://swdnucleus.ml/api/o/messmenu?id=swd&messno=1`,{
+        const result =await fetch(`${BaseUrl}/api/o/messmenu?id=swd&messno=1`,{
           headers:{Authorization:`Bearer ${token}`}
         })
          const res = await result.json();
@@ -143,7 +143,7 @@ export default function Search() {
    if(messUpdate===true){
     try{
       const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/messmenu',{
+        const result =await fetch('http://swdnucleus.ml/api/o/messmenu',{
             method:"post",
             headers:{'Content-Type':"application/json",
             Authorization:`Bearer ${token}`},

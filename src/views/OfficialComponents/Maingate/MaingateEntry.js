@@ -21,7 +21,7 @@ import CardBody from "components/Card/CardBody.js";
 //import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 //import Clearfix from "components/Clearfix/Clearfix.js";
 
-
+import {BaseUrl} from "variables/BaseUrl";
 import {
   primaryColor,
   defaultFont
@@ -127,7 +127,7 @@ export default function Search() {
         try{
           
             const sendData=async ()=>{
-              const result =await fetch('https://swdnucleus.ml/api/o/maingate/log',{
+              const result =await fetch(`${BaseUrl}/api/o/maingate/log`,{
                   method:"post",
                   headers:{
                     'Content-Type':"application/json",
@@ -166,64 +166,6 @@ export default function Search() {
    },5000)
  }
  const onChange=(e)=>{setUid(e.target.value)}
-  /*
-  
- React.useEffect(()=>{
-
-    //setRecievedData(false);
-    try{
-      const fetchData=async ()=>{
-        const result =await fetch(`https://swdnucleus.ml/api/o/messmenu?id=swd&token=${token}&messno=1`)
-         const res = await result.json();
-        if(result.status===200||result.status===201){
-            setMessMenuData(res);
-          setRecievedData(true);
-          //setSendingData(false);
-        }
-       if(result.status===401)
-       console.log(atob(token.split('.')[1]));
-    }
-      fetchData();
-      
-    }
-    catch(err){
-      console.log(err);
-      console.log(atob(token.split('.')[1]))
-    } 
-  
-  },[token,menuUpdated])
-  React.useEffect(()=>{
-   if(messUpdate===true){
-    try{
-      const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/maingate/',{
-            method:"post",
-            headers:{'Content-Type':"application/json"},
-            body:JSON.stringify({
-              id:"swd",
-              messno:1,
-              token:token,
-              menu:JSON.stringify(messMenuData)
-            })
-           })
-         const res = await result.json();
-        if(result.status===200||result.status===201){
-          console.log("hi");
-          setMenuUpdated(true);
-          setMessUpdate(false);
-        }
-      
-    }
-      sendData();
-      
-    }
-    catch(err){
-      console.log(err);
-      
-    } 
-  }
-  },[messUpdate,token,messMenuData])
-  */
   
 
   return (

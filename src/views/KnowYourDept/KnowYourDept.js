@@ -5,34 +5,14 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
 
-// @material-ui/icons
-import InfoIcon from '@material-ui/icons/Info';
-import Restaurant from "@material-ui/icons/Restaurant";
-import EventNoteIcon from '@material-ui/icons/EventNote';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Tasks from "components/Tasks/Tasks.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 //import Danger from "components/Typography/Danger.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardIcon from "components/Card/CardIcon.js";
-//import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-import Button from "components/CustomButtons/Button.js";
 
 
 import General from './General';
-
-import { official,
-  department,
-  techassocs,
-  regionalassocs,
-  miscellaneous,
-  sports,
-  clubs,
-  others } from "variables/general.js";
 
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";

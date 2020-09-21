@@ -15,7 +15,7 @@ import Logo from "assets/img/bitslogo.png";
 
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-
+import {BaseUrl} from "variables/BaseUrl";
 const useStyles = makeStyles(styles);
 
 export default function DocItem({docTitle,docKey}) {
@@ -31,7 +31,7 @@ export default function DocItem({docTitle,docKey}) {
       setLoading(true);
       try{
       const sendData=async ()=>{
-          const result =await fetch(`https://swdnucleus.ml/api/doc?uid=${uid}&key=${docKey}`,{
+          const result =await fetch(`${BaseUrl}/api/doc?uid=${uid}&key=${docKey}`,{
             headers:{Authorization:token}
           });
           const res= await result.blob();       

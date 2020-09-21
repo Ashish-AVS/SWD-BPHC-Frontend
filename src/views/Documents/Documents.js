@@ -10,7 +10,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 
 // Created Components
 import DocItem from "./DocItem";
-
+import {BaseUrl} from "variables/BaseUrl";
 
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
@@ -27,7 +27,7 @@ export default function Documents() {
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/doc/list?uid=${user.uid}`,{
+        const result= await fetch(`${BaseUrl}/api/doc/list?uid=${user.uid}`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
@@ -41,7 +41,7 @@ export default function Documents() {
     console.log(err);
   }
   },[])
-const DocData=isFetching?<h4>Fetching Data...</h4>: 
+const DocData=isFetching?<h4>Loading Data...</h4>: 
 <GridContainer>
  {doc.map((item)=>{
    return(<DocItem 

@@ -14,7 +14,7 @@ import GridItem from "components/Grid/GridItem";
 import GoodieItem from "./GoodieItem";
 
 import {swdUid} from "variables/swdmembers.js";
-
+import {BaseUrl} from "variables/BaseUrl";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 
@@ -32,7 +32,7 @@ export default function Goodies() {
   React.useEffect(()=>{
     try{
         const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/goodies?uid=${user.uid}`,{
+        const result= await fetch(`${BaseUrl}/api/goodies?uid=${user.uid}`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
@@ -42,7 +42,7 @@ export default function Goodies() {
         
       }
       const fetchDeduction= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${user.uid}`,{
+        const result= await fetch(`${BaseUrl}/api/deductions?uid=${user.uid}`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
@@ -61,7 +61,7 @@ export default function Goodies() {
   },[isUpdated,user.uid,token])
 let GoodieData=<></>;
 if(isFetching)
-GoodieData=<h4>Fetching data...</h4>
+GoodieData=<h4>Loading data...</h4>
 else{
  GoodieData=
   <GridContainer>
