@@ -22,11 +22,17 @@ export default function CustomTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, value) => {
-    
+    if(value===2){
+        setStatus(-1);
+    }
+    else{
+        setStatus(value);
+    }
     setValue(value);
+    
   };
   const classes = useStyles();
-  const { headerColor, plainTabs, tabs, title, rtlActive } = props;
+  const { headerColor, plainTabs, tabs, title, rtlActive,setStatus } = props;
   const cardTitle = classNames({
     [classes.cardTitle]: true,
     [classes.cardTitleRTL]: rtlActive

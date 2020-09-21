@@ -3,25 +3,14 @@ import MaterialTable from "material-table";
 import Datetime from "react-datetime";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from '@material-ui/core/CircularProgress';
+//import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 // core components
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from '@material-ui/core/FormControl';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
 
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Badge from "components/Badge/Badge.js";
-import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-import Clearfix from "components/Clearfix/Clearfix.js";
+import CustomTabs from "components/CustomTabs/EditedTabs.js";
 import {BaseUrl} from "variables/BaseUrl";
 import {
     primaryColor,
@@ -154,54 +143,69 @@ export default function Outstation() {
 
   React.useEffect(()=>{
     try{
-      
-    const fetchData0= async ()=>{
-      const result= await fetch(`${BaseUrl}/api/o/outstation/?status=0`,{
-        headers:{Authorization:`Bearer ${token}`}
-      
-      }) ;
-      const res = await result.json();
-      if(result.status===200||result.status===201||result.status===304){
-       setData0(
-           res.map((info,index)=>{
-            return {sno:index+1,uid:info.uid,outstation_id:info.outstation_id,location:info.location,from:info.from,to:info.to,reason:info.reason}   
-           })
-       )
-      }   
-  }
-  const fetchData1= async ()=>{
-    const result= await fetch(`${BaseUrl}/api/o/outstation/?status=1`,{
-      headers:{Authorization:`Bearer ${token}`}
-    
-    }) ;
-    const res = await result.json();
-    if(result.status===200||result.status===201||result.status===304){
-     setData1(
-         res.map((info,index)=>{
-          return {sno:index+1,uid:info.uid,outstation_id:info.outstation_id,location:info.location,from:info.from,to:info.to,reason:info.reason}   
-         })
-     )
-    }   
-}
-const fetchData2= async ()=>{
-  const result= await fetch(`${BaseUrl}/api/o/outstation/?status=-1`,{
-    headers:{Authorization:`Bearer ${token}`}
-  
-  }) ;
-  const res = await result.json();
-  if(result.status===200||result.status===201||result.status===304){
-   setData2(
-       res.map((info,index)=>{
-        return {sno:index+1,uid:info.uid,outstation_id:info.outstation_id,location:info.location,from:info.from,to:info.to,reason:info.reason}   
-       })
-   )
-  }   
-}
-    fetchData0();
-    fetchData1();
-    fetchData2();
-    
-    
+      if (status == 0) {
+        const fetchData0 = async () => {
+          const result = await fetch(`${BaseUrl}/api/o/outstation/?status=0`, {
+            headers: { Authorization: `Bearer ${token}` }
+
+          });
+          const res = await result.json();
+          if (result.status === 200 || result.status === 201 || result.status === 304) {
+            setData0(
+              res.map((info, index) => {
+                return { sno: index + 1, uid: info.uid, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, reason: info.reason }
+              })
+            )
+          }
+        }
+        fetchData0();
+      }
+      if (status === 1) {
+        const fetchData1 = async () => {
+          const result = await fetch(`${BaseUrl}/api/o/outstation/?status=1`, {
+            headers: { Authorization: `Bearer ${token}` }
+
+          });
+          const res = await result.json();
+          if (result.status === 200 || result.status === 201 || result.status === 304) {
+            setData1(
+              res.map((info, index) => {
+                return { sno: index + 1, uid: info.uid, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, reason: info.reason }
+              })
+            )
+          }
+        }
+        fetchData1();
+      }
+      if (status === -1) {
+        const fetchData2 = async () => {
+          const result = await fetch(`${BaseUrl}/api/o/outstation/?status=-1`, {
+            headers: { Authorization: `Bearer ${token}` }
+
+          });
+          const res = await result.json();
+          if (result.status === 200 || result.status === 201 || result.status === 304) {
+            setData2(
+              res.map((info, index) => {
+                return { sno: index + 1, uid: info.uid, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, reason: info.reason }
+              })
+
+            )
+          }
+          else if (result.status === 400) {
+            alert('task not completed');
+          }
+          else if (result.status === 401) {
+            alert('Session timed out. Login again');
+          }
+        }
+        fetchData2();
+      }
+
+
+
+
+
   }catch(err){
       console.log(err);
     }
@@ -223,8 +227,11 @@ const fetchData2= async ()=>{
     })
     const res = await result.json();
     if (result.status === 200 || result.status === 201 || result.status === 304) {
-     setDataSent(`sent ${id}`);
-     handleClick();
+     setDataSent(`sent-${id}-${sta}`);
+     setTimeout(()=>{
+      handleClick();
+     },1000)
+     
      
     }
     else if (result.status === 400 || result.status === 401) {
@@ -251,7 +258,7 @@ const fetchData2= async ()=>{
       <GridContainer direction="column" justify="center" alignItems="center">
         <GridItem xs={12} sm={12} md={11}>
           <CustomTabs
-           
+            setStatus={setStatus}
             headerColor="primary"
             tabs={[
               {
@@ -357,8 +364,6 @@ const fetchData2= async ()=>{
                         icon: 'check',
                         tooltip: 'Approve',
                         onClick: async (event, rowData) => {
-                          
-                         
                             sendData(rowData.outstation_id,1)  
                                                        
             
