@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Redirect} from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -10,10 +10,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 //Core Components
 import Button from "components/CustomButtons/Button.js";
+
+//Auth Components
+import { useAuth } from "context/auth";
 
 import {BaseUrl} from "variables/BaseUrl";
 
@@ -37,7 +40,7 @@ const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("tokens"));
 const [goodieDetails,setGoodieDetails]=React.useState({});
 const [recievedData,setRecievedData]=React.useState(false);
-
+const { onLogin } = useAuth();
 
 
 React.useEffect(()=>{
@@ -52,9 +55,12 @@ React.useEffect(()=>{
           Authorization:token},
          })
      const res = await result.json();
-        if(result.status===200||result.status===201){ 
-         setGoodieDetails(res);
+        if(res.err===false){ 
+         setGoodieDetails(res.data);
          setRecievedData(true);                      
+        }
+        else if(res.err===true && result.status===401){ 
+          logout();
         }
     }
       
@@ -68,7 +74,14 @@ React.useEffect(()=>{
     }
 
 },[uid,token,goodieId])
-    
+
+const logout=()=>{
+  localStorage.removeItem("tokens");
+  localStorage.removeItem("data");
+  onLogin(false);  
+  return (<Redirect exact to='/login-page' />);
+}
+
     return(
         <Dialog
                   classes={{

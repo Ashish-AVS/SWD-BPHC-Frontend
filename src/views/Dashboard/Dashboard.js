@@ -62,7 +62,7 @@ export default function Dashboard() {
         Authorization:token
       }}) ;
       //const res = await result.json();
-      setMessDetails(result.data);   
+      setMessDetails(result.data.data);   
   }
     fetchData();
     

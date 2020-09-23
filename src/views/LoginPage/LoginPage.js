@@ -103,9 +103,9 @@ export default function LoginPage(props) {
             //console.log(result.headers.get('Set-Cookie')); 
              
             onLogin(result.headers.authorization); 
-             data.name=result.data.name;
-             data.id=result.data.id;
-             data.isComplete=result.data.isComplete;
+             data.name=result.data.data.name;
+             data.id=result.data.data.id;
+             data.isComplete=result.data.data.isComplete;
              data.uid=uid;
              setLoggedIn(true);
           }

@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Redirect} from "react-router-dom";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -7,7 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridContainer from "components/Grid/GridContainer.js";
 
-
+//Auth Components
+import { useAuth } from "context/auth";
 // Created Components
 import DocItem from "./DocItem";
 import {BaseUrl} from "variables/BaseUrl";
@@ -23,7 +24,7 @@ export default function Documents() {
   const [doc,setDoc]=React.useState([])
   const user=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
-
+  const { onLogin } = useAuth();
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
@@ -31,9 +32,12 @@ export default function Documents() {
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
-        if(result.status===200||result.status===200||result.status===304){
-        setDoc(res);
+        if(res.err===false){
+        setDoc(res.data);
         setIsFetching(false);
+      }
+      else if(res.err===true && result.status===401){
+        logout();
       }
     }
     fetchData();
@@ -41,6 +45,12 @@ export default function Documents() {
     console.log(err);
   }
   },[])
+  const logout=()=>{
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("data");
+    onLogin(false);  
+    return (<Redirect exact to='/login-page' />);
+  }
 const DocData=isFetching?<h4>Loading Data...</h4>: 
 <GridContainer>
  {doc.map((item)=>{

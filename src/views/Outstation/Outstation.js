@@ -1,6 +1,7 @@
 import React from "react";
 import MaterialTable from "material-table";
-import Datetime from "react-datetime";
+import Datetime from "react-datetime"
+import {Redirect} from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -20,6 +21,10 @@ import Badge from "components/Badge/Badge.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
 import CancelOutstation from "./CancelOutstation.js";
+
+//Auth Components
+import { useAuth } from "context/auth";
+
 import {BaseUrl} from "variables/BaseUrl";
 import {
     primaryColor,
@@ -121,7 +126,8 @@ const useStyles = makeStyles(styles);
 
 export default function Outstation() {
   const classes = useStyles();
-  const [emptyError,setEmptyError]=React.useState(false);
+  const { onLogin } = useAuth();
+  
   const [isError, setIsError] = React.useState(false);
   const {uid}=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
@@ -132,6 +138,7 @@ export default function Outstation() {
   const [open,setOpen]=React.useState(false);
   const [cancelId,setCancelId]=React.useState(null);
   const [isUpdated,setIsUpdated]=React.useState(null);
+  const [errorMsg,setErrorMsg]=React.useState("")
   const [outData,setOutData]=React.useState({
       from:'',
       to:'',
@@ -151,9 +158,9 @@ export default function Outstation() {
         headers:{Authorization:token}
       }) ;
       const res = await result.json();
-      if(result.status===200||result.status===201||result.status===304){
+      if(res.err===false){
        setData(
-           res.map((info,index)=>{
+           res.data.map((info,index)=>{
             let badge=null;  
             if(info.approved===-1){
                badge=<Badge color="danger">Rejected</Badge>
@@ -167,6 +174,9 @@ export default function Outstation() {
             return {sno:index+1,outstation_id:info.outstation_id,location:info.location,from:info.from,to:info.to,duration:`${info.duration} Days`,approved:badge,status:info.approved}   
            })
        )
+      }
+      else if(res.err===true && result.status===401){
+        logout();
       }   
   }
     fetchData();
@@ -181,7 +191,7 @@ export default function Outstation() {
        setLoading(true);
        setReqSent(false);
        setIsError(false);
-       setEmptyError(false);
+    
         try{
       const fetchData= async ()=>{
       const result= await fetch(`${BaseUrl}/api/outstation/?`,{
@@ -196,25 +206,28 @@ export default function Outstation() {
           location:outData.location
       }) 
     })
-      
-      if(result.status===200||result.status===201||result.status===304){
+      const res = await result.json();
+      if(res.err===false){
           setReqSent(true);
           setSendingData(false);
           setLoading(false);
       }
-      else if(result.status===400){
-          setIsError(true);
-          setSendingData(false);
-          setLoading(false);
+      else if(res.err===true&&result.status===401){
+        logout();
       }
-      else if(result.status===422){
-          setEmptyError(true);
+      else if(res.err===true&&result.status===422){
+          setErrorMsg("Empty Fields Detected");
+          setIsError(true);
           setSendingData(false);
           setLoading(false);    
       }
-      else if(result.status===500){
-        alert("Server Error Contact SWD Nucleus")
-      }   
+      else if(res.err===true){
+        setErrorMsg(res.msg);
+        setIsError(true);
+        setSendingData(false);
+          setLoading(false);  
+      }
+      
   }
     fetchData();
     
@@ -224,6 +237,15 @@ export default function Outstation() {
 }
   
   },[sendingData, uid, token, outData.from, outData.to, outData.reason, outData.location]);
+  
+  const logout=()=>{
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("data");
+    onLogin(false);  
+    return (<Redirect exact to='/login-page' />);
+  }
+  
+  
   function onChange(e){
     const { name, value } = e.target;
     
@@ -253,24 +275,11 @@ export default function Outstation() {
                />
                <Clearfix />
                </div>:null}
-               {emptyError?
-                  <div>
-                    <SnackbarContent
-                      message={
-                      <span >
-                        <b>EMPTY FIELDS</b>:Ensure that every field is filled or set to nil
-                      </span>
-                        }
-                      close
-                      color="danger"
-                      icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
                     {isError?
                   <div><SnackbarContent
                     message={
                       <span>
-                         <b>ERROR:</b>Applying too early for Outstation
+                         <b>ERROR:</b>{errorMsg}
                        </span>
                              }
                     close
