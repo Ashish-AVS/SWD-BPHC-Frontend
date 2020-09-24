@@ -99,8 +99,8 @@ export default function OfficialLogin(props) {
         })
         const res =await result.json();
         if(result.status===200||result.status===201||result.status===304){ 
-           const datatoken=res.bearer_token;
-           onOfficialLogin(res.bearer_token);
+          
+           onOfficialLogin(res.data.bearer_token);
           
            setLoggedIn(true);
           }

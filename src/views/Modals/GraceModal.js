@@ -24,6 +24,7 @@ import Table from "components/Table/Table";
 
 import {BaseUrl} from "variables/BaseUrl";
 import styles from "assets/jss/material-kit-react/modalStyle";
+import { set } from "d3";
 
 const useStyles = makeStyles(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -41,6 +42,8 @@ const [gr,setGr]=React.useState([]);
 const [applyingGrace,setApplyingGrace]=React.useState(false);
 const [applied,setAppliedGrace]=React.useState(false);
 const [open,setOpen]=React.useState(false);
+const [err,setErr]= React.useState(false);
+const [errMsg,setErrMsg]=React.useState('');
 //const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("tokens"));
 const [postDate,setPostDate]=React.useState("");
@@ -48,15 +51,13 @@ var yesterday = Datetime.moment().subtract( 1, 'day' );
 var valid = function( current ){
     return current.isAfter( yesterday );
 }
-const handleClick = () => {
-  setOpen(true);
-};
+
 
 const handleClose = (event, reason) => {
   if (reason === 'clickaway') {
     return;
   }
-
+  setErr(false);
   setOpen(false);
 };
 
@@ -108,10 +109,14 @@ React.useEffect(()=>{
             date:postDate
           })
          })
-        if(result.status===200||result.status===201){
-          handleClick();
+         const res = await result.json();
+        if(res.err===false){
+          setOpen(true);
           setAppliedGrace(true);
         }
+        else if(res.err===true)
+        setErr(true);
+        setErrMsg(res.msg);
        
       }
       sendData();
@@ -254,13 +259,13 @@ React.useEffect(()=>{
           </Snackbar>
           <Snackbar
            anchorOrigin={{horizontal:'center',vertical:'top'}}
-            open={open}
+            open={err}
             autoHideDuration={4000}
             onClose={handleClose}>
             <Alert
               onClose={handleClose}
-              severity="success">
-              Error
+              severity="error">
+              {errMsg}
         </Alert>
           </Snackbar>
                 </Dialog>

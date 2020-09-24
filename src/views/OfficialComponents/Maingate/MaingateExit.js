@@ -115,8 +115,8 @@ export default function Search() {
  const [exitData,setExitData]=React.useState({});
  const [recievedData,setRecievedData]=React.useState(false);
  const [blacklist,setBlacklist]=React.useState(false);
- 
-  
+ const [timer,setTimer]=React.useState(false);
+  let t;
   const classes = useStyles();
   
    
@@ -140,15 +140,15 @@ export default function Search() {
                const res = await result.json();
               if(result.status===200||result.status===201){
                 setBlacklist(false);
-                setExitData(res);
+                setExitData(res.data);
                 setRecievedData(true);
-                removeDiv();
+                setTimer(true);
               }
               else if(result.status===400){
                 setBlacklist(true);
-                setExitData(res);
+                setExitData(res.data);
                 setRecievedData(true);
-                removeDiv();
+                setTimer(true);
               }
             
           }
@@ -162,6 +162,21 @@ export default function Search() {
           
       }
   })
+  React.useEffect(()=>{
+    if(timer===true){
+      removeDiv();
+      return ()=>{
+        removeTimer();
+        setTimer(false);
+      }
+    }
+  })
+
+const removeTimer=()=>{
+  clearTimeout(t);
+}
+
+ 
   const removeDiv=()=>{
     setTimeout(()=>{
       setRecievedData(false);

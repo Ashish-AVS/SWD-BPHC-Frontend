@@ -12,7 +12,7 @@ import FastfoodIcon from '@material-ui/icons/Fastfood';
 import FastForwardIcon from '@material-ui/icons/FastForward';
 import FastRewindIcon from '@material-ui/icons/FastRewind';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
-
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 
 // core components/views for Admin layout
 
@@ -20,7 +20,8 @@ import Search from "views/OfficialComponents/Search/Search";
 import Entry from "views/OfficialComponents/Maingate/MaingateEntry";
 import Mess from "views/OfficialComponents/Mess/MessMenu";
 import Exit from "views/OfficialComponents/Maingate/MaingateExit";
-import Outstation from "views/OfficialComponents/Outstation/Outstation"
+import Outstation from "views/OfficialComponents/Outstation/Outstation";
+import Mcn from 'views/OfficialComponents/Mcn/Mcn';
 
 const dashboardRoutes = [
   
@@ -62,6 +63,14 @@ const dashboardRoutes = [
     name: "Outstation Request",
     icon: AirplanemodeActiveIcon,
     component: Outstation ,
+    layout: "/official"
+  },
+  {
+    path: "/mcn",
+    id:"mcn",
+    name: "MCN Portal",
+    icon: AccountBalanceWalletIcon,
+    component: Mcn ,
     layout: "/official"
   }
 

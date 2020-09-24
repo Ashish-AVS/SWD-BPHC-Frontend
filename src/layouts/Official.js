@@ -33,6 +33,7 @@ export default function Official({ ...rest }) {
   const token=JSON.parse(localStorage.getItem('officialtokens'));
   const data = jwt_decode(token);
   const color="blue";
+ 
   const allowedRoutes=OfficialRoutes.filter(element=>data.resources.includes(element.id));
   const switchRoutes = (
     <Switch>
@@ -48,7 +49,7 @@ export default function Official({ ...rest }) {
         }
         return null;
       })}
-      <Redirect from="/official" to="/official/search" />
+      <Redirect from="/official" to={`/official${allowedRoutes[0].path}`} />
     </Switch>
   );
   const [mobileOpen, setMobileOpen] = React.useState(false);

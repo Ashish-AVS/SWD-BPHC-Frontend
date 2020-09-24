@@ -1,6 +1,6 @@
 import React from "react";
 import MaterialTable from "material-table";
-import Datetime from "react-datetime";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 //import CircularProgress from '@material-ui/core/CircularProgress';
@@ -121,11 +121,11 @@ export default function Outstation() {
   const [data2,setData2]=React.useState([]);  
   const [status,setStatus]=React.useState(0);
   const [dataSent,setDataSent]=React.useState(false)
-  const [loading,setLoading]=React.useState(false)
-  const [outData,setOutData]=React.useState({
-      outstation_id:null,
-      new_status:null
-  })
+  //const [loading,setLoading]=React.useState(false)
+  //const [outData,setOutData]=React.useState({
+    //  outstation_id:null,
+      //new_status:null
+  //})
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -150,9 +150,9 @@ export default function Outstation() {
 
           });
           const res = await result.json();
-          if (result.status === 200 || result.status === 201 || result.status === 304) {
+          if (res.err===false) {
             setData0(
-              res.map((info, index) => {
+              res.data.map((info, index) => {
                 return { sno: index + 1, uid: info.uid, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, reason: info.reason }
               })
             )
@@ -167,9 +167,9 @@ export default function Outstation() {
 
           });
           const res = await result.json();
-          if (result.status === 200 || result.status === 201 || result.status === 304) {
+          if (res.err===false) {
             setData1(
-              res.map((info, index) => {
+              res.data.map((info, index) => {
                 return { sno: index + 1, uid: info.uid, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, reason: info.reason }
               })
             )
@@ -184,9 +184,9 @@ export default function Outstation() {
 
           });
           const res = await result.json();
-          if (result.status === 200 || result.status === 201 || result.status === 304) {
+          if (res.err===false) {
             setData2(
-              res.map((info, index) => {
+              res.data.map((info, index) => {
                 return { sno: index + 1, uid: info.uid, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, reason: info.reason }
               })
 
@@ -234,7 +234,7 @@ export default function Outstation() {
      
      
     }
-    else if (result.status === 400 || result.status === 401) {
+    else if (res.err===false) {
       alert("error")
     }
     else if (result.status === 422) {

@@ -118,12 +118,12 @@ export default function Search() {
     //setRecievedData(false);
     try{
       const fetchData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/messmenu?id=swd&messno=1`,{
+        const result =await fetch(`${BaseUrl}/api/o/messmenu?messno=1`,{
           headers:{Authorization:`Bearer ${token}`}
         })
          const res = await result.json();
         if(result.status===200||result.status===201){
-            setMessMenuData(res);
+            setMessMenuData(res.data);
           setRecievedData(true);
           //setSendingData(false);
         }
@@ -139,6 +139,7 @@ export default function Search() {
     } 
   
   },[token,menuUpdated])
+
   React.useEffect(()=>{
    if(messUpdate===true){
     try{
@@ -148,9 +149,7 @@ export default function Search() {
             headers:{'Content-Type':"application/json",
             Authorization:`Bearer ${token}`},
             body:JSON.stringify({
-              id:"swd",
               messno:1,
-              token:token,
               menu:JSON.stringify(messMenuData)
             })
            })
@@ -231,13 +230,13 @@ export default function Search() {
                    // Actions:'MTableActions'
                   //}}
                   />
-              :<h5>Fetching Data...</h5>}  
+              :<h5>Loading Menu...</h5>}  
               </GridItem>
                 <GridItem xs={12} sm={12} md={10}>
                 <GridContainer direction="row"  justify="center"  alignItems="center" >
                   <GridItem>
                     <Button color="success" onClick={()=>{
-                      console.log(messMenuData);
+                     
                       setMessUpdate(true)
                       }}>
                       Submit
