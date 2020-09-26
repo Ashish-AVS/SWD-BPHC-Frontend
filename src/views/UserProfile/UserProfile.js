@@ -266,7 +266,11 @@ export default function UserProfile() {
       
   }
   const UserComponent=isFetching?
+
+ 
+
   <h4>Loading Your Profile....</h4>
+
   :
   <CardBody>
   <h3><b>PERSONAL DETAILS</b></h3>
