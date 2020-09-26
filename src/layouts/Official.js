@@ -68,7 +68,10 @@ export default function Official({ ...rest }) {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
-        suppressScrollY: false
+        suppressScrollY: false,
+        wheelSpeed: 0.5,
+        wheelPropagation: true,
+        minScrollbarLength: 10
       });
       document.body.style.overflow = "hidden";
     }
