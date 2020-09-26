@@ -399,7 +399,7 @@ export default function Outstation() {
         <div className={classes.typo} style={{marginTop:"-50px"}}>
           <h2><strong>BITS-PILANI,HYDERABAD CAMPUS</strong></h2>
       </div>
-      <GridContainer direction="column" justify="center" alignItems="center">
+      <GridContainer  justify="center" alignItems="center">
         <GridItem xs={12} sm={12} md={12}>
           <CustomTabs
             setStatus={setStatus}

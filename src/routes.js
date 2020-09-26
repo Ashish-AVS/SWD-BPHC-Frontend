@@ -15,13 +15,14 @@ import SchoolIcon from '@material-ui/icons/School';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import Connect from "views/Connect/Connect.js";
 import Goodies from "views/Goodies/Goodies.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
-import Awards from "views/Awards/Awards.js";
+import Counsellor from "views/Counsellor/Counsellor";
 import Deductions from "views/Deductions/Deductions.js";
 import Documents from "views/Documents/Documents.js";
 import Medclaim from "views/MedClaim/Medclaim.js";
@@ -86,10 +87,10 @@ const dashboardRoutes = [
     layout: "/admin"
   },
   {
-    path: "/award",
-    name: "Achievements",
-    icon: LocalPlay,
-    component: Awards,
+    path: "/counsellor",
+    name: "Counsellor",
+    icon: EmojiPeopleIcon,
+    component: Counsellor,
     layout: "/admin"
   },
   {
