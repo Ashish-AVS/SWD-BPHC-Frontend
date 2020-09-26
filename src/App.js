@@ -10,7 +10,7 @@ import OfficialPrivateRoute from "./OfficialPrivateRoute";
 import { AuthContextProvider } from "./context/auth";
 
 // pages for this product
-import Components from "views/Components/Components.js";
+// import Components from "views/Components/Components.js";
 import LandingPage from "views/LandingPage/LandingPage.js";
 import KnowYourDept from "views/KnowYourDept/KnowYourDept";
 import LoginPage from "views/LoginPage/LoginPage.js";
@@ -28,7 +28,7 @@ return(
         <AuthContextProvider>
             <Router history={hist} >
               <Switch>
-                <Route path="/components" component={Components}  />
+                {/* <Route path="/components" component={Components}  /> */}
                 <Route path="/know-your-dept" component={KnowYourDept} />
                 <Route path="/login-page" component={LoginPage} />
                 <Route path="/official-login" component={OfficialLogin} />
