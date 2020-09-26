@@ -143,6 +143,7 @@ export default function GoodieItem({
           setOpen={openInfoModal}
           goodieType={goodieType}
           goodieId={goodieId}
+          
            />:null}
         </GridItem>
         

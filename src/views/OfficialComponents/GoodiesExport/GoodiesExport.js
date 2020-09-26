@@ -1,31 +1,32 @@
 import React from "react";
-import MaterialTable from "material-table";
 import {Redirect} from 'react-router-dom';
+import {saveAs} from 'file-saver';
+import MaterialTable from "material-table";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from '@material-ui/core/Snackbar';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import MuiAlert from '@material-ui/lab/Alert';
 
 //Auth Components
 import { useAuth } from "context/auth";
-
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from "@material-ui/core/InputLabel";
 import {BaseUrl} from "variables/BaseUrl";
+import GoodieInfoModal from "./GoodieInfoModal";
 import {
   primaryColor,
   defaultFont
 } from "assets/jss/material-kit-react.js";
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 
 const styles = {
@@ -107,23 +108,29 @@ const styles = {
       marginTop: "0px"
     }}
 };
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(styles);
 
-export default function Search() {
+export default function GoodieExport() {
 
  const token=JSON.parse(localStorage.getItem("officialtokens"));
  
   //const [sendingData,setSendingData]=React.useState(false);
-  const [messMenuData,setMessMenuData]=React.useState([]);
-  const [messUpdate,setMessUpdate]=React.useState(false);
-  const [menuUpdated,setMenuUpdated]=React.useState(false);
-  const [recievedData,setRecievedData]=React.useState(false)
-  const { onOfficialLogin } = useAuth();
+  const [goodieData,setGoodieData]=React.useState([]);
+  const [sendingData,setSendingData]=React.useState(false);
+  //const [sendingData1,setSendingData1]=React.useState(false);
+  const [goodieDetails,setGoodieDetails]=React.useState({})
+  const [recievedData,setRecievedData]=React.useState(false);
+  const [open,setOpen ]=React.useState(false);
+  
+  const [success,setSuccess]=React.useState(false);
+  const {onOfficialLogin}=useAuth();
+  const classes = useStyles();
   const [err,setErr]=React.useState(false);
   const [errMsg,setErrMsg]=React.useState('');
-  const classes = useStyles();
-  const [success,setSuccess]=React.useState(false)
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -131,35 +138,68 @@ export default function Search() {
     setErr(false);
     setSuccess(false);
   };
-  
  
   React.useEffect(()=>{
   
+    //setRecievedData(false);
     try{
-      const fetchData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/messmenu?messno=1`,{
+      const SendData=async ()=>{
+        const result =await fetch(`${BaseUrl}/api/o/goodies`,{
           headers:{Authorization:`Bearer ${token}`}
         })
          const res = await result.json();
-        if(result.status===200||result.status===201){
-         
-          setMessMenuData(res.data);
-          setRecievedData(true);
+        if (res.err === false) {
+          setGoodieData( res.data.map((info, index) => {
+            let gtype=null;  
+            if(info.g_type===0){
+               gtype='Shirt/Hoodie'
+               }
+            else if(info.g_type===1){
+               gtype='Tickets'
+            }
+            else if(info.g_type===2){
+               gtype='Fund Raiser'
+            }
+            return { sno: index + 1, g_name: info.g_name, g_host: info.g_host, gtype:gtype,g_id:info.g_id,g_type:info.g_type,h_name:info.host_name,h_mobile:info.host_mobile }
+          }));
+          //setRecievedData(true);
           //setSendingData(false);
         }
-       else if(result.status===401)
-       logout()
-    }
-      fetchData();      
+        else if (res.err === true && result.status === 401) {
+          logout();
+        }
+        else if (res.err === true) {
+          setErr(true);
+          setErrMsg(res.msg);
+        }}
+      SendData();
+      
     }
     catch(err){
       console.log(err);
-     
+      
     } 
   
-  },[token,menuUpdated])
+  },[])
+  const sendGoodieData = async (g_id,g_name) => {
 
-  React.useEffect(()=>{
+    const result = await fetch(`${BaseUrl}/api/o/goodies/export?g_id=${g_id}`, {
+      headers: {  Authorization: `Bearer ${token}` ,Accept: "text/csv"},
+    })
+    const res = await result.text();
+    if(result.status===201||result.status===200||result.status===304){
+        const csvBlob=new Blob([res],{type:'text/csv'});
+        saveAs(csvBlob,`GoodieData-${g_name}.csv`);
+        setSuccess(true);
+      }
+      else {
+        setErr(true);
+        setErrMsg('Error in Downloading!');
+    }
+
+  }
+
+ /* React.useEffect(()=>{
    if(messUpdate===true){
     try{
       const sendData=async ()=>{
@@ -173,17 +213,10 @@ export default function Search() {
             })
            })
          const res = await result.json();
-        if(res.err===false){
-          setSuccess(true);  
+        if(result.status===200||result.status===201){
+          console.log("hi");
           setMenuUpdated(true);
           setMessUpdate(false);
-        }
-        else if(res.err===true && result.status===401){
-              logout();
-        }
-        else if(res.err===true){
-          setErr(true);
-          setErrMsg(res.msg);
         }
       
     }
@@ -196,77 +229,68 @@ export default function Search() {
     } 
   }
   },[messUpdate,token,messMenuData])
-  const logout=()=>{
-    localStorage.removeItem("officialtokens");
-    onOfficialLogin(false);  
-    return (<Redirect exact to='/' />);
-  }
   
+  */
+ const logout=()=>{
+  localStorage.removeItem("officialtokens");
+  onOfficialLogin(false);  
+  return (<Redirect exact to='/' />);
+}
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
           <h2><strong>BITS PILANI , HYDERABAD CAMPUS</strong></h2>
       </div>
       <GridContainer justify="center" alignItems="center">
-        <GridItem xs={12} sm={12} md={12}>
+        <GridItem xs={12} sm={12} md={10}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>MESS OPERATIONS </b></h4>
-              
+              <h4 className={classes.cardTitleWhite}><b>GOODIES DATA</b></h4>
             </CardHeader>
-            <CardBody>
-            <h5 style={{display:"flex",justifyContent:"center"}}><b>MESS MENU CHANGE</b></h5>
-            
-              <GridContainer spacing={4} >
-                  <GridItem xs={12} sm={12} md={12}>
-              {recievedData?<MaterialTable
-                  title="MESS MENU"
+            <MaterialTable
+                  title="APPLIED MCN APPLICATIONS"
                   columns={[
-                    {title:"Day",field:"day",editable:"never"},
-                    {title:"Breakfast",field:"breakfast"},
-                    {title:"Lunch",field:"lunch"},
-                    {title:"Snacks",field:"snacks"},
-                    {title:"Dinner",field:"dinner"}]}
-                  data={messMenuData}
+                   {title:"S No.",field:"sno"},
+                   {title:"Goodie Name",field:"g_name"},
+                   {title:"Sold By",field:"g_host"},
+                   {title:"Goodie Type",field:"gtype"},
+                  ]}
+                   data={goodieData}
+                  actions={[
+                      {
+                          icon: () => <VisibilityIcon />,
+                          //disabled:rowData.statusCode!==0,
+                          tooltip: 'View Goodie Sales',
+                          onClick: async (event, rowData) => {
+                              setGoodieDetails({g_id:rowData.g_id,g_type:rowData.g_type,h_name:rowData.h_name,h_mobile:rowData.h_mobile});
+                              //console.log(goodieDetails);
+                              setOpen(true);
+                              setSendingData(true);
+                          }
+
+                      },
+                      {
+                        icon: () => <GetAppIcon/>,
+                        //disabled:rowData.statusCode!==0,
+                        tooltip: 'Download CSV',
+                        onClick: async (event, rowData) => {
+                           sendGoodieData(rowData.g_id,rowData.g_name);
+                        }
+
+                    }
+
+                  ]}
+            
                   options={{
-                    search:false,
-                    paging:false,
-                    pageSizeOptions:[7],
-                    pageSize:7,
-                    emptyRowsWhenPaging:false
-                  }}
-                  editable={{
-                    onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {
-                      setTimeout(() => {
-                        const dataUpdate = [...messMenuData];
-                        const index = oldData.tableData.id;
-                        dataUpdate[index] = newData;
-                        setMessMenuData([...dataUpdate]);
-          
-                        resolve();
-                      }, 1000)
-                    }),
-                  }}
-                  />
-              :<h5>Loading Menu...</h5>}  
-              </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                <GridContainer direction="row"  justify="center"  alignItems="center" >
-                  <GridItem>
-                    <Button 
-                    color="success" 
-                    onClick={()=>{                     
-                      setMessUpdate(true)
-                      }}>
-                      Submit
-                    </Button>
-                  </GridItem>
-                </GridContainer>
-                </GridItem>
-                
-              </GridContainer>              
-            </CardBody>
+                    
+                    search:true,
+                    pageSize:20,
+                    emptyRowsWhenPaging:false,
+                    actionsColumnIndex:-1
+                    }}
+                  
+                           
+                /> 
           </Card>
         </GridItem>
        
@@ -279,7 +303,7 @@ export default function Search() {
             <Alert
               onClose={handleClose}
               severity="success">
-              Task Completed SuccessFully
+              File Download completed
         </Alert>
           </Snackbar>
           <Snackbar
@@ -293,6 +317,16 @@ export default function Search() {
               {errMsg}
         </Alert>
           </Snackbar>
+
+
+          {sendingData?<GoodieInfoModal 
+          open={open} 
+          setOpen={setOpen} 
+          goodieId={goodieDetails.g_id} 
+          goodieType={goodieDetails.g_type}
+          hostname={goodieDetails.h_name}
+          hostmobile={goodieDetails.h_mobile} 
+           />:null}
     </div>
   );
 }

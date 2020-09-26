@@ -7,8 +7,6 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridContainer from "components/Grid/GridContainer0.js";
 import GridItem from "components/Grid/GridItem0.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
-import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/workStyle.js";
 
@@ -17,50 +15,14 @@ const useStyles = makeStyles(styles);
 export default function WorkSection() {
   const classes = useStyles();
   return (
-    <div className={classes.section}>
+    <div className={classes.section} style={{marginTop:'-40px'}}>
       <GridContainer justify="center">
         <GridItem cs={12} sm={12} md={8}>
           <h2 className={classes.title}>Contact us</h2>
           <h4 className={classes.description}>
-            For any query regarding your College life you can contact us from your BITS email or you can directly mail us at<br/>swdnucleus@hyderabad.bits-pilani.ac.in
+            For any query regarding your College life you can contact us from your BITS email or you can directly mail us at<br/><a href="mailto:swdnucleus@hyderabad.bits-pilani.ac.in?subject=Query"> swdnucleus@hyderabad.bits-pilani.ac.in</a>
           </h4>
-          <form>
-            <GridContainer>
-              <GridItem xs={12} sm={12} md={6}>
-                <CustomInput
-                  labelText="Your Name"
-                  id="name"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                />
-              </GridItem>
-              <GridItem xs={12} sm={12} md={6}>
-                <CustomInput
-                  labelText="Your Email"
-                  id="email"
-                  formControlProps={{
-                    fullWidth: true
-                  }}
-                />
-              </GridItem>
-              <CustomInput
-                labelText="Your Message"
-                id="message"
-                formControlProps={{
-                  fullWidth: true,
-                  className: classes.textArea
-                }}
-                inputProps={{
-                  multiline: true,
-                  rows: 5
-                }}
-              />
-              <GridItem xs={12} sm={12} md={4}>
-                <Button color="primary">Send Message</Button>
-              </GridItem>
-            </GridContainer>
-          </form>
+         
         </GridItem>
       </GridContainer>
     </div>
