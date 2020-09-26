@@ -22,6 +22,7 @@ export default function CustomTabs(props) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, value) => {
+    
     setValue(value);
   };
   const classes = useStyles();

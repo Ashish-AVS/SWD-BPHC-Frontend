@@ -1,24 +1,24 @@
 import React from "react";
 import Datetime from "react-datetime";
-import MaterialTable from "material-table";
+import {Redirect} from 'react-router-dom';
+import {saveAs} from 'file-saver';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Select from '@material-ui/core/Select';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+//Auth Components
+import { useAuth } from "context/auth";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from "@material-ui/core/InputLabel";
+import {BaseUrl} from "variables/BaseUrl";
 import {
   primaryColor,
   defaultFont
@@ -104,80 +104,133 @@ const styles = {
       marginTop: "0px"
     }}
 };
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(styles);
 
-export default function Search() {
+export default function MessGrace() {
 
  const token=JSON.parse(localStorage.getItem("officialtokens"));
  
+  //const [sendingData,setSendingData]=React.useState(false);
+  const [graceData,setGraceData]=React.useState([]);
   const [sendingData,setSendingData]=React.useState(false);
-  const [messMenudata,setMessMenuData]=React.useState([]);
-  const [recievedData,setRecievedData]=React.useState(false)
+  const [postDate,setPostDate]=React.useState("");
+  const [success,setSuccess]=React.useState(false);
+  const {onOfficialLogin}=useAuth();
   const classes = useStyles();
-  var today = Datetime.moment();
-  var valid = function( current ){
-    return current.isBefore( today );
+  const [err,setErr]=React.useState(false);
+  const [errMsg,setErrMsg]=React.useState('');
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErr(false);
+    setSuccess(false);
   };
- // let value1=<></>
-  
-  function onChange(e){
-    const { name, value } = e.target;
-    setCriteria(prevState=>({
-         ...prevState,
-         [name]: value
-     }));
-  }
-  function onCrit1Change(e){
-    const { name, value } = e.target;
-    setCriteria(prevState=>({
-         ...prevState,
-         [name]: value,
-         value_1:''
-     }));
-  }
-  function onCrit2Change(e){
-    const { name, value } = e.target;
-    setCriteria(prevState=>({
-         ...prevState,
-         [name]: value,
-         value_2:''
-     }));
-  }
+ const date = new Date();
+ const date1= date.toLocaleDateString();
   React.useEffect(()=>{
-  if(sendingData===true){
-    setRecievedData(false);
+  
+    //setRecievedData(false);
+    try{
+      const SendData=async ()=>{
+        const result =await fetch(`${BaseUrl}/api/o/messgrace/upcoming`,{
+          headers:{Authorization:`Bearer ${token}`}
+        })
+         const res = await result.json();
+        if (res.err === false) {
+          setGraceData(res.data);
+          //setRecievedData(true);
+          //setSendingData(false);
+        }
+        else if (res.err === true && result.status === 401) {
+          logout();
+        }
+        else if (res.err === true) {
+          setErr(true);
+          setErrMsg(res.msg);
+        }}
+      SendData();
+      
+    }
+    catch(err){
+      console.log(err);
+      
+    } 
+  
+  },[])
+  React.useEffect(()=>{
+  
+    if(sendingData===true){
+    try{
+      const SendData=async ()=>{
+        const result =await fetch(`${BaseUrl}/api/o/messgrace/export?date=${postDate}`,{
+          headers:{Authorization:`Bearer ${token}`,
+          Accept: "text/csv"}
+        })
+        const res= await result.text();
+        if(result.status===201||result.status===200||result.status===304){
+          const csvBlob=new Blob([res],{type:'text/csv'});
+          saveAs(csvBlob,`GraceData-${date1}.csv`);
+          setSuccess(true);
+        }
+        else {
+          setErr(true);
+          setErrMsg('Error in Downloading!');
+        }
+        }
+      SendData();
+      setSendingData(false);
+      
+    }
+    catch(err){
+      console.log(err);
+      
+    }
+  }
+  
+  })
+
+ /* React.useEffect(()=>{
+   if(messUpdate===true){
     try{
       const sendData=async ()=>{
-        const result =await fetch('http://40.121.181.70/api/o/search',{
-          method:"post",
-          headers:{'Content-Type':"application/json"},
-          body:JSON.stringify({
-            id:"swd",
-            criteria_1:criteria.criteria_1,
-            value_1:criteria.value_1,
-            criteria_2:criteria.criteria_2,
-            value_2:criteria.value_2,
-            token:token
-          })
-         })
+        const result =await fetch(`${BaseUrl}/api/o/messmenu`,{
+            method:"post",
+            headers:{'Content-Type':"application/json",
+            Authorization:`Bearer ${token}`},
+            body:JSON.stringify({
+              messno:1,
+              menu:JSON.stringify(messMenuData)
+            })
+           })
          const res = await result.json();
         if(result.status===200||result.status===201){
-          setData(res);
-          setRecievedData(true);
-          setSendingData(false);
+          console.log("hi");
+          setMenuUpdated(true);
+          setMessUpdate(false);
         }
-       
-      }
+      
+    }
       sendData();
       
     }
     catch(err){
       console.log(err);
+      
     } 
-  } 
-  },[sendingData, criteria.criteria_1, criteria.value_1, criteria.criteria_2, criteria.value_2, token])
+  }
+  },[messUpdate,token,messMenuData])
   
+  */
+ const logout=()=>{
+  localStorage.removeItem("officialtokens");
+  onOfficialLogin(false);  
+  return (<Redirect exact to='/' />);
+}
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -187,52 +240,23 @@ export default function Search() {
         <GridItem xs={12} sm={12} md={10}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>STUDENT DETAIL FINDER</b></h4>
+              <h4 className={classes.cardTitleWhite}><b>MESS GRACE OPERATIONS </b></h4>
               
             </CardHeader>
             <CardBody>
-            <h5 style={{display:"flex",justifyContent:"center"}}><b>MENTION ABOUT STUDENT</b></h5>
-            <p style={{display:"flex",justifyContent:"center"}}>
-                Below listed are two criteria on the basis of which you can find the student.By default the first criteria
-                is "Name" which you can change by chosing the one from the available list list. If required you can use the second criteria but
-                it is not compulsory and its default value is NIL.  
-               </p>
-              <GridContainer spacing={4} >
-                
-                <GridItem xs={12} sm={12} md={5}>   
-                <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}>Criteria-1</InputLabel>
-                  <Select
-                   name="criteria_1"
-                   className={classes.input+" "+classes.underline}
-                   defaultValue={'name'}
-                   onChange={onCrit1Change}
-                  >
-                     <MenuItem value={'name'}>Name</MenuItem>
-                     <MenuItem value={'id'}>ID</MenuItem>
-                     <MenuItem value={'uid'}>User ID</MenuItem>
-                     <MenuItem value={'room'}>Room No.</MenuItem>
-                     <MenuItem value={'gender'}>Gender</MenuItem>
-                     <MenuItem value={'dob'}>Date Of Birth</MenuItem>
-                     <MenuItem value={'city'}>City</MenuItem>
-                     <MenuItem value={'state'}>State</MenuItem>
-                     <MenuItem value={'blood'}>Blood Group</MenuItem>
-                     <MenuItem value={'nation'}>Nationality</MenuItem>
-                  </Select>
-               </FormControl>  
-                  
-                </GridItem>
-                <GridItem xs={12} sm={12} md={5}>
-                {criteria.criteria_1==='dob'? 
-                <FormControl fullWidth className={classes.formControl}>
+            <h3 style={{display:"flex",justifyContent:"center"}}><b>EXPORT GRACE</b></h3>
+            
+              <GridContainer  direction="row"  justify="center"  alignItems="center">
+                  <GridItem xs={12} sm={12} md={4}>
+                  <FormControl fullWidth className={classes.formControl}>
                   <InputLabel className={classes.label}>
-                    Birth-Date
+                    Select Date
                   </InputLabel>
                   <Datetime
                    dateFormat="DD-MM-YYYY" 
                    timeFormat={false}
                    className={classes.input+" "+classes.underline}
-                   isValidDate={valid}
+                   
                    onChange={(e)=>{
                     const date = new Date(`${e}`);
                     const {Date1,Month,Year}={
@@ -240,219 +264,75 @@ export default function Search() {
                       Month:date.getMonth()+1,
                       Year:date.getFullYear()
                       }
-                    if(Month>9)
-                      setCriteria(prevState=>({
-                         ...prevState,
-                        value_1:`${Year}-${Month}-${Date1}`
-                         }));
-                    else
-                      setCriteria(prevState=>({
-                          ...prevState,
-                          value_1:`${Year}-0${Month}-${Date1}`
-                         }));  
+                      if(Month>9){
+                        if(Date1<10){
+                      setPostDate(`${Year}-${Month}-0${Date1}`);}
+                      else
+                      setPostDate(`${Year}-${Month}-${Date1}`);
+                      }else{
+                        if(Date1<10)
+                        setPostDate(`${Year}-0${Month}-0${Date1}`);
+                        else
+                        setPostDate(`${Year}-0${Month}-${Date1}`);
+                      }  
                      }}
                     />
                 </FormControl>
-                     :
-                criteria.criteria_1==='gender'?
-                <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}>Gender</InputLabel>
-                  <Select
-                    name="value_1"
-                    className={classes.input+" "+classes.underline}
-                    onChange={onChange}
-                    defaultValue={''}
-                    >
-                       <MenuItem value={''}>Select</MenuItem>
-                       <MenuItem value={'M'}>Male</MenuItem>
-                       <MenuItem value={'F'}>Female</MenuItem>
-                       <MenuItem value={'Others'}>Others</MenuItem>
-                  </Select>
-                </FormControl>
-                     :
-                criteria.criteria_1==='blood'?
-                <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}>Blood Group</InputLabel>
-                  <Select
-                    name="value_1"
-                    className={classes.input+" "+classes.underline}
-                    value={'A+'}
-                    onChange={onChange}
-                    >
-                      <MenuItem value={'A+'}>A+</MenuItem>
-                      <MenuItem value={'A-'}>A-</MenuItem>
-                      <MenuItem value={'B+'}>B+</MenuItem>
-                      <MenuItem value={'B-'}>B-</MenuItem>
-                      <MenuItem value={'AB+'}>AB+</MenuItem>
-                      <MenuItem value={'AB-'}>AB-</MenuItem>
-                      <MenuItem value={'O+'}>O+</MenuItem>
-                      <MenuItem value={'O-'}>O-</MenuItem>
-                  </Select>
-               </FormControl>
-                   :
-                <CustomInput
-                  labelText="Value"
-                  onChange={onChange}
-                  formControlProps={{
-                    fullWidth: true
-                   }}
-                   inputProps={{
-                    name:"value_1",
-                    value:criteria.value_1
-                  }}
-                />}
-                </GridItem><GridItem xs={12} sm={12} md={5}>   
-                <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}>Criteria-2</InputLabel>
-                  <Select
-                   name="criteria_2"
-                   className={classes.input+" "+classes.underline}
-                   onChange={onCrit2Change}
-                   defaultValue=''
-                  >
-                     <MenuItem value={''}>Select</MenuItem>
-                     <MenuItem value={'name'}>Name</MenuItem>
-                     <MenuItem value={'id'}>ID</MenuItem>
-                     <MenuItem value={'uid'}>User ID</MenuItem>
-                     <MenuItem value={'room'}>Room No.</MenuItem>
-                     <MenuItem value={'gender'}>Gender</MenuItem>
-                     <MenuItem value={'dob'}>Date Of Birth</MenuItem>
-                     <MenuItem value={'city'}>City</MenuItem>
-                     <MenuItem value={'state'}>State</MenuItem>
-                     <MenuItem value={'blood'}>Blood Group</MenuItem>
-                     <MenuItem value={'nation'}>Nationality</MenuItem>
-                  </Select>
-               </FormControl>  
-                </GridItem>
-                <GridItem xs={12} sm={12} md={5}>
-                {criteria.criteria_2==='dob'? 
-                <FormControl fullWidth className={classes.formControl}>
-                 <InputLabel className={classes.label}>
-                   Birth-Date
-                 </InputLabel>
-                 <Datetime
-                   dateFormat="DD-MM-YYYY" 
-                   timeFormat={false}
-                   className={classes.input+" "+classes.underline}
-                   isValidDate={valid}
-                   onChange={(e)=>{
-                    const date = new Date(`${e}`);
-                    const {Date1,Month,Year}={
-                        Date1:date.getDate(),
-                        Month:date.getMonth()+1,
-                        Year:date.getFullYear()
-                    }
-                    if(Month>9)
-                    setCriteria(prevState=>({
-                    ...prevState,
-                    value_2:`${Year}-${Month}-${Date1}`
-                     }));
-                     else
-                    setCriteria(prevState=>({
-                    ...prevState,
-                    value_2:`${Year}-0${Month}-${Date1}`
-                      }));  
-                    }}
-                />
-             </FormControl>
-                :
-             criteria.criteria_2==='gender'?
-             <FormControl fullWidth className={classes.formControl}>
-               <InputLabel className={classes.labelRoot}>Gender</InputLabel>
-               <Select
-                name="value_2"
-                className={classes.input+" "+classes.underline}
-                onChange={onChange}
-                defaultValue={''}
-                >
-                 <MenuItem value={''}>Select</MenuItem>
-                 <MenuItem value={'M'}>Male</MenuItem>
-                 <MenuItem value={'F'}>Female</MenuItem>
-                 <MenuItem value={'Others'}>Others</MenuItem>
-               </Select>
-             </FormControl>
-                  :
-              criteria.criteria_2==='blood'?
-              <FormControl fullWidth className={classes.formControl}>
-                <InputLabel className={classes.labelRoot}>Blood Group</InputLabel>
-                 <Select
-                   name="value_2"
-                   className={classes.input+" "+classes.underline}
-                   value={'A+'}
-                   onChange={onChange}
-                 >
-                  <MenuItem value={'A+'}>A+</MenuItem>
-                  <MenuItem value={'A-'}>A-</MenuItem>
-                  <MenuItem value={'B+'}>B+</MenuItem>
-                  <MenuItem value={'B-'}>B-</MenuItem>
-                  <MenuItem value={'AB+'}>AB+</MenuItem>
-                  <MenuItem value={'AB-'}>AB-</MenuItem>
-                  <MenuItem value={'O+'}>O+</MenuItem>
-                  <MenuItem value={'O-'}>O-</MenuItem>
-                </Select>
-              </FormControl>
-                 :
-              <CustomInput
-                labelText="Value"
-                onChange={onChange}
-                inputProps={{
-                  name:"value_2",
-                  value:criteria.value_2
-                }}
-                formControlProps={{
-                 fullWidth: true
-                }}
-               />}
-                </GridItem>
-                <GridItem xs={12} sm={12} md={10}>
-                <GridContainer direction="row"  justify="center"  alignItems="center" >
-                  <GridItem>
-                    <Button color="success" onClick={()=>{setSendingData(true)}}>
-                      Submit
+                
+              </GridItem>
+                <GridItem xs={12} sm={12} md={4}>
+                
+                    <Button color="success" onClick={()=>{
+                      setSendingData(true)
+                      }}>
+                      Download CSV
                     </Button>
-                  </GridItem>
-                  <GridItem>
-                    <Button color="danger">
-                      Discard
-                    </Button>
-                  </GridItem>
-                </GridContainer>
+                  
                 </GridItem>
                 
-              </GridContainer>              
+              </GridContainer> 
+              <h3 style={{display:"flex",justifyContent:"center",marginTop:'80px'}}><b>UPCOMING GRACES</b></h3>             
+             <GridContainer spacing={2} justify="center" alignItems="center">
+               <GridItem xs={12} sm={12} md={3}>
+                 <h4><b>TODAY</b></h4><br/>
+                    <h4>{graceData.today}</h4>
+               </GridItem>
+               <GridItem xs={12} sm={12} md={3}>
+               <h4><b>TOMORROW</b></h4><br/>
+                 <h4>{graceData.tomorrow}</h4>
+               </GridItem>
+               <GridItem xs={12} sm={12} md={3}>
+               <h4><b>DAY AFTER </b></h4><br/>
+                    <h4>{graceData.dayafter}</h4>
+               </GridItem>
+             </GridContainer>
             </CardBody>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={10}>
-        {recievedData?
-                <MaterialTable
-                  title="Student List"
-                  columns={[
-                    {title:"User ID",field:"uid"},
-                    {title:"Name",field:"name"},
-                    {title:"ID",field:"id"},
-                    {title:"Phone",field:"phone"}]}
-                  data={data}
-                  options={{
-                    search:false,
-                    pageSize:20,
-                    emptyRowsWhenPaging:false
-                  }}
-                  actions={[
-                    {                 
-                      icon:()=><Button color="info" round >Open</Button>,
-                      tooltip:'Open',
-                      onClick:(event,row)=>{
-                    console.log(row.uid)
-                      }
-                   }
-                  ]}
-                 // components={{
-                   // Actions:'MTableActions'
-                  //}}
-                  />:null} 
-        </GridItem>
+       
       </GridContainer>
+      <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={success}
+            autoHideDuration={4000}
+            onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity="success">
+              File Download completed
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={err}
+            autoHideDuration={4000}
+            onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity="error">
+              {errMsg}
+        </Alert>
+          </Snackbar>
     </div>
   );
 }

@@ -27,7 +27,8 @@ import { useAuth } from "context/auth";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg-official.jpg";
-
+import { json } from "d3";
+import {BaseUrl} from "variables/BaseUrl";
 const useStyles = makeStyles(styles);
 
 
@@ -42,6 +43,7 @@ export default function OfficialLogin(props) {
   const [loading,setLoading]=React.useState(false);
   const [id,setId]= React.useState();
   const [pwd,setPwd]=React.useState();
+ 
  useEffect(()=>{
   var userInput = document.getElementById("id");
   userInput.addEventListener("keyup", function(event) {
@@ -85,19 +87,21 @@ export default function OfficialLogin(props) {
      const fetchData= async ()=>{   
         setIsError(false);
         setEmptyError(false);  
-        const result= await fetch("https://swdnucleus.ml/api/o/auth/login",{
+        const result= await fetch(`${BaseUrl}/api/o/auth/login`,{
            method:"post",
            headers:{'Content-Type':"application/json"},
            body:JSON.stringify({
              id:id,
-             password:pwd
+             password:pwd,
+             type:"0"
           }),
           signal:signal      
         })
         const res =await result.json();
         if(result.status===200||result.status===201||result.status===304){ 
-           console.log(JSON.parse(atob(res.token.split('.')[1])));
-           onOfficialLogin(res.token);
+          
+           onOfficialLogin(res.data.bearer_token);
+          
            setLoggedIn(true);
           }
           else if(result.status===422){
@@ -122,12 +126,13 @@ export default function OfficialLogin(props) {
      }
    }
  },[isLoggingIn,id,pwd,onOfficialLogin]);
+ 
 
  useEffect(()=>{
   
    if(isLoggedIn===true){
     localStorage.setItem("officialtokens",JSON.stringify(officialAuthTokens)); 
-    //console.log("hi2");
+   
     props.history.push("/official");
     setLoading(false); 
   return ()=>{

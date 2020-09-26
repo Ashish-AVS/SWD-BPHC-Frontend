@@ -1,5 +1,7 @@
 import React,{useState,useEffect} from "react";
 import {Link} from "react-router-dom";
+//import Cookie from "js.cookie";
+import axios from "axios";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -27,7 +29,9 @@ import { useAuth } from "context/auth";
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bgimg.jpg";
+import { TimelapseOutlined } from "@material-ui/icons";
 
+import {BaseUrl} from "variables/BaseUrl";
 const useStyles = makeStyles(styles);
 
 let data={
@@ -43,6 +47,7 @@ export default function LoginPage(props) {
   const [isLoggingIn, setLoggingIn]=useState(false);
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
+  const [conError,setConError]=useState(false);
   const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
@@ -83,61 +88,63 @@ export default function LoginPage(props) {
  useEffect(()=>{
    if(isLoggingIn===true){  
      setLoading(true);
-     const abortController = new AbortController();
-     const signal=abortController.signal;
+
      try{
      const fetchData= async ()=>{  
-     
-      
+        setConError(false)
         setIsError(false);
         setEmptyError(false);  
-        const result= await fetch("https://swdnucleus.ml/api/auth",{
-           method:"post",
-           headers:{'Content-Type':"application/json"},
-           body:JSON.stringify({
+        axios.post(`${BaseUrl}/api/auth`,{
              uid:uid,
-             password:pwd
-          }),
-          signal:signal      
-        })
-        const res =await result.json();
-        if(result.status===200||result.status===201||result.status===304){ 
-           onLogin(res.token); 
-           data.name=res.name;
-           data.id=res.id;
-           data.isComplete=res.isComplete;
-           data.uid=uid;
-           setLoggedIn(true);
+             password:pwd,
+             type:'0'        
+        }).then(result=>{
+          if(result.status===200||result.status===201||result.status===304){
+            //console.log(result.headers.get('Set-Cookie')); 
+             
+            onLogin(result.headers.authorization); 
+             data.name=result.data.data.name;
+             data.id=result.data.data.id;
+             data.isComplete=result.data.data.isComplete;
+             data.uid=uid;
+             setLoggedIn(true);
           }
-          else if(result.status===422){
-            setLoggingIn(false);
-            setEmptyError(true);
-            setLoading(false);
-          } 
-          else if(result.status===401){
-            setLoggingIn(false);
-            setIsError(true);
-            setLoading(false);
-          }     
+        
+        }).catch((result)=>{
+          if (result.response !== undefined) {
+            if (result.response.status === 422) {
+
+              setLoggingIn(false);
+              setEmptyError(true);
+              setLoading(false);
+            }
+            else if (result.response.status === 401) {
+
+              setLoggingIn(false);
+              setIsError(true);
+              setLoading(false);
+            }
+          }
+        })      
+        
+            
         }
+        timeUp();
         fetchData();
       }catch(err){
           
           console.log(err)
         }
        
-     return ()=>{
-       abortController.abort();
-     }
+    
    }
  },[isLoggingIn,uid,pwd,onLogin]);
 
  useEffect(()=>{
-  console.log(authTokens);
+ 
    if(isLoggedIn===true){
     localStorage.setItem("tokens",JSON.stringify(authTokens)); 
     localStorage.setItem("data",JSON.stringify(data));
-    console.log("hi2");
     props.history.push("/admin/dashboard");
     setLoading(false); 
   return ()=>{
@@ -146,7 +153,13 @@ export default function LoginPage(props) {
   }
  },[isLoggedIn,props.history,authTokens])
  
-
+const timeUp=()=>{
+  setTimeout(()=>{
+    setLoading(false);
+    setLoggingIn(false);
+    setConError(true);
+  },12000)
+}
  setTimeout(function() {
     setCardAnimation("");
   }, 700);
@@ -186,6 +199,19 @@ export default function LoginPage(props) {
                       icon="info_outline"
                     />
                     <Clearfix /></div>:null}
+                    {conError?
+                  <div>
+                    <SnackbarContent
+                      message={
+                      <span >
+                        <b>CONNECTION ERROR:</b>Server Timed Out
+                      </span>
+                        }
+                      close
+                      color="danger"
+                      icon="info_outline"
+                    />
+                    <Clearfix /></div>:null}
                     {isError?
                   <div><SnackbarContent
                     message={
@@ -198,6 +224,7 @@ export default function LoginPage(props) {
                     icon="info_outline"
                     />
                     <Clearfix /></div>:null}
+                    
                     <CustomInput
                       onChange={(e)=>{
                         setUid(e.target.value);

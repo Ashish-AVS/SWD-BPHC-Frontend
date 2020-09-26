@@ -1,5 +1,6 @@
 import React from "react";
-
+import axios from "axios";
+import {Redirect} from 'react-router-dom';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -21,10 +22,14 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
 
+//Auth Components
+import { useAuth } from "context/auth";
+
+
 import GraceModal from "views/Modals/GraceModal";
 import ComplaintsModal from "views/Modals/ComplaintsModal";
 import MenuModal from "views/Modals/MenuModal";
-
+import {BaseUrl} from "variables/BaseUrl";
 
 import { official,
   department,
@@ -50,6 +55,7 @@ export default function Dashboard() {
   const [Mess,openMess] = React.useState(false);
   const  [Grace,openGrace]= React.useState(false);
   const token=JSON.parse(localStorage.getItem("tokens"));
+  const {onLogin} = useAuth();
   const {uid,name}=JSON.parse(localStorage.getItem("data"));
   const [messDetails,setMessDetails]=React.useState({});
   let messNo=messDetails.mess;
@@ -58,9 +64,15 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`https://swdnucleus.ml/api/mess/menu?uid=${uid}&token=${token}`) ;
-      const res = await result.json();
-      setMessDetails(res);   
+      const result= await axios.get(`${BaseUrl}/api/mess/menu?uid=${uid}`,{headers:{
+        Authorization:token
+      }}) ;
+      //const res = await result.json();
+      if(result.data.err===false)
+      setMessDetails(result.data.data);
+      else if(result.data.err===true && result.status===401){
+        logout();
+      }   
   }
     fetchData();
     
@@ -80,6 +92,12 @@ export default function Dashboard() {
     ) 
     }
   },[messDetails])
+  const logout=()=>{
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("data");
+    onLogin(false);  
+    return (<Redirect exact to='/login-page' />);
+  }
 
   const classes = useStyles();
   return (

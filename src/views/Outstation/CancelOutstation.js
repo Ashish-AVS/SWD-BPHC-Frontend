@@ -15,7 +15,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 //Core Components
 import Button from "components/CustomButtons/Button.js";
 
-
+import {BaseUrl} from "variables/BaseUrl";
 
 import styles from "assets/jss/material-kit-react/modalStyle";
 
@@ -45,9 +45,9 @@ React.useEffect(()=>{
     try{
     const sendData=async ()=>{
       setLoading(true);  
-      const result =await fetch('https://swdnucleus.ml/api/outstation/cancel',{
+      const result =await fetch(`${BaseUrl}/api/outstation/cancel`,{
           method:"post",
-          headers:{'Content-Type':"application/json"},
+          headers:{'Content-Type':"application/json",Authorization:token},
           body:JSON.stringify({
              uid:uid,
              token:token,

@@ -54,6 +54,7 @@ export default function Admin({ ...rest }) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  
   const getRoute = () => {
     return window.location.pathname !== "/admin/maps";
   };
@@ -92,6 +93,7 @@ export default function Admin({ ...rest }) {
         //setOpen={setMobileOpen}
         open={mobileOpen}
         color={color}
+    
         {...rest}
       />
       <div className={classes.mainPanel} ref={mainPanel}>

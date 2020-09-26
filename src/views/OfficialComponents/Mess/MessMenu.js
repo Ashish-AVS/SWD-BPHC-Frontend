@@ -1,22 +1,31 @@
 import React from "react";
 import MaterialTable from "material-table";
+import {Redirect} from 'react-router-dom';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+//Auth Components
+import { useAuth } from "context/auth";
 
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
+
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-
+import {BaseUrl} from "variables/BaseUrl";
 import {
   primaryColor,
   defaultFont
 } from "assets/jss/material-kit-react.js";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 
 const styles = {
@@ -110,52 +119,71 @@ export default function Search() {
   const [messUpdate,setMessUpdate]=React.useState(false);
   const [menuUpdated,setMenuUpdated]=React.useState(false);
   const [recievedData,setRecievedData]=React.useState(false)
+  const { onOfficialLogin } = useAuth();
+  const [err,setErr]=React.useState(false);
+  const [errMsg,setErrMsg]=React.useState('');
   const classes = useStyles();
- 
+  const [success,setSuccess]=React.useState(false)
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErr(false);
+    setSuccess(false);
+  };
+  
  
   React.useEffect(()=>{
   
-    //setRecievedData(false);
     try{
       const fetchData=async ()=>{
-        const result =await fetch(`https://swdnucleus.ml/api/o/messmenu?id=swd&token=${token}&messno=1`)
+        const result =await fetch(`${BaseUrl}/api/o/messmenu?messno=1`,{
+          headers:{Authorization:`Bearer ${token}`}
+        })
          const res = await result.json();
         if(result.status===200||result.status===201){
-            setMessMenuData(res);
+         
+          setMessMenuData(res.data);
           setRecievedData(true);
           //setSendingData(false);
         }
-       if(result.status===401)
-       console.log(atob(token.split('.')[1]));
+       else if(result.status===401)
+       logout()
     }
-      fetchData();
-      
+      fetchData();      
     }
     catch(err){
       console.log(err);
-      console.log(atob(token.split('.')[1]))
+     
     } 
   
   },[token,menuUpdated])
+
   React.useEffect(()=>{
    if(messUpdate===true){
     try{
       const sendData=async ()=>{
-        const result =await fetch('https://swdnucleus.ml/api/o/messmenu',{
+        const result =await fetch(`${BaseUrl}/api/o/messmenu`,{
             method:"post",
-            headers:{'Content-Type':"application/json"},
+            headers:{'Content-Type':"application/json",
+            Authorization:`Bearer ${token}`},
             body:JSON.stringify({
-              id:"swd",
               messno:1,
-              token:token,
               menu:JSON.stringify(messMenuData)
             })
            })
          const res = await result.json();
-        if(result.status===200||result.status===201){
-          console.log("hi");
+        if(res.err===false){
+          setSuccess(true);  
           setMenuUpdated(true);
           setMessUpdate(false);
+        }
+        else if(res.err===true && result.status===401){
+              logout();
+        }
+        else if(res.err===true){
+          setErr(true);
+          setErrMsg(res.msg);
         }
       
     }
@@ -168,6 +196,11 @@ export default function Search() {
     } 
   }
   },[messUpdate,token,messMenuData])
+  const logout=()=>{
+    localStorage.removeItem("officialtokens");
+    onOfficialLogin(false);  
+    return (<Redirect exact to='/' />);
+  }
   
   return (
     <div>
@@ -182,7 +215,7 @@ export default function Search() {
               
             </CardHeader>
             <CardBody>
-            <h5 style={{display:"flex",justifyContent:"center"}}><b>MESS MENU</b></h5>
+            <h5 style={{display:"flex",justifyContent:"center"}}><b>MESS MENU CHANGE</b></h5>
             
               <GridContainer spacing={4} >
                   <GridItem xs={12} sm={12} md={12}>
@@ -215,34 +248,18 @@ export default function Search() {
                       }, 1000)
                     }),
                   }}
-                  //actions={[
-                    //{                 
-                      //icon:()=><Button color="info" round >Open</Button>,
-                      //tooltip:'Open',
-                      //onClick:(event,row)=>{
-                    //console.log(row.uid)
-                      //}
-                   //}
-                  //]}
-                 // components={{
-                   // Actions:'MTableActions'
-                  //}}
                   />
-              :<h5>Fetching Data...</h5>}  
+              :<h5>Loading Menu...</h5>}  
               </GridItem>
-                <GridItem xs={12} sm={12} md={10}>
+                <GridItem xs={12} sm={12} md={12}>
                 <GridContainer direction="row"  justify="center"  alignItems="center" >
                   <GridItem>
-                    <Button color="success" onClick={()=>{
-                      console.log(messMenuData);
+                    <Button 
+                    color="success" 
+                    onClick={()=>{                     
                       setMessUpdate(true)
                       }}>
                       Submit
-                    </Button>
-                  </GridItem>
-                  <GridItem>
-                    <Button color="danger">
-                      Discard
                     </Button>
                   </GridItem>
                 </GridContainer>
@@ -254,6 +271,28 @@ export default function Search() {
         </GridItem>
        
       </GridContainer>
+      <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={success}
+            autoHideDuration={4000}
+            onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity="success">
+              Task Completed SuccessFully
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={err}
+            autoHideDuration={4000}
+            onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity="error">
+              {errMsg}
+        </Alert>
+          </Snackbar>
     </div>
   );
 }

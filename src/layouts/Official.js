@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -19,23 +20,7 @@ import logo from "assets/img/bitslogo.png";
 
 let ps;
 
-const switchRoutes = (
-  <Switch>
-    {OfficialRoutes.map((prop, key) => {
-      if (prop.layout === "/official") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Redirect from="/official" to="/official/search" />
-  </Switch>
-);
+
 
 const useStyles = makeStyles(styles);
 
@@ -45,9 +30,28 @@ export default function Official({ ...rest }) {
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  
+  const token=JSON.parse(localStorage.getItem('officialtokens'));
+  const data = jwt_decode(token);
   const color="blue";
-  
+ 
+  const allowedRoutes=OfficialRoutes.filter(element=>data.resources.includes(element.id));
+  const switchRoutes = (
+    <Switch>
+      {OfficialRoutes.map((prop, key) => {
+        if (prop.layout === "/official") {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              component={prop.component}
+              key={key}
+            />
+          );
+        }
+        return null;
+      })}
+      <Redirect from="/official" to={`/official${allowedRoutes[0].path}`} />
+    </Switch>
+  );
   const [mobileOpen, setMobileOpen] = React.useState(false);
   
   const handleDrawerToggle = () => {
@@ -81,8 +85,8 @@ export default function Official({ ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         layout='official'
-        routes={OfficialRoutes}
-        logoText={"SWD"}
+        routes={allowedRoutes}
+        logoText={data.id}
         logo={logo}
         image={bgImage}
         handleDrawerToggle={handleDrawerToggle}
@@ -93,7 +97,7 @@ export default function Official({ ...rest }) {
       <div className={classes.mainPanel} ref={mainPanel}>
         <Navbar
           layout='official'
-          routes={OfficialRoutes}
+          routes={allowedRoutes}
           handleDrawerToggle={handleDrawerToggle}
           {...rest}
         />         

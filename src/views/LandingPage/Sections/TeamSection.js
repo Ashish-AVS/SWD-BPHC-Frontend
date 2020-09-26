@@ -32,12 +32,12 @@ export default function TeamSection() {
   return (
     <div className={classes.section}>
       <h2 className={classes.title}>Our Head</h2>
-      <div>
-        <GridContainer style={{justifyContent:"center"}}>
+      <div style={{marginTop:'-30px'}}>
+        <GridContainer direction="row" justify="center" alignItems="center" >
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
               <GridItem xs={12} sm={12} md={6} className={classes.itemGrid} >
-                <img src={sirImg} alt="..." className={imageClasses}  />
+                <img style={{marginLeft:'-50px',marginBottom:'20px'}} src={sirImg} alt="..." className={imageClasses}  />
               </GridItem>
               <h4 className={classes.cardTitle}>
                 Prof. Sandip S. Deshmukh

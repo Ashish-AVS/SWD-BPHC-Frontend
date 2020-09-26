@@ -12,7 +12,7 @@ import { AuthContextProvider } from "./context/auth";
 // pages for this product
 import Components from "views/Components/Components.js";
 import LandingPage from "views/LandingPage/LandingPage.js";
-import ProfilePage from "views/ProfilePage/ProfilePage.js";
+import KnowYourDept from "views/KnowYourDept/KnowYourDept";
 import LoginPage from "views/LoginPage/LoginPage.js";
 import OfficialLogin from "views/Official/Official.js";
 import Admin from "layouts/Admin.js";
@@ -29,7 +29,7 @@ return(
             <Router history={hist} >
               <Switch>
                 <Route path="/components" component={Components}  />
-                <Route path="/profile-page" component={ProfilePage} />
+                <Route path="/know-your-dept" component={KnowYourDept} />
                 <Route path="/login-page" component={LoginPage} />
                 <Route path="/official-login" component={OfficialLogin} />
                 <OfficialPrivateRoute path="/official" component={Official} />

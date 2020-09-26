@@ -21,6 +21,12 @@ const dashboardStyle = {
     position: "relative",
     
   },
+  typo2: {
+    paddingLeft: "50%",
+    marginBottom: "30px",
+    position: "relative",
+    
+  },
   note: {
     paddingLeft: "35%",
     marginBottom: "30px",
@@ -35,6 +41,12 @@ const dashboardStyle = {
   },
   note2: {
     paddingLeft: "30%",
+    marginBottom: "30px",
+    position: "relative",
+    
+  },
+  note3: {
+    paddingLeft: "2.5%",
     marginBottom: "30px",
     position: "relative",
     

@@ -67,7 +67,7 @@ setIsFetched(true);
                 root: classes.center,
                 paper: classes.modal
               }}
-              maxWidth="lg"
+              fullScreen
               fullWidth={true}
               open={open}
               TransitionComponent={Transition}
@@ -100,6 +100,17 @@ setIsFetched(true);
                   title="HOSTEL DETAILS"
                   columns={columns1}
                   data={data}
+                  options={{
+                    pageSize:20,
+                    emptyRowsWhenPaging:false,
+                    headerStyle: {
+                      backgroundColor: '#969592',
+                      color: '#FFF'
+                    },
+                    rowStyle: {
+                      border: "2px solid black",
+                    }
+                  }}
                   />           
 
 
@@ -110,7 +121,7 @@ setIsFetched(true);
                 <Button
                   onClick={() => setOpen(false)}
                   color="danger"
-                  simple
+                  solid="true"
                 >
                   Close
                 </Button>

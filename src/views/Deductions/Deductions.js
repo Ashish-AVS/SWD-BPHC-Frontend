@@ -1,4 +1,5 @@
 import React from "react";
+import {Redirect} from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -9,6 +10,11 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
+//Auth Components
+import { useAuth } from "context/auth";
+
+
+import {BaseUrl} from "variables/BaseUrl";
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -49,18 +55,22 @@ const useStyles = makeStyles(styles);
 export default function Deductions() {
   const [deduction,setDeduction]=React.useState({});
   const [isFetching,setIsFetching]=React.useState(true);
+  const [totAmt,setTotAmt]=React.useState(0)
   const {uid}=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
+  const { onLogin } = useAuth();
   const classes = useStyles();
 
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`https://swdnucleus.ml/api/deductions?uid=${uid}&token=${token}`) ;
+        const result= await fetch(`${BaseUrl}/api/deductions?uid=${uid}`,{
+          headers:{Authorization:token}
+        }) ;
         const res = await result.json();
-        if(result.status===200||result.status===200||result.status===304){
-        console.log(res);
-          setDeduction(res.map((item)=>{
+
+        if(res.err===false){
+          setDeduction(res.data.map((item)=>{
             let OrderedOn= new Date(parseInt(item.time));
             let goodieDetails="";
             if(item.g_type===0){
@@ -81,9 +91,15 @@ export default function Deductions() {
               let data=[];
             data.push(item.g_name,goodieDetails,item.total_amount,OrderedOn.toDateString());
             return data;
+            
           })
-        ) 
-        setIsFetching(false) ;  
+        )
+        res.data.forEach(element => {
+          setTotAmt(totAmt=>totAmt+parseInt(element.total_amount))
+        })
+        setIsFetching(false) ; }
+        else if(res.err===true && result.status===401){ 
+          logout();
         }
       }
       fetchData();
@@ -92,6 +108,12 @@ export default function Deductions() {
         console.log(err);
       }
   },[token,uid])
+  const logout=()=>{
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("data");
+    onLogin(false);  
+    return (<Redirect exact to='/login-page' />);
+  }
 
   return (
   <div>
@@ -110,12 +132,17 @@ export default function Deductions() {
           </CardHeader>
           <CardBody>
             {isFetching?
-            <h5>Fetching Details</h5>:
+            <h5>Loading Account Information...</h5>:
+            <div>
             <Table
               tableHeaderColor="primary"
               tableHead={["Goodie Name","Goodie info.","Amount(in ₹)","Ordered On"]}
               tableData={deduction}
-            />}
+            />
+            <div style={{marginLeft:'70%'}}>
+            <h5><b>Total Amount-</b> ₹{totAmt}</h5>
+            </div>
+            </div>}
             
           </CardBody>
         </Card>

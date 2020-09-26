@@ -1,5 +1,6 @@
 import React from "react";
 import Datetime from "react-datetime";
+import {Redirect} from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -8,7 +9,8 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
-import Check from "@material-ui/icons/Check";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 //import CircularProgress from '@material-ui/core/CircularProgress';
 // core components
 import GridItem from "components/Grid/GridItem.js";
@@ -20,10 +22,12 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-import Clearfix from "components/Clearfix/Clearfix.js";
 
 
+//Auth Components
+import { useAuth } from "context/auth";
+
+import {BaseUrl} from "variables/BaseUrl";
 import avatar from "assets/img/bitslogo.png";
 import {
   primaryColor,
@@ -110,6 +114,9 @@ const styles = {
       }
     },
 };
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(styles);
 
@@ -121,7 +128,8 @@ export default function UserProfile() {
   const [hostels,setHostels]=React.useState([]);
   const [emptyError,setEmptyError]=React.useState(false);
   const [isError, setIsError] = React.useState(false);
-  const myref=React.useRef(null);
+  const [isSessionError, setIsSessionError] = React.useState(false);
+  const { onLogin } = useAuth();
   const [isFetching,setIsFetching]=React.useState(true);
   const [isEnabled,setIsEnabled]=React.useState(false);
   const [profileUpdated,setProfileUpdated]=React.useState(false);
@@ -131,11 +139,19 @@ export default function UserProfile() {
     try{
     const fetchData= async ()=>{
       
-      const result= await fetch(`https://swdnucleus.ml/api/usr/profile?uid=${uid}&token=${token}`) ;
+      const result= await fetch(`${BaseUrl}/api/usr/profile?uid=${uid}`,{
+        headers:{Authorization:token}
+      }) ;
       const res = await result.json();
-      setProfile(res.profile);
-      setHostels(res.hostels);
+      if(res.err===false){
+      setProfile(res.data.profile);
+      setHostels(res.data.hostels);
       setIsFetching(false);
+      }
+      else if(res.err===true && result.status===401){
+      setIsSessionError(true);
+          logout();
+        }
   }
     fetchData();
     
@@ -149,12 +165,12 @@ export default function UserProfile() {
     if(updatingProfile===true){
       try{
         const sendData=async ()=>{
-          const result =await fetch('https://swdnucleus.ml/api/usr/profile',{
-            method:"post",
-            headers:{'Content-Type':"application/json"},
+          const result =await fetch(`${BaseUrl}/api/usr/profile`,{
+            method:"post",            
+            headers:{'Content-Type':"application/json",Authorization:token},
             body:JSON.stringify({
               uid:uid,
-              token:token,
+              
               aadhaar: profile.aadhaar,
               acno: profile.acno,
               bank: profile.bank,
@@ -202,17 +218,21 @@ export default function UserProfile() {
           if(result.status===200||result.status===201){
             setProfileUpdated(true);
             setUpdatingProfile(false);
-            myref.current.scrollTo(0, 0);
+           
           }
          else if(result.status===422){
           setEmptyError(true);
           setUpdatingProfile(false);
-          myref.current.scrollTo(0, 0);
+         
+        }
+        else if(result.status===401){
+          setIsSessionError(true);
+          logout();
         }
          else{
            setIsError(true);
            setUpdatingProfile(false);
-           myref.current.scrollTo(0, 0);
+          
          }
         }
         sendData();
@@ -224,6 +244,12 @@ export default function UserProfile() {
     }
   },[updatingProfile, uid, token, profile.aadhaar, profile.acno, profile.bank, profile.blood, profile.bonafide_no, profile.category, profile.city, profile.current_med, profile.dob, profile.email, profile.father, profile.fcomp, profile.fdesg, profile.fmail, profile.foccup, profile.fphone, profile.gender, profile.gphone, profile.guardian, profile.homeadd, profile.hphone, profile.id, profile.ifsc, profile.income, profile.localadd, profile.mcomp, profile.mdesg, profile.med_history, profile.mmail, profile.moccup, profile.mother, profile.name, profile.nation, profile.pan_card, profile.phone, profile.pimage, profile.room, profile.state, profile.time])  
   
+  const logout=()=>{
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("data");
+    onLogin(false);  
+    return (<Redirect exact to='/login-page' />);
+  }
 
   var today = Datetime.moment();
   var valid = function( current ){
@@ -240,7 +266,11 @@ export default function UserProfile() {
       
   }
   const UserComponent=isFetching?
-  <h4>Fetching user profile....</h4>
+
+ 
+
+  <h4>Loading Your Profile....</h4>
+
   :
   <CardBody>
   <h3><b>PERSONAL DETAILS</b></h3>
@@ -847,7 +877,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <div ref={myref} className={classes.typo} style={{marginTop:"-50px"}}>
+      <div  className={classes.typo} style={{marginTop:"-50px"}}>
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
       <GridContainer>
@@ -858,43 +888,6 @@ export default function UserProfile() {
               <p className={classes.cardCategoryWhite}>Your Profile Must Stay Updated</p>
             </CardHeader>
             <CardBody>
-           {profileUpdated?<div>
-             <SnackbarContent
-                message={
-                    <span>
-                      <b>PROFILE UPDATED SUCCESSFULLY</b>
-                    </span>}
-                close
-                color="success"
-                icon={Check}
-               />
-               <Clearfix />
-               </div>:null}
-               {emptyError?
-                  <div>
-                    <SnackbarContent
-                      message={
-                      <span >
-                        <b>EMPTY FIELDS</b>:Ensure that every field is filled or set to nil
-                      </span>
-                        }
-                      close
-                      color="danger"
-                      icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
-                    {isError?
-                  <div><SnackbarContent
-                    message={
-                      <span>
-                         <b>ERROR:</b>Try logging in again
-                       </span>
-                             }
-                    close
-                    color="danger"
-                    icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
              {UserComponent}
             </CardBody>
             <CardFooter>
@@ -927,6 +920,50 @@ export default function UserProfile() {
           
          </GridContainer>
       </GridContainer>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={profileUpdated}
+        autoHideDuration={5000}
+        onClose={() => { setProfileUpdated(false) }}>
+        <Alert
+          onClose={() => { setProfileUpdated(false) }}
+          severity="success">
+          Profile Updated Successfully
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={emptyError}
+        autoHideDuration={5000}
+        onClose={() => { setEmptyError(false) }}>
+        <Alert
+          onClose={() => { setEmptyError(false) }}
+          severity="error">
+          Empty fields detected!
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={isSessionError}
+        autoHideDuration={5000}
+        onClose={() => { setIsSessionError(false) }}>
+        <Alert
+          onClose={() => { setIsSessionError(false) }}
+          severity="error">
+          Session Expired! Logging Out 
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={isError}
+        autoHideDuration={5000}
+        onClose={() => { setIsError(false) }}>
+        <Alert
+          onClose={() => { setIsError(false) }}
+          severity="error">
+          Unknown Error Contact SWD Nucleus 
+                  </Alert>
+      </Snackbar>
     </div>
   );
 }
