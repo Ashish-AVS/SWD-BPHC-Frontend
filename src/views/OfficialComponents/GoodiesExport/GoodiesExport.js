@@ -248,7 +248,7 @@ export default function GoodieExport() {
               <h4 className={classes.cardTitleWhite}><b>GOODIES DATA</b></h4>
             </CardHeader>
             <MaterialTable
-                  title="APPLIED MCN APPLICATIONS"
+                  title="GOODIE DATA"
                   columns={[
                    {title:"S No.",field:"sno"},
                    {title:"Goodie Name",field:"g_name"},

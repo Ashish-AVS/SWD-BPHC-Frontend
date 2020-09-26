@@ -15,6 +15,7 @@ import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import BookIcon from '@material-ui/icons/Book';
 import CardTravelIcon from '@material-ui/icons/CardTravel';
+import EventNoteIcon from '@material-ui/icons/EventNote';
 
 // core components/views for Admin layout
 
@@ -26,6 +27,7 @@ import Exit from "views/OfficialComponents/Maingate/MaingateExit";
 import Outstation from "views/OfficialComponents/Outstation/Outstation";
 import Mcn from 'views/OfficialComponents/Mcn/Mcn';
 import GoodieExport from "views/OfficialComponents/GoodiesExport/GoodiesExport";
+import Counsellor from "views/OfficialComponents/Counsellor/Counsellor";
 
 const dashboardRoutes = [
   
@@ -91,6 +93,14 @@ const dashboardRoutes = [
     name: "Goodies Data",
     icon: CardTravelIcon,
     component: GoodieExport,
+    layout: "/official"
+  },
+  {
+    path: "/counsellor",
+    id:"counselor",
+    name: "Counsellor",
+    icon: EventNoteIcon,
+    component: Counsellor,
     layout: "/official"
   }
 
