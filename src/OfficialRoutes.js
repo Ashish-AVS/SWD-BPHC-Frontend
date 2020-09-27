@@ -18,6 +18,7 @@ import CardTravelIcon from '@material-ui/icons/CardTravel';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import BlockIcon from '@material-ui/icons/Block';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import DescriptionIcon from '@material-ui/icons/Description';
 
 // core components/views for Official layout
 
@@ -32,7 +33,7 @@ import GoodieExport from "views/OfficialComponents/GoodiesExport/GoodiesExport";
 import Counsellor from "views/OfficialComponents/Counsellor/Counsellor";
 import Blacklist from "views/OfficialComponents/Blacklist/Blacklist";
 import Blocklist from "views/OfficialComponents/Blocklist/Blocklist";
-
+import DocGen from "views/OfficialComponents/DocGen/DocGen"
 const dashboardRoutes = [
   
   {
@@ -121,6 +122,14 @@ const dashboardRoutes = [
     name: "Blocklist Action ",
     icon: BlockIcon,
     component: Blocklist,
+    layout: "/official"
+  },
+  {
+    path: "/docgen",
+    id:"doc",
+    name: "Document Generation ",
+    icon: DescriptionIcon,
+    component: DocGen,
     layout: "/official"
   }
 
