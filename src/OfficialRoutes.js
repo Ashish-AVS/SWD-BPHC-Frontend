@@ -16,8 +16,10 @@ import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import BookIcon from '@material-ui/icons/Book';
 import CardTravelIcon from '@material-ui/icons/CardTravel';
 import EventNoteIcon from '@material-ui/icons/EventNote';
+import BlockIcon from '@material-ui/icons/Block';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
-// core components/views for Admin layout
+// core components/views for Official layout
 
 import Search from "views/OfficialComponents/Search/Search";
 import Entry from "views/OfficialComponents/Maingate/MaingateEntry";
@@ -28,6 +30,8 @@ import Outstation from "views/OfficialComponents/Outstation/Outstation";
 import Mcn from 'views/OfficialComponents/Mcn/Mcn';
 import GoodieExport from "views/OfficialComponents/GoodiesExport/GoodiesExport";
 import Counsellor from "views/OfficialComponents/Counsellor/Counsellor";
+import Blacklist from "views/OfficialComponents/Blacklist/Blacklist";
+import Blocklist from "views/OfficialComponents/Blocklist/Blocklist";
 
 const dashboardRoutes = [
   
@@ -102,7 +106,24 @@ const dashboardRoutes = [
     icon: EventNoteIcon,
     component: Counsellor,
     layout: "/official"
+  },
+  {
+    path: "/blacklist",
+    id:"blacklist",
+    name: "Blacklist Action ",
+    icon: ErrorOutlineIcon,
+    component: Blacklist,
+    layout: "/official"
+  },
+  {
+    path: "/blocklist",
+    id:"blocklist",
+    name: "Blocklist Action ",
+    icon: BlockIcon,
+    component: Blocklist,
+    layout: "/official"
   }
+
 
   /*
   {
