@@ -39,35 +39,32 @@ function Alert(props) {
 }
 
 Transition.displayName = "Transition";
-export default function GraceModal({
-  open,
-  setOpen,
-  setUpdated, 
-  setSuccess,
-  setErr,
-  setErrMsg,
-  setSuccessMsg}){
+export default function EditModal({
+    open,
+    setOpen,
+    data,
+    setSuccess,
+    setErr,
+    setErrMsg,
+    setUpdated,
+    setSuccessMsg}){
 const classes=useStyles();
 const {uid}=JSON.parse(localStorage.getItem("data"));
-
 const token=JSON.parse(localStorage.getItem("tokens"));
-const [mcnData,setMcnData]=React.useState({
-  fsalary:'',
-    msalary:'',
-    mcertificate:'',
-    fcertificate:'',
-    categ:''
-});
+const [edit,setEdit]=React.useState(false);
+const [mcnData,setMcnData]=React.useState({});
 const [sendingData,setSendingData]=React.useState(false)
+const [recieved,setRecieved]=React.useState(false)
 
-
-
+React.useEffect(()=>{
+    setMcnData(data)
+},[data])
 
 React.useEffect(()=>{
 if(sendingData===true){
-  console.log(mcnData); 
+   
   try{
-     // console.log(mcnData);
+    
     const fetchData= async ()=>{
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
@@ -77,26 +74,21 @@ if(sendingData===true){
         body:JSON.stringify({
           uid:uid,
           fsalary:mcnData.fsalary,
-          msalary:mcnData.fsalary,
+          msalary:mcnData.msalary,
           mcertificate:mcnData.mcertificate,
-          fcertificate:mcnData.mcertificate,
+          fcertificate:mcnData.fcertificate,
           categ:mcnData.categ
           })
       }) ;
       const res = await result.json();
       if(res.err===false){     
-      setMcnData({
-        fsalary:'',
-          msalary:'',
-          mcertificate:'',
-          fcertificate:'',
-          categ:''
-      })
+      
         setSuccess(true);
         setSuccessMsg(res.msg);
+        setOpen(false);
         setUpdated(res.msg);
         setOpen(false);
-        
+        setEdit(false);
   }
   else if(res.err===true){
       setErr(true);
@@ -151,17 +143,49 @@ if(sendingData===true){
                     >
                       <Close className={classes.modalClose} />
                     </IconButton>
-                    <h3 className={classes.modalTitle}><strong>MCN APPLICATION</strong></h3>
+                    <h3 className={classes.modalTitle}><strong>EDIT MCN APPLICATION</strong></h3>
                   </DialogTitle>
                   <DialogContent
                     id="classic-modal-slide-description"
                     className={classes.modalBody}
                   >
-                <GridContainer >
+               {mcnData.name!==undefined?
+                <GridContainer justify="center" alignItems="center">
+                 
+                <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText="Name"                                 
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    inputProps={{
+                                      defaultValue:mcnData.name,
+                                         disabled:true
+                                    }}
+                                   
+                                />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText="Category"                                 
+
+                                    formControlProps={{
+                                        fullWidth: true
+                                    
+                                    }}
+                                    inputProps={{
+                                      
+                                      defaultValue:mcnData.categ,
+                                         name: 'categ',
+                                         disabled:!edit
+                                    }}
+                                    onChange={onChange}
+                                />
+                            </GridItem>
                   <GridItem xs={12} sm={12} md={12}>
-                    <GridContainer justify="center" alignItems='center' >
-                    <GridItem xs={12} sm={12} md={5}>
-         <FormControl fullWidth className={classes.formControl}>
+                    <GridContainer >
+                    <GridItem xs={12} sm={12} md={6}>
+         <FormControl fullWidth className={classes.formControl} disabled={!edit}>
                   <InputLabel className={classes.labelRoot}>Father's Income Certificate</InputLabel>
                   <Select
                    name="fcertificate"
@@ -169,15 +193,15 @@ if(sendingData===true){
                    value={mcnData.fcertificate}
                    onChange={onChange}
                   >
-                     <MenuItem value={''}>SELECT DOCUMENT</MenuItem>
-                     <MenuItem value={'ITR-V'}>ITR-V</MenuItem>
-                     <MenuItem value={'DOC-2'}>DOC-2</MenuItem>
-                     <MenuItem value={'DOC-3'}>DOC-3</MenuItem>
+                     <MenuItem value={``}>SELECT DOCUMENT</MenuItem>
+                     <MenuItem value={`ITR-V`}>ITR-V</MenuItem>
+                     <MenuItem value={`DOC-2`}>DOC-2</MenuItem>
+                     <MenuItem value={`DOC-3`}>DOC-3</MenuItem>
                      
                   </Select>
                </FormControl>
                 </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
+                      <GridItem xs={12} sm={12} md={6}>
                                 <CustomInput
                                     labelText="Fathers Income"
                                     formControlProps={{
@@ -185,15 +209,20 @@ if(sendingData===true){
                                     }}
                                     onChange={onChange}
                                     inputProps={{
-                                      value:mcnData.fsalary,
+                                      
+                                      defaultValue:mcnData.fsalary,
                                         name: 'fsalary',
+                                        disabled:!edit
                                         
                                     }}
 
                                 />
                       </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
-         <FormControl fullWidth className={classes.formControl}>
+                      </GridContainer>
+                      <GridItem xs={12} sm={12} md={12}>
+                    <GridContainer >
+                      <GridItem xs={12} sm={12} md={6}>
+         <FormControl fullWidth className={classes.formControl} disabled={!edit} >
                   <InputLabel className={classes.labelRoot}>Mother's Income Certificate</InputLabel>
                   <Select
                    name="mcertificate"
@@ -201,15 +230,15 @@ if(sendingData===true){
                    onChange={onChange}
                    value={mcnData.mcertificate}
                   >
-                     <MenuItem value={''}>SELECT DOCUMENT</MenuItem>
-                     <MenuItem value={'ITR-V'}>ITR-V</MenuItem>
-                     <MenuItem value={'DOC-2'}>DOC-2</MenuItem>
-                     <MenuItem value={'DOC-3'}>DOC-3</MenuItem>
+                     <MenuItem value={``}>SELECT DOCUMENT</MenuItem>
+                     <MenuItem value={`ITR-V`}>ITR-V</MenuItem>
+                     <MenuItem value={`DOC-2`}>DOC-2</MenuItem>
+                     <MenuItem value={`DOC-3`}>DOC-3</MenuItem>
                      
                   </Select>
                </FormControl>
                 </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
+                      <GridItem xs={12} sm={12} md={6}>
                                 <CustomInput
                                     labelText="Mothers Income"
                                     formControlProps={{
@@ -217,42 +246,28 @@ if(sendingData===true){
                                     }}
                                     onChange={onChange}
                                     inputProps={{  
-                                      value:mcnData.msalary,                                      
-                                        name: 'msalary'    
+                                      defaultValue:mcnData.msalary,                                      
+                                        name: 'msalary',
+                                        disabled:!edit    
                                        }}
 
                                 />
                       </GridItem>
-                            <GridItem xs={12} sm={12} md={5}>
-                                <CustomInput
-                                    labelText="Category"                                 
-
-                                    formControlProps={{
-                                        fullWidth: true
-                                    }}
-                                    inputProps={{
-                                      value:mcnData.categ,
-                                         name: 'categ'
-                                    }}
-                                    onChange={onChange}
-                                />
-                            </GridItem>
-
-                  
                   </GridContainer>
                  </GridItem>
-              </GridContainer>
-
+                 </GridItem>
+              </GridContainer>:<p>Loading Data... if more than 30sec then refresh</p>}
                   </DialogContent>
                   <DialogActions className={classes.modalFooter}>
-                   
+                {!edit? 
+                <div>  
                   <Button
-                      onClick={() => setSendingData(true)}
-                      color="success"
+                      onClick={() => setEdit(true)}
+                      color="info"
                       solid="true"
                       round
                     >
-                      Submit
+                      Edit Response
                   </Button>
                     <Button
                       onClick={() => setOpen(false)}
@@ -262,8 +277,27 @@ if(sendingData===true){
                     >
                       Close
                     </Button>
+                    </div>
+                    :
+                    <div>
+                    <Button
+                    onClick={() => setSendingData(true)}
+                    color="success"
+                    solid="true"
+                    round
+                  >
+                    Submit
+                </Button>
+                  <Button
+                    onClick={() => setEdit(false)}
+                    color="danger"
+                    solid="true"
+                    round
+                  >
+                    Cancel
+                  </Button></div>}
                   </DialogActions>
-                 
+                  
                 </Dialog>
     );
 }

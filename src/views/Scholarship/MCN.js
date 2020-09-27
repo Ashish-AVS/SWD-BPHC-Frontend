@@ -7,6 +7,9 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter";
 import Button from "components/CustomButtons/Button.js";
 import MCNApplyModal from './MCNApplyModal';
+import EditModal from './EditModal';
+import DeleteModal from './DeleteModal';
+import {BaseUrl} from "variables/BaseUrl";
 const styles = {
   typo: {
     paddingLeft: "10%",
@@ -46,13 +49,14 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function MCN({portalOn}) {
+export default function MCN({portalOn,status,setUpdated,data,setSuccess,setErr,setErrMsg,setSuccessMsg}) {
   const classes = useStyles();
-  const [open,setOpen]=React.useState(false)
+  
  
+  
+  
   return (
       
-      <Card>
 
           <CardBody>
               <div className={classes.typo}>
@@ -99,19 +103,6 @@ export default function MCN({portalOn}) {
 
               </div>
           </CardBody>
-          <CardFooter style={{display:'flex',justifyContent:'center'}}>
-         <Button 
-         round 
-         color="info" 
-         disabled={!portalOn} 
-         onClick={()=>{
-             setOpen(true)
-         }} >
-             Apply For MCN
-        </Button>
-     </CardFooter>
-<MCNApplyModal open={open} setOpen={setOpen} />
-      </Card>
-    ); 
+             ); 
       
 }
