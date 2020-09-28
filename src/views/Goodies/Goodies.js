@@ -67,7 +67,7 @@ export default function Goodies() {
         
       fetchData();
       fetchDeduction();
-      console.log(isUpdated);
+      
       
     }catch(err){
         console.log(err);

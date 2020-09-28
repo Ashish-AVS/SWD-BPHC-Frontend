@@ -23,7 +23,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-
+import ChangePasswordModal from './ChangePassword';
 //Auth Components
 import { useAuth } from "context/auth";
 
@@ -126,6 +126,7 @@ export default function UserProfile() {
   const token=JSON.parse(localStorage.getItem("tokens"));
   const [profile,setProfile]=React.useState({});
   const [hostels,setHostels]=React.useState([]);
+  const [open,setOpen]=React.useState(false);
   const [emptyError,setEmptyError]=React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const [isSessionError, setIsSessionError] = React.useState(false);
@@ -913,7 +914,7 @@ export default function UserProfile() {
           </Card>
           </GridItem>
           <GridItem >
-            <Button  round color="info" >
+            <Button  round color="info" onClick={()=>{setOpen(true)}} >
              Change Password
             </Button>
           </GridItem>
@@ -964,6 +965,7 @@ export default function UserProfile() {
           Unknown Error Contact SWD Nucleus 
                   </Alert>
       </Snackbar>
+      <ChangePasswordModal open={open} setOpen={setOpen} />
     </div>
   );
 }

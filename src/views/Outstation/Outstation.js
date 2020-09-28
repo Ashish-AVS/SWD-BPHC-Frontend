@@ -208,8 +208,15 @@ export default function Outstation() {
     })
       const res = await result.json();
       if(res.err===false){
+        setSendingData(false);  
+        setOutData({
+            from:'',
+            to:'',
+            reason:'',
+            location:''
+          })
           setReqSent(true);
-          setSendingData(false);
+          
           setLoading(false);
       }
       else if(res.err===true&&result.status===401){
@@ -248,7 +255,6 @@ export default function Outstation() {
   
   function onChange(e){
     const { name, value } = e.target;
-    
     setOutData(prevState=>({
          ...prevState,
          [name]: value
@@ -299,6 +305,7 @@ export default function Outstation() {
               timeFormat={false}
               className={classes.input+" "+classes.underline}
               isValidDate={validfrom}
+              value={outData.from}
               onChange={(e)=>{
                const date = new Date(`${e}`);
                const {Date1,Month,Year}={
@@ -343,6 +350,7 @@ export default function Outstation() {
               timeFormat={false}
               className={classes.input+" "+classes.underline}
               isValidDate={validfrom}
+              value={outData.to}
               onChange={(e)=>{
                const date = new Date(`${e}`);
                const {Date1,Month,Year}={
@@ -387,7 +395,8 @@ export default function Outstation() {
                     }}
                     inputProps={{
                       multiline:true,
-                      name:"reason"
+                      name:"reason",
+                      value:outData.reason
                     }}
                     onChange={onChange}
                   />                  
@@ -402,7 +411,8 @@ export default function Outstation() {
                       fullWidth: true
                     }}
                     inputProps={{
-                        name:"location"
+                        name:"location",
+                        value:outData.location
                       }}
                   />                  
                 </GridItem>

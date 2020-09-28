@@ -14,6 +14,7 @@ import { AuthContextProvider } from "./context/auth";
 const LandingPage = lazy(() => import('./views/LandingPage/LandingPage.js'));
 const KnowYourDept = lazy(() => import('views/KnowYourDept/KnowYourDept'));
 const LoginPage = lazy(() => import('views/LoginPage/LoginPage.js'));
+const Reset = lazy(() => import('views/ResetPassword/ResetPassword'));
 const OfficialLogin = lazy(() => import('views/Official/Official.js'));
 const Admin = lazy(() => import('layouts/Admin.js'));
 const Official = lazy(() => import('layouts/Official'));
@@ -29,9 +30,11 @@ return(
                   <Route path="/know-your-dept" component={KnowYourDept} />
                   <Route path="/login-page" component={LoginPage} />
                   <Route path="/official-login" component={OfficialLogin} />
+                  <Route path="/reset-password"  component={Reset}/>
                   <OfficialPrivateRoute path="/official" component={Official} />
                   <StudentPrivateRoute path="/admin" component={Admin} />
                   <Route path="/"  component={LandingPage}/>
+                 
                 </Switch>
               </Suspense>
             </Router>
