@@ -5,8 +5,7 @@ import MaterialTable from "material-table";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from '@material-ui/core/Snackbar';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import GetAppIcon from '@material-ui/icons/GetApp';
+
 import MuiAlert from '@material-ui/lab/Alert';
 
 //Auth Components
@@ -14,12 +13,10 @@ import { useAuth } from "context/auth";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Button from "components/CustomButtons/Button.js";
+
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from "@material-ui/core/InputLabel";
+
 import {BaseUrl} from "variables/BaseUrl";
 
 import {
@@ -120,12 +117,9 @@ export default function GoodieExport() {
  
   //const [sendingData,setSendingData]=React.useState(false);
   const [blacklistData,setBlacklistData]=React.useState([]);
-  const [sendingData,setSendingData]=React.useState(false);
-  //const [sendingData1,setSendingData1]=React.useState(false);
-  const [removeData,setRemoveData]=React.useState({})
-  const [recievedData,setRecievedData]=React.useState(false);
-  const [open,setOpen ]=React.useState(false);
   
+  const [recievedData,setRecievedData]=React.useState(false);
+    
   const [success,setSuccess]=React.useState(false);
   const {onOfficialLogin}=useAuth();
   const classes = useStyles();

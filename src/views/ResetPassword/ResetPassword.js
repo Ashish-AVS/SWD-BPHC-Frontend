@@ -51,6 +51,7 @@ export default function ResetPassword(props) {
   const classes = useStyles();
   const [isError,setIsError]=React.useState(false);
 const [errMsg,setErrMsg]=React.useState('');
+const [success,setSuccess]=React.useState(false)
 const [confError,setConfError]=React.useState(true);
   const [pwdData,setPwdData]=React.useState({
     uid:'',
@@ -94,9 +95,8 @@ const [confError,setConfError]=React.useState(true);
           }) ;
           const res = await result.json();
           if(res.err===false&& result.status===201){     
-            return(
-            <Redirect exact to='/login-page' />
-            )
+            setSuccess(true);
+            props.history.push("/login-page");
       }
       else if(res.err===true){
           setIsError(true);
@@ -203,6 +203,17 @@ const [confError,setConfError]=React.useState(true);
           onClose={() => { setIsError(false) }}
           severity="error">
          {errMsg} 
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={success}
+        autoHideDuration={10000}
+        onClose={() => { setSuccess(false) }}>
+        <Alert
+          onClose={() => { setSuccess(false) }}
+          severity="error">
+         Password Reset SuccessFull 
                   </Alert>
       </Snackbar>
     </div>

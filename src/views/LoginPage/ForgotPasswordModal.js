@@ -55,7 +55,9 @@ if(sendingData===true){
       const result= await fetch(`${BaseUrl}/api/auth/reset?uid=${uid}`) ;
       const res = await result.json();
       if(res.err===false&& result.status===201){     
-      alert('mail sent');        
+      alert('mail sent'); 
+      setUid('');
+      setOpen(false);       
   }
   else if(res.err===true){
       setIsError(true);
