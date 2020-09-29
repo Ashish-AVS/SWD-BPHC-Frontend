@@ -1,27 +1,24 @@
 import React from "react";
-import Datetime from "react-datetime";
 import {Redirect} from 'react-router-dom';
-import {saveAs} from 'file-saver';
+import MaterialTable from "material-table";
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from '@material-ui/core/Snackbar';
+
 import MuiAlert from '@material-ui/lab/Alert';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from "@material-ui/core/InputLabel";
 
 //Auth Components
 import { useAuth } from "context/auth";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Button from "components/CustomButtons/Button.js";
+
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
+
 import {BaseUrl} from "variables/BaseUrl";
+
 import {
   primaryColor,
   defaultFont
@@ -113,14 +110,15 @@ function Alert(props) {
 
 const useStyles = makeStyles(styles);
 
-export default function MessGrace() {
+export default function GoodieExport() {
 
  const token=JSON.parse(localStorage.getItem("officialtokens"));
  
   //const [sendingData,setSendingData]=React.useState(false);
-  const [docData,setDocData]=React.useState([]);
-  const [sendingData,setSendingData]=React.useState(false);
-  const [reqData,setReqData]=React.useState({key:'',uid:''});
+  const [blocklistData,setBlocklistData]=React.useState([]);
+  const [recievedData,setRecievedData]=React.useState(false);
+  
+  
   const [success,setSuccess]=React.useState(false);
   const {onOfficialLogin}=useAuth();
   const classes = useStyles();
@@ -136,17 +134,17 @@ export default function MessGrace() {
  
   React.useEffect(()=>{
   
-    //setRecievedData(false);
+   
     try{
       const SendData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/doc`,{
+        const result =await fetch(`${BaseUrl}/api/o/blocklist`,{
           headers:{Authorization:`Bearer ${token}`}
         })
          const res = await result.json();
         if (res.err === false) {
-          setDocData(res.data);
-          console.log(res.data)
-          
+          setBlocklistData(res.data.map((item,index)=>{
+              return({...item,sno:index+1})
+          }))
         }
         else if (res.err === true && result.status === 401) {
           logout();
@@ -163,58 +161,61 @@ export default function MessGrace() {
       
     } 
   
-  },[])
-  React.useEffect(()=>{
-  
-    if(sendingData===true){
-    
-        try{
-      const SendData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/doc`,{
-         method:'post',
-            headers:{'Content-Type':"application/json",Authorization:`Bearer ${token}`
-          },
-          body:JSON.stringify({
-              uid:reqData.uid,
-              key:reqData.key
-          })
+  },[recievedData,token,logout])
+  const sendRemoveData = async (uid) => {
+
+    const result = await fetch(`${BaseUrl}/api/o/blocklist`, {
+        method:"post",
+        headers:{'Content-Type':"application/json",
+        Authorization:`Bearer ${token}`},
+        body:JSON.stringify({
+          uid:uid
         })
-        const res= await result.blob();       
-          if(result.status===200||result.status===201){  
-            const pdfBlob=new Blob([res],{type:'application/pdf'});
-          saveAs(pdfBlob,`${reqData.uid}-${reqData.key}.pdf`);
-          setReqData({
-              uid:'',
-              key:''
-          })
-          setSuccess(true);
-                   
-          }
-        else {
-          setErr(true);
-          setErrMsg('Error in Downloading!');
+    })
+    const res = await result.json();
+    if(res.err===false){
+       setRecievedData(`${uid}-removed`);
+        setSuccess(true);
+      }
+      else if(res.err===true){
+        setErr(true);
+        setErrMsg(res.msg);
+    }
+
+  }
+
+ /* React.useEffect(()=>{
+   if(messUpdate===true){
+    try{
+      const sendData=async ()=>{
+        const result =await fetch(`${BaseUrl}/api/o/messmenu`,{
+            method:"post",
+            headers:{'Content-Type':"application/json",
+            Authorization:`Bearer ${token}`},
+            body:JSON.stringify({
+              messno:1,
+              menu:JSON.stringify(messMenuData)
+            })
+           })
+         const res = await result.json();
+        if(result.status===200||result.status===201){
+          console.log("hi");
+          setMenuUpdated(true);
+          setMessUpdate(false);
         }
-        }
-      SendData();
-      setSendingData(false);
+      
+    }
+      sendData();
       
     }
     catch(err){
       console.log(err);
       
-    }
+    } 
   }
+  },[messUpdate,token,messMenuData])
   
-  })
-function onChange(e){
-    const { name, value } = e.target;
-    setReqData(prevState=>({
-         ...prevState,
-         [name]: value
-     }));
-     
- }
- 
+  */
  const logout=()=>{
   localStorage.removeItem("officialtokens");
   onOfficialLogin(false);  
@@ -226,60 +227,45 @@ function onChange(e){
           <h2><strong>BITS PILANI , HYDERABAD CAMPUS</strong></h2>
       </div>
       <GridContainer justify="center" alignItems="center">
-        <GridItem xs={12} sm={12} md={10}>
+        <GridItem xs={12} sm={12} md={11}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>DOCUMENTS OPERATION </b></h4>
-              
+              <h4 className={classes.cardTitleWhite}><b>BLOCKLIST OPERATIONS</b></h4>
             </CardHeader>
-            <CardBody>
-            <h3 style={{display:"flex",justifyContent:"center"}}><b>Download Student Document</b></h3>
-            
-              <GridContainer  justify="center"  alignItems="center">
-                  <GridItem xs={12} sm={12} md={5}>
-                  <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}> Select Document</InputLabel>
-                  <Select
-                   name="key"
-                   className={classes.input+" "+classes.underline}
-                   value={reqData.key}
-                   onChange={onChange}
-                  >
-                     <MenuItem value={''}>SELECT DOCUMENT</MenuItem>
-                    {docData.map(item=>{
-                        return <MenuItem value={item.key}>{item.name}</MenuItem>
-                    })}
-                     
-                  </Select>
-               </FormControl>
-              </GridItem>
-                              <GridItem xs={12} sm={12} md={5}>
-                                  <CustomInput
-                                      labelText="Student UID"
-                                      formControlProps={{
-                                          fullWidth: true
-                                      }}
-                                      onChange={onChange}
-                                      inputProps={{
-                                          name: 'uid',
-                                          value:reqData.uid
-                                      }}
+            <MaterialTable
+                  title="BLOCKLIST DATA"
+                  columns={[
+                   {title:"S No.",field:"sno"},
+                   {title:"Student Name",field:"name"},
+                   {title:"Student ID",field:"id"},
+                   {title:"Room No.",field:"room"},
+                   {title:"Mobile No.",field:"phone"}
+                  ]}
+                   data={blocklistData}
+                  actions={[
+                      {
+                          icon: 'close',
+                          //disabled:rowData.statusCode!==0,
+                          tooltip: 'Remove as Blocklisted',
+                          onClick: async (event, rowData) => {
+                            sendRemoveData(rowData.uid); 
+                              
+                          }
 
-                                  />
-                              </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
-                
-                    <Button color="success" round disabled={sendingData} onClick={()=>{
-                      setSendingData(true)
-                      }}>
-                      Download
-                    </Button>
+                      }
+
+                  ]}
+            
+                  options={{
+                    
+                    search:true,
+                    pageSize:20,
+                    emptyRowsWhenPaging:false,
+                    actionsColumnIndex:-1
+                    }}
                   
-                </GridItem>
-                
-              </GridContainer> 
-              
-            </CardBody>
+                           
+                /> 
           </Card>
         </GridItem>
        
@@ -292,7 +278,7 @@ function onChange(e){
             <Alert
               onClose={handleClose}
               severity="success">
-              File Download completed
+             Blocklist cleared
         </Alert>
           </Snackbar>
           <Snackbar

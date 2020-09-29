@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React from "react";
 // react components for routing our app without refresh
-import { Link } from "react-router-dom";
+import { Link,Redire } from "react-router-dom";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,6 +13,7 @@ import Slide from "@material-ui/core/Slide";
 
 // @material-ui/icons
 import { Apps} from "@material-ui/icons";
+import LinkIcon from '@material-ui/icons/Link';
 import BookIcon from '@material-ui/icons/Book';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
@@ -81,14 +82,29 @@ export default function HeaderLinks(props) {
       </ListItem>
       <ListItem className={classes.listItem}>
         
-          <Button
-            href='#'
-            target="_blank"
-            color="transparent"
-            className={classes.navLink}
-          >
-            {"External Links"}
-          </Button>
+      <CustomDropdown
+          noLiPadding
+          buttonText="External Links"
+          buttonProps={{
+            className: classes.navLink,
+            color: "transparent"
+          }}
+          buttonIcon={LinkIcon}
+          dropdownList={[
+            <a href="https://erp.bits-pilani.ac.in/"  className={classes.dropdownLink} >
+              ERP PORTAL
+            </a>,
+            <a
+              href="https://td.bits-hyderabad.ac.in/"
+              className={classes.dropdownLink}
+            >
+              Time-Table Division
+            </a>,
+             <a href="http://libraryopac.bits-hyderabad.ac.in/" className={classes.dropdownLink}>
+             Library OPAC
+            </a>
+          ]}
+        />
         
       </ListItem>
       <ListItem className={classes.listItem}>

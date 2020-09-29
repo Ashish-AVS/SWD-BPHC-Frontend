@@ -193,6 +193,9 @@ export default function OfficialLogin(props) {
                     icon="info_outline"
                     />
                     <Clearfix /></div>:null}
+                    <div style={{display:'flex',justifyContent:'center'}}>
+                    <Link to="/"><h6>Back to home page </h6></Link>
+                    </div>
                     <CustomInput
                       onChange={(e)=>{
                         setId(e.target.value);
@@ -243,9 +246,7 @@ export default function OfficialLogin(props) {
 
                       {loading?<CircularProgress size={24} color="primary"/>:null}
                       </GridItem>
-                      <GridItem>
-                    <Link href="#" ><h6>Forgot Password? </h6></Link>
-                    </GridItem>
+                      
                     </GridContainer>
                   </CardFooter>
                 </form>

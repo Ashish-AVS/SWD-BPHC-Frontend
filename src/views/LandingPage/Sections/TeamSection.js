@@ -36,8 +36,8 @@ export default function TeamSection() {
         <GridContainer direction="row" justify="center" alignItems="center" >
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
-              <GridItem xs={12} sm={12} md={6} className={classes.itemGrid} >
-                <img style={{marginLeft:'-50px',marginBottom:'20px'}} src={sirImg} alt="..." className={imageClasses}  />
+              <GridItem xs={12} sm={12} md={12} className={classes.itemGrid} >
+                <img  src={sirImg} alt="..." className={imageClasses}  />
               </GridItem>
               <h4 className={classes.cardTitle}>
                 Prof. Sandip S. Deshmukh

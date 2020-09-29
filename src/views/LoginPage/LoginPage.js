@@ -10,10 +10,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 // @material-ui/icons
 //import Email from "@material-ui/icons/Email";
 import People from "@material-ui/icons/People";
+import ForgotModal from './ForgotPasswordModal';
 
 // core components
-
-
 import GridContainer from "components/Grid/GridContainer0.js";
 import GridItem from "components/Grid/GridItem0.js";
 import Button from "components/CustomButtons/Button.js";
@@ -45,12 +44,15 @@ export default function LoginPage(props) {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   const {authTokens,onLogin} = useAuth();
   const [isLoggingIn, setLoggingIn]=useState(false);
+  const [open,setOpen]=useState(false);
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
   const [conError,setConError]=useState(false);
   const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
+  let t;
+  const [timer,setTimer]=React.useState(false);
  useEffect(()=>{
   var userInput = document.getElementById("uid");
   userInput.addEventListener("keyup", function(event) {
@@ -113,23 +115,27 @@ export default function LoginPage(props) {
         }).catch((result)=>{
           if (result.response !== undefined) {
             if (result.response.status === 422) {
-
+              
               setLoggingIn(false);
+              setPwd('');
               setEmptyError(true);
               setLoading(false);
+              removeTimer()
             }
             else if (result.response.status === 401) {
 
               setLoggingIn(false);
               setIsError(true);
+              setPwd('');
               setLoading(false);
+              removeTimer();
             }
           }
         })      
         
             
         }
-        timeUp();
+        setTimer(true);
         fetchData();
       }catch(err){
           
@@ -152,13 +158,25 @@ export default function LoginPage(props) {
     } 
   }
  },[isLoggedIn,props.history,authTokens])
- 
+ React.useEffect(()=>{
+  if(timer===true){
+    timeUp();
+    return ()=>{
+      removeTimer();
+      setTimer(false);
+    }
+  }
+})
+
 const timeUp=()=>{
-  setTimeout(()=>{
+ t= setTimeout(()=>{
     setLoading(false);
     setLoggingIn(false);
     setConError(true);
   },12000)
+}
+const removeTimer=()=>{
+  clearTimeout(t);
 }
  setTimeout(function() {
     setCardAnimation("");
@@ -224,7 +242,9 @@ const timeUp=()=>{
                     icon="info_outline"
                     />
                     <Clearfix /></div>:null}
-                    
+                    <div style={{display:'flex',justifyContent:'center'}}>
+                    <Link to="/"><h6>Back to home page </h6></Link>
+                    </div>
                     <CustomInput
                       onChange={(e)=>{
                         setUid(e.target.value);
@@ -237,6 +257,7 @@ const timeUp=()=>{
                       }}
                       inputProps={{
                         type: "text",
+                        value:uid,
                         endAdornment: (
                           <InputAdornment position="end">
                             <People className={classes.inputIconsColor} />
@@ -256,6 +277,7 @@ const timeUp=()=>{
                       }}
                       inputProps={{
                         type: "password",
+                        value:pwd,
                         endAdornment: (
                           <InputAdornment position="end">
                             <Icon className={classes.inputIconsColor}>
@@ -277,8 +299,9 @@ const timeUp=()=>{
                       {loading?<CircularProgress size={24} color="primary"/>:null}
                       </GridItem>
                       <GridItem>
-                    <Link href="#" ><h6>Forgot Password? </h6></Link>
+                    <Link onClick={()=>{setOpen(true)}}><h6>Forgot Password? </h6></Link>
                     </GridItem>
+                   
                     </GridContainer>
                   </CardFooter>
                 </form>
@@ -288,6 +311,7 @@ const timeUp=()=>{
         </div>
         
       </div>
+      <ForgotModal open={open} setOpen={setOpen}/>
     </div>
   );
 }

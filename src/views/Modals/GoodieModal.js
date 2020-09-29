@@ -41,7 +41,7 @@ export default function GoodieModal({
     limit,
     setIsUpdated}){
 const classes=useStyles();
-
+const reference = React.useRef(null);
 const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("tokens"));
 const [loading,setLoading]=React.useState(false);
@@ -50,9 +50,6 @@ let totalAmt=0;
 //const [totalAmt,setTotalAmt]=React.useState(0);
 const [sendingData,setSendingData]=React.useState(false);
 const [goodieData,setGoodieData]=React.useState({
-    uid:uid,
-    token:token,
-    g_id:`${goodieId}`,
     xs:"0",
     s:"0",
     m:"0",
@@ -60,8 +57,8 @@ const [goodieData,setGoodieData]=React.useState({
     xl:"0",
     xxl:"0",
     xxxl:"0",
-    net_quantity:"",
-    total_amount:""
+    net_quantity:"0",
+    total_amount:"0"
 })
 
 
@@ -75,9 +72,8 @@ React.useEffect(()=>{
           headers:{'Content-Type':"application/json",
           Authorization:token},
           body:JSON.stringify({
-             uid:goodieData.uid,
-             token:goodieData.token,
-             g_id:goodieData.g_id,
+             uid:uid,
+             g_id:goodieId,
              xs:goodieData.xs,
              s:goodieData.s,
              m:goodieData.m,
@@ -90,13 +86,33 @@ React.useEffect(()=>{
           })
          })
         if(result.status===200||result.status===201){ 
-          setIsUpdated(`Place ${goodieData.g_id}`);
-          setLoading(false);
           setSendingData(false);
+          setIsUpdated(`Place ${goodieId}`);
+          setLoading(false);
+          
+          setGoodieData(prevState=>({
+            ...prevState,
+            xs:"0",
+            s:"0",
+            m:"0",
+            l:"0",
+            xl:"0",
+            xxl:"0",
+            xxxl:"0",
+            net_quantity:"0",
+            total_amount:"0"
+          })
+            
+          )
           setOpen(false);
         }
         else if(result.status===401){
           alert('Session Expiration Detected. Try Refreshing the page')
+        }
+        else if(result.status===422){
+           alert('ensure empty fields are set to 0')
+           setSendingData(false);
+           setLoading(false);
         }
        
       }
@@ -109,10 +125,12 @@ React.useEffect(()=>{
       console.log(err);
     }
   }
-})
+},[sendingData,goodieData,token])
 
 function onChange(e){
+    console.log(e.target.value)
     const { name,id} = e.target;
+   
     document.getElementById(id).oninput = function () {
         var max = parseInt(this.max);
         var min = parseInt(this.min);
@@ -133,6 +151,7 @@ function onChange(e){
             ); 
         }
         else{
+          
         setGoodieData(prevState=>({
             ...prevState,
             [name]: this.value
@@ -152,20 +171,21 @@ if(goodieType===0){
          goodieContent=
     <GridContainer direction="column" spacing={0} >
         <GridItem>
-            <p>Select your required Size and Quantity here:<br/>(Put 0 for unselected sizes)</p>
+<p>Select your required Size and Quantity here:<br/><b>(Put 0 for unselected sizes)</b><br/>Max Amount : {maxAmount}</p>
         </GridItem>
         <GridItem>
       <GridContainer spacing={2}>
         <GridItem>
         <CustomInput
         labelText="XS"
-        id="xs"                                 
+        id="xs" 
+        ref={reference}                      
         onChange={onChange}
         inputProps={{
         type:"number",
         name:'xs',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        value:goodieData.xs
           }}  
       />
       </GridItem>
@@ -178,7 +198,8 @@ if(goodieType===0){
         type:"number",
         name:'s',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        //defaultValue:goodieData.s,
+        value:goodieData.s
           }}
        />
        </GridItem>
@@ -191,7 +212,8 @@ if(goodieType===0){
         type:"number",
         name:'m',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        //defaultValue:0,
+        value:goodieData.m
           }}
        />
        </GridItem>
@@ -204,7 +226,8 @@ if(goodieType===0){
         type:"number",
         name:'l',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        //defaultValue:0
+        value:goodieData.l
           }}
        />
        </GridItem>
@@ -217,7 +240,8 @@ if(goodieType===0){
         type:"number",
         name:'xl',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        //defaultValue:0,
+        value:goodieData.xl
           }}
        />
        </GridItem>
@@ -230,7 +254,8 @@ if(goodieType===0){
         type:"number",
         name:'xxl',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        //defaultValue:0,
+        value:goodieData.xxl
           }}
        />
        </GridItem>
@@ -243,7 +268,8 @@ if(goodieType===0){
         type:"number",
         name:'xxxl',
         inputProps: { min: 0, max: 10 },
-        defaultValue:0
+        //defaultValue:0,
+        value:goodieData.xxxl
           }}
 
        />
@@ -251,7 +277,7 @@ if(goodieType===0){
        </GridContainer>
        </GridItem>
        <GridItem>
-          <p>Total Quantity: {`${totalQty}`} </p>
+          <p>Total Quantity: {`${Qty}`} </p>
           <p>Total Amount: ₹ {`${totalAmt}`}</p>
         </GridItem>
         </GridContainer>}
@@ -277,7 +303,8 @@ if(goodieType===0){
          type:"number",
          name:'net_quantity',
          inputProps: { min: parseInt(minAmount), max: parseInt(limit) },
-         defaultValue:0
+         ////defaultValue:0,
+         value:goodieData.net_quantity
            }}
  
         />
@@ -309,7 +336,8 @@ if(goodieType===0){
          type:"number",
          name:'total_amount',
          inputProps: { min: 0, max: parseInt(maxAmount) },
-         defaultValue:0
+         ////defaultValue:0,
+         value:goodieData.total_amount
            }}
  
         />
@@ -369,9 +397,10 @@ if(goodieType===0){
                                   {goodieContent}
                             </GridItem>
                             <GridItem>
-                            {loading?<CircularProgress size={24} color="primary"/>:null}
-                            <Button size='lg' round color="info" onClick={()=>{setSendingData(true)}} disabled={loading} >
                             
+                            {loading?<CircularProgress size={24} color="primary"/>:null}
+                            <Button size='lg' round color="info"  onClick={()=>{setSendingData(true)}} disabled={loading||(totalAmt>maxAmount)} >
+
                                 Place Order
                             </Button>
                              
@@ -383,7 +412,22 @@ if(goodieType===0){
                   </DialogContent>
                   <DialogActions className={classes.modalFooter}>
                     <Button
-                      onClick={() => setOpen(false)}
+                      onClick={() => {
+                        setOpen(false);
+                      setGoodieData(prevState=>({
+                        ...prevState,
+                        xs:"0",
+                        s:"0",
+                        m:"0",
+                        l:"0",
+                        xl:"0",
+                        xxl:"0",
+                        xxxl:"0",
+                        net_quantity:"",
+                        total_amount:""
+
+                      }))
+                    }}
                       color="danger"
                       solid
                       round

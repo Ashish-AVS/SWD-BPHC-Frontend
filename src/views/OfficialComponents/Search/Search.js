@@ -167,7 +167,6 @@ export default function Search() {
              Authorization:`Bearer ${token}`
             },
           body:JSON.stringify({
-            id:"swd",
             criteria_1:criteria.criteria_1,
             value_1:criteria.value_1,
             criteria_2:criteria.criteria_2,
@@ -177,7 +176,7 @@ export default function Search() {
          })
          const res = await result.json();
         if(result.status===200||result.status===201){
-          setData(res);
+          setData(res.data);
           setRecievedData(true);
           setSendingData(false);
         }
@@ -209,7 +208,7 @@ export default function Search() {
            })
            const res = await result.json();
           if(result.status===200||result.status===201){
-            setDetailsData(res);
+            setDetailsData(res.data);
             setOpen(true);
             setRecievedDetailsData(true)
             setDetailsReq(false);
@@ -252,6 +251,7 @@ export default function Search() {
                    name="criteria_1"
                    className={classes.input+" "+classes.underline}
                    defaultValue={'name'}
+                   value={criteria.criteria_1}
                    onChange={onCrit1Change}
                   >
                      <MenuItem value={'name'}>Name</MenuItem>
@@ -354,6 +354,7 @@ export default function Search() {
                    name="criteria_2"
                    className={classes.input+" "+classes.underline}
                    onChange={onCrit2Change}
+                   value={criteria.criteria_2}
                    defaultValue=''
                   >
                      <MenuItem value={''}>Select</MenuItem>
@@ -458,7 +459,15 @@ export default function Search() {
                     </Button>
                   </GridItem>
                   <GridItem>
-                    <Button color="danger">
+                    <Button color="danger" onClick={()=>{
+                      setRecievedData(false);
+                      setCriteria({
+                        criteria_1:'name',
+                        criteria_2:'',
+                        value_1:'',
+                        value_2:''
+                      })
+                    }}>
                       Discard
                     </Button>
                   </GridItem>
