@@ -71,10 +71,11 @@ export default function Official({ ...rest }) {
         suppressScrollY: false,
         wheelSpeed: 0.5,
         wheelPropagation: true,
-        minScrollbarLength: 10
+        minScrollbarLength: 200
       });
       document.body.style.overflow = "hidden";
     }
+    mainPanel.current.scrollTop = 0;
     window.addEventListener("resize", resizeFunction);
     // Specify how to clean up after this effect:
     return function cleanup() {

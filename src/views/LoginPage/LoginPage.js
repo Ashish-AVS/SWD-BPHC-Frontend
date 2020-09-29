@@ -216,7 +216,7 @@ const timeUp=()=>{
                   <div><SnackbarContent
                     message={
                       <span>
-                         <b>UN-AUTHORISED:</b>Incorrect credentials
+                         <b>UNAUTHORISED:</b> Incorrect credentials
                        </span>
                              }
                     close
