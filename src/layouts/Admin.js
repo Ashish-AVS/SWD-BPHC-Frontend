@@ -76,10 +76,6 @@ export default function Admin({ ...rest }) {
       document.body.style.overflow = "hidden";
     }
     mainPanel.current.scrollTop = 0;
-    // mainPanel.current.PerfectScrollbar('update');
-    // alert(mainPanel.current.scrollTop);
-    // mainPanel.current.scrollTop(0);
-    // window.PerfectScrollbar('update');
     window.addEventListener("resize", resizeFunction);
     // Specify how to clean up after this effect:
     return function cleanup() {
