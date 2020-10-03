@@ -119,18 +119,7 @@ export default function HeaderLinks(props) {
           </Button>
         
       </ListItem>
-      <ListItem className={classes.listItem}>
-        
-          <Button
-            color="transparent"
-            href="#"
-            target="_blank"
-            className={classes.navLink}
-          >
-            {"About Us"}
-          </Button>
-        
-      </ListItem>
+     
       <ListItem className={classes.listItem}>
 
           <Button

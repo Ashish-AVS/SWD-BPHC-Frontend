@@ -21,6 +21,9 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
 import SnackbarContent from "components/Snackbar/SnackbarContent";
 import Clearfix from "components/Clearfix/Clearfix";
 import { useAuth } from "context/auth";
@@ -38,6 +41,11 @@ let data={
   id:'',
   uid:'',
   isComplete:''}
+  
+  
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
 
 export default function LoginPage(props) {
   const [emptyError,setEmptyError]=React.useState(false);
@@ -204,44 +212,7 @@ const removeTimer=()=>{
                   </CardHeader>
                   {/*<p className={classes.divider}>Or Be Classical</p>*/}
                   <CardBody>
-                  {emptyError?
-                  <div>
-                    <SnackbarContent
-                      message={
-                      <span >
-                        <b>INVALID CREDENTIALS:</b>Provide valid input
-                      </span>
-                        }
-                      close
-                      color="danger"
-                      icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
-                    {conError?
-                  <div>
-                    <SnackbarContent
-                      message={
-                      <span >
-                        <b>CONNECTION ERROR:</b>Server Timed Out
-                      </span>
-                        }
-                      close
-                      color="danger"
-                      icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
-                    {isError?
-                  <div><SnackbarContent
-                    message={
-                      <span>
-                         <b>UN-AUTHORISED:</b>Incorrect credentials
-                       </span>
-                             }
-                    close
-                    color="danger"
-                    icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
+                  
                     <div style={{display:'flex',justifyContent:'center'}}>
                     <Link to="/"><h6>Back to home page </h6></Link>
                     </div>
@@ -293,13 +264,15 @@ const removeTimer=()=>{
                     <GridContainer direction="column" justify="center" alignItems="center">
                       <GridItem>
                       <Button id="login" onClick={()=>{setLoggingIn(true)}} round color="rose" size="lg" disabled={loading}>
-                             Login
+                            Login
                       </Button>
-
-                      {loading?<CircularProgress size={24} color="primary"/>:null}
+                    
                       </GridItem>
                       <GridItem>
-                    <Link onClick={()=>{setOpen(true)}}><h6>Forgot Password? </h6></Link>
+                    <Link onClick={()=>{setOpen(true)}}><h6>Forgot Password? </h6></Link> 
+                    </GridItem>
+                    <GridItem>
+                    {loading?<CircularProgress size={24}  style={{position:'inherit',left:'45%'}} color="primary"/>:null}                     
                     </GridItem>
                    
                     </GridContainer>
@@ -312,6 +285,51 @@ const removeTimer=()=>{
         
       </div>
       <ForgotModal open={open} setOpen={setOpen}/>
+      <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={isError}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setIsError(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setIsError(false)
+              }}
+              severity="error">
+              Invalid Credentials
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={conError}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setConError(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setConError(false)
+              }}
+              severity="error">
+              Error in Connection
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={emptyError}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setEmptyError(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setEmptyError(false)
+              }}
+              severity="error">
+              Empty Fields Detected!
+        </Alert>
+          </Snackbar>
     </div>
   );
 }

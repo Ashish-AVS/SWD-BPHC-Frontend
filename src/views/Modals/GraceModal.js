@@ -24,7 +24,7 @@ import Table from "components/Table/Table";
 
 import {BaseUrl} from "variables/BaseUrl";
 import styles from "assets/jss/material-kit-react/modalStyle";
-import { set } from "d3";
+
 
 const useStyles = makeStyles(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {

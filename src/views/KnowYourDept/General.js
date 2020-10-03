@@ -1,6 +1,12 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 import Image1 from "assets/img/know/img1.png";
 import Image2 from "assets/img/know/img2.jpg";
@@ -21,16 +27,36 @@ export default function General(){
     const classes = useStyles();
 return(
     <div className={classes.note3}>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Q. What is the semester distribution like (including CDCs and Electives)</span></strong></p>
-    <p><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>This is the structure/requirements for the First Degrees namely B.E, B. Pharm, and M.Sc.:</span></p>
-    <br/>
-    <div style={{display:'flex',justifyContent:'center'}}><img src={Image1} alt="image can't be loaded" width="400px"></img></div>
-    <br/>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A student should complete the minimum number of courses and units required in each category as well as meet the minimum requirements of courses (42) and units (144) in total. Also, the credit limit cannot cross 25 credits per semester.</span></p>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>*Note:</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>&nbsp;A thesis is for 16 units and for a full semester duration. But a student has the option of pursuing a Thesis of 9 units concurrently with coursework over a full semester, in which case the additional coursework would be at least 2 courses of total 6 units to meet the minimum unit requirements.</span></p>
-    <br/><br/>
-    <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}><strong><span style={{fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif'}}>Q. What are DELs| HELs| OELs| Project Type Courses?</span></strong></p>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>DELs stand for Disciplinary Electives. These courses span various disciplines and offer a variety of subjects as per student’s requirement. A list of discipline wise electives is provided in the discipline specific blogs of each branch.</span></p>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+           <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Q. What is the semester distribution like (including CDCs and Electives)</span></strong></p>
+        </AccordionSummary>
+        <AccordionDetails>
+        <div>
+          <p><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>This is the structure/requirements for the First Degrees namely B.E, B. Pharm, and M.Sc.:</span></p>
+          <br />
+          <div style={{ display: 'flex', justifyContent: 'center' }}><img src={Image1} alt="image can't be loaded" width="400px"></img></div>
+          <br />
+          <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A student should complete the minimum number of courses and units required in each category as well as meet the minimum requirements of courses (42) and units (144) in total. Also, the credit limit cannot cross 25 credits per semester.</span></p>
+          <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>*Note:</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>&nbsp;A thesis is for 16 units and for a full semester duration. But a student has the option of pursuing a Thesis of 9 units concurrently with coursework over a full semester, in which case the additional coursework would be at least 2 courses of total 6 units to meet the minimum unit requirements.</span></p>
+        </div>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <p style={{marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif'}}><strong><span style={{fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif'}}>Q. What are DELs| HELs| OELs| Project Type Courses?</span></strong></p>
+        </AccordionSummary>
+        <AccordionDetails>
+        <div>
+        <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>DELs stand for Disciplinary Electives. These courses span various disciplines and offer a variety of subjects as per student’s requirement. A list of discipline wise electives is provided in the discipline specific blogs of each branch.</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>HELs stand for Humanity Electives. These courses are meant to give an insight in social knowledge, history, philosophy, politics, etc. &nbsp;</span></p>
     <p><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A list of HELs is provided here:</span></p>
     <br/>
@@ -61,10 +87,21 @@ return(
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>(iii) Design Projects (maximum of 2)&nbsp;</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>(iv) Special Projects (maximum of 1)</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A student may avail a maximum of 3 Project courses (under any of the heads mentioned above offered by any discipline as an Open Elective. However, in total a student may avail at most 5 Project courses against Electives slots in any category.</span></p>
-    <br/>
-    <br/>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>MINOR PROGRAMMES FOR FIRST DEGREE STUDENTS</span></strong></p>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>“Minor programs” are offered as options for first degree students with the intent of encouraging them to add focus to their supplemental learning (outside a major area) as well as recognizing and certifying the knowledge obtained in an area that is outside of their major area.</span></p>
+
+        </div>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+           <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>MINOR PROGRAMMES FOR FIRST DEGREE STUDENTS</span></strong></p>
+        </AccordionSummary>
+        <AccordionDetails>
+        <div>
+        <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>“Minor programs” are offered as options for first degree students with the intent of encouraging them to add focus to their supplemental learning (outside a major area) as well as recognizing and certifying the knowledge obtained in an area that is outside of their major area.</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>General Guidelines:</span></strong></p>
     <ol style={{ listStyleType: 'decimal' }}>
       <li><span style={{ fontFamily: '"Arial",sans-serif' }}>&nbsp;</span><span style={{ lineHeight: '107%', fontFamily: '"Arial",sans-serif', fontSize: '17px' }}>A minor would allow a Department (or multiple Departments) to offer a package of courses in an area/sub-area to students for whom this area/sub-area would not be part of their (major) program.</span></li>
@@ -121,11 +158,22 @@ return(
       <img src={Image10} alt="image can't be loaded" width="500px"></img>
       <img src={Image11} alt="image can't be loaded" width="500px"></img>
     </div>
-    <br/>
-    <br/>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>About Electives:</span></strong></p>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Q.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Minimum number of DELs to do.</span></p>
-    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Depends upon your discipline:</span></p>
+  
+        </div>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        ><div>
+           <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>About Electives:</span></strong></p>
+    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Q.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Minimum number of DELs to do.</span></p></div>
+        </AccordionSummary>
+        <AccordionDetails>
+        <div>
+        <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Depends upon your discipline:</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A1: 5 DELs</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>All other AX: 4 DELs</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>B2: 4 DELs</span></p>
@@ -139,6 +187,14 @@ return(
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>You can take any elective in absolutely any semester as long as it is not clashing with any of the other courses. You can do OPELs in 2-1 as well, however it is advisable to do only Humanities Electives in your 2-1 as your workload will <em>substantially</em> increase in your 2-1 after your lame and easy 1-1 - 1-2, hence it is advisable to do only HELs in 2-1.&nbsp;</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Q.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Is there any cap on the number of credits per semester?</span></p>
     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>A.&nbsp;</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Yes, there is. You can do courses worth up to 25 credits only (per semester).</span></p>
+        </div>
+        </AccordionDetails>
+      </Accordion>
+    
+    
+       
+    
+    
     
   </div>
 

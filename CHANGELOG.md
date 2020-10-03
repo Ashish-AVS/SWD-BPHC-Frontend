@@ -10,7 +10,7 @@
 ### Added dependencies
 ### Updated dependencies
 ```
-@material-ui/core                          4.3.2   →    4.10.0
+@material-ui/core                          4.3.2   →    4.11.0
 @material-ui/icons                         4.2.1   →     4.9.1
 history                                    4.9.0   →    4.10.1
 moment                                    2.24.0   →    2.26.0
@@ -79,8 +79,7 @@ typescript                                 3.5.1   →    3.5.3
 - Changed all string refs to `React.createRef()`
 - Added types validation in each component
 - Solved linting issues
-- Solved https://github.com/creativetimofficial/material-kit-react/issues/52
-- Solved https://github.com/creativetimofficial/ct-material-dashboard-pro-react/issues/149
+
 ### Major style changes
 ### Deleted components
 ### Added components

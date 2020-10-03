@@ -10,9 +10,14 @@ import Button from "components/CustomButtons/Button.js";
 import GridItem from "components/Grid/GridItem";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
-
+import CustomInput from "components/CustomInput/CustomInput.js";
+import Card from "components/Card/Card.js";
+import CardHeader from "components/Card/CardHeader.js";
+import CardBody from "components/Card/CardBody.js";
+import CardFooter from "components/Card/CardFooter.js";
 //Created Components
 import GoodieItem from "./GoodieItem";
+import AddGoodie from "./AddGoodie";
 //Auth Components
 import { useAuth } from "context/auth";
 
@@ -34,7 +39,8 @@ export default function Goodies() {
   const [deductions,setDeductions]=React.useState([]);
   const user=JSON.parse(localStorage.getItem("data"));
   const token=JSON.parse(localStorage.getItem("tokens"));
-  const [error,isError]=React.useState(false)
+  const [error,isError]=React.useState(false);
+  const [addGoodie,setAddGoodie]=React.useState(false)
   React.useEffect(()=>{
     try{
         const fetchData= async ()=>{
@@ -120,6 +126,26 @@ else{
          setIsUpdated={setIsUpdated}
          />)
   }):null}
+  {!addGoodie?
+  <GridItem xs={12} sm={12} md={12}>
+    <div style={{display:'flex',justifyContent:'center'}}>
+  { swdUid.map(item=>{
+       if(item===user.uid){
+       return(    
+        <GridContainer  justify='center' alignItems='center'>
+        <GridItem xs={12} sm={12} md={12} >
+          <Button size='lg' round color="rose" onClick={()=>{
+            setAddGoodie(true)
+          }}>
+            Add New Goodie
+          </Button>
+        </GridItem>
+      </GridContainer>
+       )
+      }
+     })}
+     </div>
+     </GridItem>:null}
   </GridContainer>
 };
 
@@ -134,23 +160,10 @@ else{
       </div>
       
       {GoodieData}
-     { swdUid.map(item=>{
-       if(item===user.uid){
-       return(
-        
-        <GridContainer direction='column' justify='center' alignItems='center'>
-        <GridItem xs={12} sm={12} md={8} >
-          <Button size='lg' round color="rose">
-            Add Goodie
-          </Button>
-        </GridItem>
-      </GridContainer>
      
-       )
-      }
-     })   
-      
-}
+ {addGoodie ?
+ <AddGoodie setVisible={setAddGoodie} setIsUpdated={setIsUpdated}/>
+ :null}
     </div>
   );
 }
