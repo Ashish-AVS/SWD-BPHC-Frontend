@@ -116,18 +116,18 @@ export default function Dashboard() {
                 <Restaurant/>
               </CardIcon>
               <p className={classes.cardCategory}>Current Mess</p>
-              <h3 className={classes.cardTitle}>
+              {messNo!==undefined?<h3 className={classes.cardTitle}>
                 MESS {messNo}
-              </h3>
+              </h3>:<h3 className={classes.cardTitle}>N/A</h3>}
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Button round color="rose" onClick={()=>{openMess(true)}}>
+                <Button round color="rose" disabled={messNo===undefined} onClick={()=>{openMess(true)}}>
                   Check Menu
                 </Button>
               </div>
               <div className={classes.stats}>
-                <Button round color="rose" onClick={()=>{openGrace(true)}}>
+                <Button round color="rose" disabled={messNo===undefined} onClick={()=>{openGrace(true)}}>
                   Grace
                 </Button>
               </div>

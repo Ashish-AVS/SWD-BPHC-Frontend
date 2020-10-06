@@ -102,7 +102,7 @@ export default function GoodieItem({
             <CardFooter stats>
              <GridContainer spacing={5}>
                <GridItem>
-                <Button round>
+                <Button round disabled>
                  View Size Chart
                 </Button>
                 </GridItem>

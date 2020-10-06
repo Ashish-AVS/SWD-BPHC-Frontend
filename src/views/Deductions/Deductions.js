@@ -60,7 +60,7 @@ export default function Deductions() {
   const token=JSON.parse(localStorage.getItem("tokens"));
   const { onLogin } = useAuth();
   const classes = useStyles();
-
+  const [empty,setEmpty]=React.useState(false)
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
@@ -70,6 +70,10 @@ export default function Deductions() {
         const res = await result.json();
 
         if(res.err===false){
+          if(res.data.length===0){
+            setEmpty(true)
+          }
+          else{
           setDeduction(res.data.map((item)=>{
             let OrderedOn= new Date(parseInt(item.time));
             let goodieDetails="";
@@ -93,7 +97,7 @@ export default function Deductions() {
             return data;
             
           })
-        )
+        )}
         res.data.forEach(element => {
           setTotAmt(totAmt=>totAmt+parseInt(element.total_amount))
         })
@@ -133,6 +137,7 @@ export default function Deductions() {
           <CardBody>
             {isFetching?
             <h5>Loading Account Information...</h5>:
+            empty===true?<h5> No Deductions Made Yet </h5>:
             <div>
             <Table
               tableHeaderColor="primary"
