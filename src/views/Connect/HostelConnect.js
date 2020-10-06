@@ -104,11 +104,11 @@ setIsFetched(true);
                     pageSize:20,
                     emptyRowsWhenPaging:false,
                     headerStyle: {
-                      backgroundColor: '#969592',
+                      backgroundColor: '#A28089',
                       color: '#FFF'
                     },
                     rowStyle: {
-                      border: "2px solid black",
+                      border: "1.4px solid black",
                     }
                   }}
                   />           
@@ -137,7 +137,7 @@ setIsFetched(true);
                </h3>
             </CardHeader>
             <CardBody>
-                <p>A complete Directory of all contacts regarding hostel</p>
+                <p>A complete Directory of all contacts of wardens, Assistant wardens ,Hostel officials and Chief Warden</p>
             </CardBody>
             <CardFooter stats>
               <div className={classes.stats}>

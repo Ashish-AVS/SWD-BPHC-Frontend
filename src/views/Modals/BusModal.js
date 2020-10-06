@@ -68,7 +68,7 @@ const classes=useStyles();
           <Button
             onClick={() => openModal(false)}
             color="danger"
-            simple
+            solid="true"
           >
             Close
           </Button>

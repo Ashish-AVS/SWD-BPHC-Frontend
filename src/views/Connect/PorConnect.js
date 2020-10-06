@@ -196,9 +196,9 @@ React.useEffect(()=>{
           <Card>
            
             <CardHeader color="primary">  
-               <h3 className={classes.cardTitleCon}>
-                RESPONSIBILITY BEARERS
-               </h3>
+               <h4 className={classes.cardTitleCon}>
+                RESPONSIBILITY 
+               </h4>
             </CardHeader>
             <CardBody>
                 <p>A complete Directory of all the students holding some position in various places</p>

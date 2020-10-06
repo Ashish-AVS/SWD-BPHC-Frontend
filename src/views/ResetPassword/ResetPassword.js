@@ -99,6 +99,12 @@ const [confError,setConfError]=React.useState(true);
             props.history.push("/login-page");
       }
       else if(res.err===true){
+         setPwdData(prevState=>({
+           ...prevState,
+           newPwd:'',
+           confPwd:''
+         }))
+          setEntryStarted(false);
           setIsError(true);
           setErrMsg(res.msg);
       }

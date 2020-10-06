@@ -177,7 +177,7 @@ export default function UserProfile() {
               bank: profile.bank,
               blood: profile.blood,
               bonafide_no: profile.bonafide_no,
-              branch: `ID dekh lo`,
+              branch: profile.branch,
               category: profile.category,
               city: profile.city,
               current_med: profile.current_med,
@@ -392,7 +392,7 @@ export default function UserProfile() {
        >
          <MenuItem value={'M'}>Male</MenuItem>
          <MenuItem value={'F'}>Female</MenuItem>
-         <MenuItem value={'Others'}>Others</MenuItem>
+         <MenuItem value={'O'}>Others</MenuItem>
       </Select>
      </FormControl>  
     </GridItem>
@@ -465,6 +465,21 @@ export default function UserProfile() {
       />
       </GridItem>
   </GridContainer>
+  <GridContainer direction="row"  justify="flex-start"  alignItems="flex-start">
+        <GridItem xs={12} sm={12} md={6}>
+      <CustomInput
+       labelText="Branch"
+       id="branch"
+        formControlProps={{
+          fullWidth: true
+        }}
+        inputProps={{
+          defaultValue:profile.branch,
+        }}
+        onChange={onChange}
+      />
+      </GridItem>
+      </GridContainer>
   <h3><b>MEDICAL DETAILS</b></h3>
   <GridContainer>
     <GridItem xs={12} sm={12} md={4}>
@@ -908,7 +923,9 @@ export default function UserProfile() {
             <CardBody >
               <h6 >Your Mentor</h6>
               <h4 className={classes.cardTitle}><b>Prof. G. Sunder</b></h4>
-              <h7>profmail@hyderabad.bits-pilani.ac.in</h7>
+              <h7><b>
+              <a href="mailto:profmail@hyderabad.bits-pilani.ac.in?subject=Query"> profmail@hyderabad.bits-pilani.ac.in</a>
+              </b> </h7>
               <p>Ph No. 040-1111-1111</p>              
             </CardBody>
           </Card>

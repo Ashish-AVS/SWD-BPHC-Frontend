@@ -35,7 +35,8 @@ function Alert(props) {
   
 export default function ChangePasswordModal({
   open,
-  setOpen
+  setOpen,
+  setMailSent
   }){
 const classes=useStyles();
 
@@ -54,10 +55,10 @@ if(sendingData===true){
     const fetchData= async ()=>{
       const result= await fetch(`${BaseUrl}/api/auth/reset?uid=${uid}`) ;
       const res = await result.json();
-      if(res.err===false&& result.status===201){     
-      alert('mail sent'); 
+      if(res.err===false&& result.status===201){      
       setUid('');
-      setOpen(false);       
+      setOpen(false); 
+      setMailSent(true);      
   }
   else if(res.err===true){
       setIsError(true);
@@ -135,10 +136,7 @@ if(sendingData===true){
                       </GridItem>
                       <GridItem xs={12} sm={12} md={12}>
                         On submitting userID you will get a reset link in your Bits-mail.
-                      </GridItem>
-                
-
-                  
+                      </GridItem>                 
                   </GridContainer>
                  </GridItem>
               </GridContainer>
@@ -152,7 +150,7 @@ if(sendingData===true){
                       solid="true"
                       round
                     >
-                     Confirm
+                     Submit
                   </Button>
                     <Button
                       onClick={() => {
@@ -167,7 +165,7 @@ if(sendingData===true){
                     </Button>
                   </DialogActions>
                   <Snackbar
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
         open={isError}
         autoHideDuration={5000}
         onClose={() => { setIsError(false) }}>

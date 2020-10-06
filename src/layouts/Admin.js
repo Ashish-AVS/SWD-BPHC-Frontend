@@ -20,23 +20,7 @@ import logo from "assets/img/bitslogo.png";
 
 let ps;
 
-const switchRoutes = (
-  <Switch>
-    {routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
-      }
-      return null;
-    })}
-    <Redirect from="/admin" to="/admin/dashboard" />
-  </Switch>
-);
+
 
 const useStyles = makeStyles(styles);
 
@@ -46,11 +30,30 @@ export default function Admin({ ...rest }) {
   // ref to help us initialize PerfectScrollbar on windows devices
   const mainPanel = React.createRef();
   // states and functions
-  
+  const {isComplete}=JSON.parse(localStorage.getItem("data"));
   const color="blue";
   
   const [mobileOpen, setMobileOpen] = React.useState(false);
   
+
+  const switchRoutes = (
+    <Switch>
+      {routes.map((prop, key) => {
+        if (prop.layout === "/admin") {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              component={prop.component}
+              key={key}
+            />
+          );
+        }
+        return null;
+      })}
+      {isComplete===0?<Redirect from="/admin" to="/admin/user" />:<Redirect from="/admin" to="/admin/dashboard" />}
+    </Switch>
+  );
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

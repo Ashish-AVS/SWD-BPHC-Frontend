@@ -128,7 +128,7 @@ React.useEffect(()=>{
 },[sendingData,goodieData,token])
 
 function onChange(e){
-    console.log(e.target.value)
+   
     const { name,id} = e.target;
    
     document.getElementById(id).oninput = function () {

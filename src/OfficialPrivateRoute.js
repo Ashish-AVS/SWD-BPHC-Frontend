@@ -5,7 +5,7 @@ import { useAuth } from "./context/auth";
 function OfficialPrivateRoute({ component: Component, ...rest }) {
   const {officialAuthTokens} = useAuth();
   useEffect(()=>{
-    console.log("authToken ka value: ",officialAuthTokens);
+    //console.log("authToken ka value: ",officialAuthTokens);
   });
   
   

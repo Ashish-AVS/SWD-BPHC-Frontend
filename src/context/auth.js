@@ -11,9 +11,9 @@ export  function AuthContextProvider(props){
     setOfficialAuthTokens(data);
     };
   const onLogin=(data)=>{
-    console.log("pehle YAAhan");
+    //console.log("pehle YAAhan");
     setAuthTokens(data);
-    console.log("phiri YAAhan");
+    //console.log("phiri YAAhan");
     };
   
  return <AuthContext.Provider value={{authTokens,onLogin:onLogin,officialAuthTokens,onOfficialLogin:onOfficialLogin}} {...props}/>;

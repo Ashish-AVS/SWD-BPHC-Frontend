@@ -5,7 +5,7 @@ import { useAuth } from "./context/auth";
 function StudentPrivateRoute({ component: Component, ...rest }) {
   const {authTokens} = useAuth();
   useEffect(()=>{
-    console.log("authToken ka value: ",authTokens);
+   // console.log("authToken ka value: ",authTokens);
   });
   
   //const token=localStorage.getItem('token');

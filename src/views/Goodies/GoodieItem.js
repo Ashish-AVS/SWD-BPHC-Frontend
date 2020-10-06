@@ -73,7 +73,7 @@ export default function GoodieItem({
                   {goodieName}                
               </h3>
               <h3 className={classes.cardTitle} >
-                 {goodieId===2?null:`₹ ${goodiePrice}`}
+                 {goodieType===2?null:`₹ ${goodiePrice}`}
               </h3>
               </div>
             </CardHeader>

@@ -12,7 +12,7 @@ import EventNoteIcon from '@material-ui/icons/EventNote';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Tasks from "components/Tasks/Tasks.js";
+//import Tasks from "components/Tasks/Tasks.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 //import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
@@ -31,14 +31,14 @@ import ComplaintsModal from "views/Modals/ComplaintsModal";
 import MenuModal from "views/Modals/MenuModal";
 import {BaseUrl} from "variables/BaseUrl";
 
-import { official,
-  department,
-  techassocs,
-  regionalassocs,
-  miscellaneous,
-  sports,
-  clubs,
-  others } from "variables/general.js";
+// import { official,
+//   department,
+//   techassocs,
+//   regionalassocs,
+//   miscellaneous,
+//   sports,
+//   clubs,
+//   others } from "variables/general.js";
 
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
@@ -185,108 +185,55 @@ export default function Dashboard() {
               {
                 tabName: "Official",                
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0, 1, 2]}
-                    tasks={official}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "Departments",              
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0, 1]}
-                    tasks={department}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "Clubs",                
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0]}
-                    tasks={clubs}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "TechAssocs",                
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0]}
-                    tasks={techassocs}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "RegionalAssocs",                
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0]}
-                    tasks={regionalassocs}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "Sports",                
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0]}
-                    tasks={sports}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "Miscellaneous",
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0]}
-                    tasks={miscellaneous}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
               {
                 tabName: "others",
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[]}
-                    tasksIndexes={[0]}
-                    tasks={others}
-                  />
+                  <h4>No Notices to Show</h4>
                 )
               },
             ]}
           />
         </GridItem>
-       {/* <GridItem xs={12} sm={12} md={6}>
-          <Card>
-            <CardHeader color="warning">
-              <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
-              <p className={classes.cardCategoryWhite}>
-                New employees on 15th September, 2016
-              </p>
-            </CardHeader>
-            <CardBody>
-              <Table
-                tableHeaderColor="warning"
-                tableHead={["ID", "Name", "Salary", "Country"]}
-                tableData={[
-                  ["1", "Dakota Rice", "$36,738", "Niger"],
-                  ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                  ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                  ["4", "Philip Chaney", "$38,735", "Korea, South"]
-                ]}
-              />
-            </CardBody>
-              </Card>
-        </GridItem>*/}
+     
       </GridContainer> 
       <ComplaintsModal Modal={Modal} openModal={openModal} />
       <MenuModal Mess={Mess} openMess={openMess} messMenu={messMenu}/>    

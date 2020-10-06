@@ -102,7 +102,14 @@ setIsFetched(true);
                   data={data}
                   options={{
                     pageSize:20,
-                    emptyRowsWhenPaging:false
+                    emptyRowsWhenPaging:false,
+                    headerStyle: {
+                      backgroundColor: '#A28089',
+                      color: '#FFF'
+                    },
+                    rowStyle: {
+                      border: "1.2px solid black",
+                    }
                   }}
                   />           
 

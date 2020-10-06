@@ -253,7 +253,7 @@ setGoodieAddData(prevState=>({
   ...prevState,
   g_img:base64
 }))
-console.log(base64)}
+}
 }
 function convertTobase64(file){
   return new Promise((resolve,reject)=>{

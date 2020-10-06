@@ -24,8 +24,6 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import SnackbarContent from "components/Snackbar/SnackbarContent";
-import Clearfix from "components/Clearfix/Clearfix";
 import { useAuth } from "context/auth";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
@@ -59,6 +57,7 @@ export default function LoginPage(props) {
   const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
+  const [mailSent,setMailSent]=React.useState(false);
   let t;
   const [timer,setTimer]=React.useState(false);
  useEffect(()=>{
@@ -159,7 +158,7 @@ export default function LoginPage(props) {
    if(isLoggedIn===true){
     localStorage.setItem("tokens",JSON.stringify(authTokens)); 
     localStorage.setItem("data",JSON.stringify(data));
-    props.history.push("/admin/dashboard");
+    props.history.push("/admin");
     setLoading(false); 
   return ()=>{
     setLoggedIn(false);
@@ -284,7 +283,7 @@ const removeTimer=()=>{
         </div>
         
       </div>
-      <ForgotModal open={open} setOpen={setOpen}/>
+      <ForgotModal open={open} setOpen={setOpen} setMailSent={setMailSent} />
       <Snackbar
            anchorOrigin={{horizontal:'center',vertical:'top'}}
             open={isError}
@@ -330,6 +329,22 @@ const removeTimer=()=>{
               Empty Fields Detected!
         </Alert>
           </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={mailSent}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setMailSent(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setMailSent(false)
+              }}
+              severity="success">
+              Reset Link Sent to your BITS-Mail
+        </Alert>
+          </Snackbar>
+          
     </div>
   );
 }
