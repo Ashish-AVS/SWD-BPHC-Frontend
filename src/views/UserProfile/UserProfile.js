@@ -475,6 +475,7 @@ export default function UserProfile() {
         }}
         inputProps={{
           defaultValue:profile.branch,
+          name:'branch'
         }}
         onChange={onChange}
       />
