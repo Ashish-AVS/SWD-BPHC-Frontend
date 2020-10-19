@@ -14,6 +14,7 @@ import { AuthContextProvider } from "./context/auth";
 
 const LandingPage = lazy(() => import('./views/LandingPage/LandingPage.js'));
 const KnowYourDept = lazy(() => import('views/KnowYourDept/KnowYourDept'));
+const Faqs = lazy(() => import('views/Faqs/Faqs'));
 const LoginPage = lazy(() => import('views/LoginPage/LoginPage.js'));
 const Reset = lazy(() => import('views/ResetPassword/ResetPassword'));
 const OfficialLogin = lazy(() => import('views/Official/Official.js'));
@@ -29,6 +30,7 @@ return(
             <Suspense fallback={<div>Loading...</div>}>
                 <Switch>
                   <Route path="/know-your-dept" component={KnowYourDept} />
+                  <Route path="/FAQs" component={Faqs} />
                   <Route path="/login-page" component={LoginPage} />
                   <Route path="/official-login" component={OfficialLogin} />
                   <Route path="/reset-password"  component={Reset}/>

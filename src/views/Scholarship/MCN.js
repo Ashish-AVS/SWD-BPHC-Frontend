@@ -49,7 +49,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function MCN({portalOn,status,setUpdated,data,setSuccess,setErr,setErrMsg,setSuccessMsg}) {
+export default function MCN() {
   const classes = useStyles();
   
  

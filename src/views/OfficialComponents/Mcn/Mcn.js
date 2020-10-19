@@ -7,11 +7,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import AssignmentReturnIcon from '@material-ui/icons/AssignmentReturn';
+import GetAppIcon from '@material-ui/icons/GetApp';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Badge from "components/Badge/Badge.js";
-import CustomTabs from "components/CustomTabs/EditedTabs1.js";
+import CustomTabs from "components/CustomTabs/EditedTabs.js";
+import RemarkModal from "./RemarkModal";
 import {BaseUrl} from "variables/BaseUrl";
 import {
     primaryColor,
@@ -129,7 +131,9 @@ export default function Outstation() {
       //new_status:null
   //})
   const [success, setSuccess] = React.useState(false);
-
+  const [remarkData,setRemarkData]=React.useState({})
+  const [open,setOpen]=React.useState(false)
+  const [updated,setUpdated]=React.useState(false)
   
     
   
@@ -147,29 +151,28 @@ export default function Outstation() {
     try{
       if (status == 0) {
         const fetchData0 = async () => {
-          const result = await fetch(`${BaseUrl}/api/o/mcn/applied`, {
+          const result = await fetch(`${BaseUrl}/api/o/mcn/get?status=0`, {
             headers: { Authorization: `Bearer ${token}` }
-
           });
           const res = await result.json();
           if (res.err===false) {
             setData0(
-                
               res.data.map((info, index) => {
                 let badge=null;  
                 if(info.status===-1){
-                   badge=<Badge color="danger">Denied</Badge>
+                   badge=<Badge color="danger">Rejected</Badge>
                    }
-                else if(info.status===0){
-                    badge=<Badge color="warning">Applied</Badge>
+                   else if(info.status===0 && info.updated===0){
+                    badge=<Badge color="info">Remarked</Badge>
+                }
+                else if(info.status===0 && info.updated===1){
+                    badge=<Badge color="warning">Pending</Badge>
                 }
                 else if(info.status===1){
-                    badge=<Badge color="info">Submitted</Badge>
+                    badge=<Badge color="success">Accepted</Badge>
                 }
-                else if(info.status===2){
-                    badge=<Badge color="success">Verified</Badge>
-                }
-                return { sno: index + 1, uid: info.uid, fsalary: info.fsalary, fcertificate: info.fcertificate, msalary: info.msalary, mcertificate: info.mcertificate, categ: info.categ,status:badge,statusCode:info.status }
+               
+                return { sno: index + 1, uid: info.uid, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload }
               })
             )
           }
@@ -184,7 +187,7 @@ export default function Outstation() {
       }
       if (status === 1) {
         const fetchData1 = async () => {
-          const result = await fetch(`${BaseUrl}/api/o/mcn/submitted`, {
+          const result = await fetch(`${BaseUrl}/api/o/mcn/get?status=1`, {
             headers: { Authorization: `Bearer ${token}` }
 
           });
@@ -194,18 +197,18 @@ export default function Outstation() {
               res.data.map((info, index) => {
                 let badge=null;  
                 if(info.status===-1){
-                   badge=<Badge color="danger">Denied</Badge>
+                   badge=<Badge color="danger">Rejected</Badge>
                    }
-                else if(info.status===0){
-                    badge=<Badge color="warning">Applied</Badge>
+                   else if(info.status===0 && info.updated===0){
+                    badge=<Badge color="info">Remarked</Badge>
+                }
+                else if(info.status===0 && info.updated===1){
+                    badge=<Badge color="warning">Pending</Badge>
                 }
                 else if(info.status===1){
-                    badge=<Badge color="info">Submitted</Badge>
+                    badge=<Badge color="success">Accepted</Badge>
                 }
-                else if(info.status===2){
-                    badge=<Badge color="success">Verified</Badge>
-                }
-                return { sno: index + 1, uid: info.uid, fsalary: info.fsalary, fcertificate: info.fcertificate, msalary: info.msalary, mcertificate: info.mcertificate, categ: info.categ,status:badge }
+                return { sno: index + 1, uid: info.uid, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload }
               })
             )
           }
@@ -218,9 +221,9 @@ export default function Outstation() {
         }
         fetchData1();
       }
-      if (status === 2) {
+      if (status === -1) {
         const fetchData2 = async () => {
-          const result = await fetch(`${BaseUrl}/api/o/mcn/verified`, {
+          const result = await fetch(`${BaseUrl}/api/o/mcn/get?status=-1`, {
             headers: { Authorization: `Bearer ${token}` }
 
           });
@@ -230,18 +233,19 @@ export default function Outstation() {
               res.data.map((info, index) => {
                 let badge=null;  
                 if(info.status===-1){
-                   badge=<Badge color="danger">Denied</Badge>
+                   badge=<Badge color="danger">Rejected</Badge>
                    }
-                else if(info.status===0){
-                    badge=<Badge color="warning">Applied</Badge>
+                   else if(info.status===0 && info.updated===0){
+                    badge=<Badge color="info">Remarked</Badge>
+                }
+                else if(info.status===0 && info.updated===1){
+                    badge=<Badge color="warning">Pending</Badge>
                 }
                 else if(info.status===1){
-                    badge=<Badge color="success">Submitted</Badge>
+                    badge=<Badge color="success">Accepted</Badge>
                 }
-                else if(info.status===2){
-                    badge=<Badge color="success">Verified</Badge>
-                }
-                return { sno: index + 1, uid: info.uid, fsalary: info.fsalary, fcertificate: info.fcertificate, msalary: info.msalary, mcertificate: info.mcertificate, categ: info.categ,status:badge }
+               
+                return { sno: index + 1, uid: info.uid, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload }
               })
 
             )
@@ -255,43 +259,6 @@ export default function Outstation() {
         }
         fetchData2();
       }
-      if (status === 3) {
-        const fetchData3 = async () => {
-          const result = await fetch(`${BaseUrl}/api/o/mcn/denied`, {
-            headers: { Authorization: `Bearer ${token}` }
-
-          });
-          const res = await result.json();
-          if (res.err===false) {
-            setData3(
-              res.data.map((info, index) => {
-                let badge=null;  
-                if(info.status===-1){
-                   badge=<Badge color="danger">Denied</Badge>
-                   }
-                else if(info.status===0){
-                    badge=<Badge color="warning">Applied</Badge>
-                }
-                else if(info.status===1){
-                    badge=<Badge color="success">Submitted</Badge>
-                }
-                else if(info.status===2){
-                    badge=<Badge color="success">Verified</Badge>
-                }
-                return { sno: index + 1, uid: info.uid, fsalary: info.fsalary, fcertificate: info.fcertificate, msalary: info.msalary, mcertificate: info.mcertificate,categ: info.categ,status:badge  }
-              })
-
-            )
-          }
-          else if (result.status === 400) {
-            alert('task not completed');
-          }
-          else if (result.status === 401) {
-            alert('Session timed out. Login again');
-          }
-        }
-        fetchData3();
-      }
 
 
 
@@ -301,25 +268,23 @@ export default function Outstation() {
       console.log(err);
     }
   
-  },[status,token,dataSent]);
+  },[status,token,dataSent,updated]);
 
+  const sendApplyData = async (uid) => {
 
-  const sendSubmitData = async (uid,fcerti,mcerti) => {
-
-    const result = await fetch(`${BaseUrl}/api/o/mcn/submit`, {
+    const result = await fetch(`${BaseUrl}/api/o/mcn/change`, {
       method: "post",
       headers: { 'Content-Type': "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({
         uid:uid,
-        fcertificate:fcerti,
-        mcertificate:mcerti
+        new_status:0,
+        remark:'Re-Applied by the Committee'
       })
     })
     const res = await result.json();
     if (result.status === 200 || result.status === 201 || result.status === 304) {
-     setDataSent(`sent-${uid}-${fcerti}`);
+     setDataSent(`verify-${uid}`);
      setSuccess(true);
-     
      
     }
     else if (res.err===false) {
@@ -333,13 +298,17 @@ export default function Outstation() {
     }
 
   }
+  
+
   const sendVerifyData = async (uid) => {
 
-    const result = await fetch(`${BaseUrl}/api/o/mcn/verify`, {
+    const result = await fetch(`${BaseUrl}/api/o/mcn/change`, {
       method: "post",
       headers: { 'Content-Type': "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({
-        uid:uid
+        uid:uid,
+        new_status:1,
+        remark:'Application Accepted'
       })
     })
     const res = await result.json();
@@ -362,11 +331,13 @@ export default function Outstation() {
   }
   const sendDenyData = async (uid) => {
 
-    const result = await fetch(`${BaseUrl}/api/o/mcn/deny`, {
+    const result = await fetch(`${BaseUrl}/api/o/mcn/change`, {
       method: "post",
       headers: { 'Content-Type': "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({
-        uid:uid
+        uid:uid,
+        new_status:-1,
+        remark:"Application Rejected"
       })
     })
     const res = await result.json();
@@ -406,80 +377,105 @@ export default function Outstation() {
             headerColor="primary"
             tabs={[
               {
-                tabName: "Applied",
-                                
+                tabName: "Pending",                                
                 tabContent: (
                   <MaterialTable
-                  title="APPLIED MCN APPLICATIONS"
+                  title="PENDING MCN APPLICATIONS"
                   columns={[
                    {title:"S No.",field:"sno"},
                    {title:"Student ID",field:"uid"},
+                   {title:"Name",field:"name"},                   
                    {title:"Father's Salary",field:"fsalary"},
-                   {title:"Father's Certificate",field:"fcertificate"},
-                   {title:"Mother's Salary",field:"msalary"},
-                   {title:"Mother's Certificate",field:"mcertificate"},
+                   {title:"Mother's Salary",field:"msalary"},                  
                    {title:"Category",field:"categ"},
+                   {title:"Remarks",field:"remark"},
                    {title:"Appln Status",field:"status"}
                   ]}
                   data={data0}
                   actions={[
                     rowData=>({
+                    icon: ()=><GetAppIcon />,
+                      disabled:rowData.statusCode!==0,
+                      tooltip: 'Download Documents',
+                      onClick:  (event, rowData) => {
+                        window.open(rowData.upload,'_self')
+                        }         
+                    }),
+                    rowData=>({
+                        icon: 'edit',
+                        disabled:rowData.statusCode!==0,
+                        tooltip: 'Give Remarks',
+                        onClick: async (event, rowData) => {
+                          setRemarkData(rowData);
+                          setOpen(true);
+                          }         
+                      }),
+                      rowData=>({
                         icon: 'check',
                         disabled:rowData.statusCode!==0,
-                        tooltip: 'Submit',
+                        tooltip: 'Accept',
                         onClick: async (event, rowData) => {
-                          sendSubmitData(rowData.uid,rowData.fcertificate,rowData.mcertificate)
+                          sendVerifyData(rowData.uid)
                           }         
             
-                      })
-                  ]}
-            
-                  options={{
-                    
-                    search:true,
-                    pageSize:10,
-                    emptyRowsWhenPaging:false
-                    }}
-                  
-                           
-                />
-                )
-              },
-              {
-                tabName: "Submitted", 
-                            
-                tabContent: (
-                  <MaterialTable
-                  title="SUBMITTED MCN APPLICATIONS"
-                  columns={[
-                    {title:"S No.",field:"sno"},
-                   {title:"Student ID",field:"uid"},
-                   {title:"Father's Salary",field:"fsalary"},
-                   {title:"Father's Certificate",field:"fcertificate"},
-                   {title:"Mother's Salary",field:"msalary"},
-                   {title:"Mother's Certificate",field:"mcertificate"},
-                   {title:"Category",field:"categ"},
-                   {title:"Appln Status",field:"status"}
-                  ]}
-                  data={data1}
-                  actions={[
-                    {
-                      icon: 'check',
-                      tooltip: 'Verify',
-                      onClick: async (event, rowData) => {
-                        sendVerifyData(rowData.uid)
-                        }         
-          
-                    },
-                    {
+                      }),
+                      rowData=>({
                         icon: 'close',
-                        tooltip: 'Deny',
+                        disabled:rowData.statusCode!==0,
+                        tooltip: 'Reject',
                         onClick: async (event, rowData) => {
                           sendDenyData(rowData.uid)
                           }         
             
-                      }
-                ]}
+                      }),
+
+                  ]}
+            
+                  options={{
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    }}
+                  
+                           
+                />
+                )
+              },
+              
+              {
+                tabName: "Accepted", 
+                               
+                tabContent: (
+                  <MaterialTable
+                  title="ACCEPTED APPLICATIONS"
+                  columns={[
+                   {title:"S No.",field:"sno"},
+                   {title:"Student ID",field:"uid"},
+                   {title:"Father's Salary",field:"fsalary"},
+                   {title:"Mother's Salary",field:"msalary"},
+                   {title:"Category",field:"categ"},
+                   {title:"Remarks",field:"remark"},                  
+                   {title:"Appln Status",field:"status"}
+                  ]}
+                  data={data1}
+                  actions={[
+                    rowData=>({
+                    icon: ()=><GetAppIcon />,
+                      
+                      tooltip: 'Download Documents',
+                      onClick:  (event, rowData) => {
+                        window.open(rowData.upload,'_self')
+                        }         
+                    }),
+                    {
+                      icon: ()=><AssignmentReturnIcon/>,
+                      tooltip: 'Re-submit',
+                      onClick: async (event, rowData) => {
+                          sendApplyData(rowData.uid)  
+                    }
+                  }
+
+                  ]}
             
                   options={{
                     
@@ -493,71 +489,41 @@ export default function Outstation() {
                 )
               },
               {
-                tabName: "Verified", 
+                tabName: "Rejected", 
                                
                 tabContent: (
                   <MaterialTable
-                  title="VERIFIED APPLICATIONS"
+                  title="REJECTED APPLICATIONS"
                   columns={[
                     {title:"S No.",field:"sno"},
                    {title:"Student ID",field:"uid"},
+                   {title:"Name",field:"name"},                   
                    {title:"Father's Salary",field:"fsalary"},
-                   {title:"Father's Certificate",field:"fcertificate"},
-                   {title:"Mother's Salary",field:"msalary"},
-                   {title:"Mother's Certificate",field:"mcertificate"},
+                   {title:"Mother's Salary",field:"msalary"},                  
                    {title:"Category",field:"categ"},
                    {title:"Appln Status",field:"status"}
                   ]}
                   data={data2}
                   actions={[
-                    {
-                        icon: 'close',
-                        tooltip: 'Deny',
-                        onClick: async (event, rowData) => {
-                          sendDenyData(rowData.uid)
-                          }         
-            
-                      }
+                      
                   ]}
-            
-                  options={{
-                    
-                    search:true,
-                    pageSize:10,
-                    emptyRowsWhenPaging:false
-                    }}
-                  
-                           
-                />
-                )
-              },
-              {
-                tabName: "Denied", 
-                               
-                tabContent: (
-                  <MaterialTable
-                  title="DENIED APPLICATIONS"
-                  columns={[
-                    {title:"S No.",field:"sno"},
-                    {title:"Student ID",field:"uid"},
-                    {title:"Father's Salary",field:"fsalary"},
-                    {title:"Father's Certificate",field:"fcertificate"},
-                    {title:"Mother's Salary",field:"msalary"},
-                    {title:"Mother's Certificate",field:"mcertificate"},
-                    {title:"Category",field:"categ"},
-                    {title:"Appln Status",field:"status"}
-                  ]}
-                  data={data3}
                   actions={[
+                    rowData=>({
+                    icon: ()=><GetAppIcon />,
+                     
+                      tooltip: 'Download Documents',
+                      onClick:  (event, rowData) => {
+                        window.open(rowData.upload,'_self')
+                        }         
+                    }),
                       {
                         icon: ()=><AssignmentReturnIcon/>,
                         tooltip: 'Re-submit',
                         onClick: async (event, rowData) => {
-                            sendSubmitData(rowData.uid,rowData.fcertificate,rowData.mcertificate)  
-                                                       
-            
+                            sendApplyData(rowData.uid)  
                       }
-                    }
+                    },
+
                   ]}
             
                   options={{
@@ -586,7 +552,7 @@ export default function Outstation() {
           </Snackbar>
         </GridItem>
         </GridContainer>
-         
+         <RemarkModal open={open} setOpen={setOpen} setUpdated={setUpdated} data={remarkData}/>
   </div>
     );
 }

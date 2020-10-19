@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 //import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
-
+import VisibilityIcon from '@material-ui/icons/Visibility';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -171,14 +171,15 @@ export default function Search() {
             value_1:criteria.value_1,
             criteria_2:criteria.criteria_2,
             value_2:criteria.value_2,
-            token:token
+            
           })
          })
          const res = await result.json();
         if(result.status===200||result.status===201){
+          setSendingData(false);
           setData(res.data);
           setRecievedData(true);
-          setSendingData(false);
+          console.log(res.data)
         }
        
       }
@@ -194,22 +195,15 @@ export default function Search() {
     if(detailsReq===true){
       try{
         const sendData=async ()=>{
-          const result =await fetch(`${BaseUrl}/api/o/search/details`,{
-            method:"post",
+          const result =await fetch(`${BaseUrl}/api/o/search/plink?uid=${uid}`,{
             headers:{
               'Content-Type':"application/json",
                Authorization:`Bearer ${token}`
-              },
-            body:JSON.stringify({
-              id:"swd",
-              uid:uid,
-              token:token
-            })
+              }
            })
            const res = await result.json();
           if(result.status===200||result.status===201){
-            setDetailsData(res.data);
-            setOpen(true);
+           window.open(res.data.link)
             setRecievedDetailsData(true)
             setDetailsReq(false);
           }
@@ -495,7 +489,7 @@ export default function Search() {
                   }}
                   actions={[
                     {                 
-                      icon:()=><Button color="info" round >Open</Button>,
+                      icon:()=><VisibilityIcon/>,
                       tooltip:'Open',
                       onClick:(event,row)=>{
                     console.log(row.uid);
@@ -512,8 +506,8 @@ export default function Search() {
                   />:null} 
         </GridItem>
       </GridContainer>
-      {recievedDetailsData?
-      <SearchDetails open={open} setOpen={setOpen} data={detailsData} setRecievedDetailsData={setRecievedDetailsData} />:null}
+      {/* {recievedDetailsData?
+      <SearchDetails open={open} setOpen={setOpen} data={detailsData} setRecievedDetailsData={setRecievedDetailsData} />:null} */}
     </div>
   );
 }

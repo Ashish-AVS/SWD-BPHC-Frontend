@@ -66,23 +66,23 @@ if(sendingData===true){
   try{
     
     const fetchData= async ()=>{
+      const fileData= new FormData();
+      fileData.append('upload', mcnData.upload,`${uid}.zip`);
+      fileData.append('fsalary', mcnData.fsalary);
+      fileData.append('msalary', mcnData.msalary);
+      fileData.append('categ', mcnData.categ);
+     
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
-        headers:{'Content-Type':"application/json",
+        headers:{
           Authorization:token
         },
-        body:JSON.stringify({
-          uid:uid,
-          fsalary:mcnData.fsalary,
-          msalary:mcnData.msalary,
-          mcertificate:mcnData.mcertificate,
-          fcertificate:mcnData.fcertificate,
-          categ:mcnData.categ
-          })
+        
+        body:fileData
       }) ;
       const res = await result.json();
       if(res.err===false){     
-      
+       
         setSuccess(true);
         setSuccessMsg(res.msg);
         setOpen(false);
@@ -112,6 +112,16 @@ if(sendingData===true){
      }));
      
  }
+
+ async function  onDocChange(e){
+  const file=e.target.files[0];
+  if(file!==undefined){
+  setMcnData(prevState=>({
+    ...prevState,
+    upload:file
+  }))
+  }
+  }
 
 
     return(
@@ -184,23 +194,6 @@ if(sendingData===true){
                             </GridItem>
                   <GridItem xs={12} sm={12} md={12}>
                     <GridContainer >
-                    <GridItem xs={12} sm={12} md={6}>
-         <FormControl fullWidth className={classes.formControl} disabled={!edit}>
-                  <InputLabel className={classes.labelRoot}>Father's Income Certificate</InputLabel>
-                  <Select
-                   name="fcertificate"
-                   className={classes.input+" "+classes.underline}
-                   value={mcnData.fcertificate}
-                   onChange={onChange}
-                  >
-                     <MenuItem value={``}>SELECT DOCUMENT</MenuItem>
-                     <MenuItem value={`ITR-V`}>ITR-V</MenuItem>
-                     <MenuItem value={`DOC-2`}>DOC-2</MenuItem>
-                     <MenuItem value={`DOC-3`}>DOC-3</MenuItem>
-                     
-                  </Select>
-               </FormControl>
-                </GridItem>
                       <GridItem xs={12} sm={12} md={6}>
                                 <CustomInput
                                     labelText="Fathers Income"
@@ -212,32 +205,11 @@ if(sendingData===true){
                                       
                                       defaultValue:mcnData.fsalary,
                                         name: 'fsalary',
-                                        disabled:!edit
-                                        
+                                        disabled:!edit    
                                     }}
 
                                 />
                       </GridItem>
-                      </GridContainer>
-                      <GridItem xs={12} sm={12} md={12}>
-                    <GridContainer >
-                      <GridItem xs={12} sm={12} md={6}>
-         <FormControl fullWidth className={classes.formControl} disabled={!edit} >
-                  <InputLabel className={classes.labelRoot}>Mother's Income Certificate</InputLabel>
-                  <Select
-                   name="mcertificate"
-                   className={classes.input+" "+classes.underline}
-                   onChange={onChange}
-                   value={mcnData.mcertificate}
-                  >
-                     <MenuItem value={``}>SELECT DOCUMENT</MenuItem>
-                     <MenuItem value={`ITR-V`}>ITR-V</MenuItem>
-                     <MenuItem value={`DOC-2`}>DOC-2</MenuItem>
-                     <MenuItem value={`DOC-3`}>DOC-3</MenuItem>
-                     
-                  </Select>
-               </FormControl>
-                </GridItem>
                       <GridItem xs={12} sm={12} md={6}>
                                 <CustomInput
                                     labelText="Mothers Income"
@@ -253,14 +225,30 @@ if(sendingData===true){
 
                                 />
                       </GridItem>
-                  </GridContainer>
-                 </GridItem>
-                 </GridItem>
+                      </GridContainer>
+                   </GridItem>
+                   <GridItem>
+                     {!edit?<Button
+                      onClick={() => {
+                        window.open(data.upload)
+                      }}
+                      color="danger"
+                      
+                    >
+                     Download Submitted Documents 
+                  </Button>: 
+                  <div><InputLabel className={classes.label}>
+                  Upload New Document File(.zip file )
+                 </InputLabel>
+                 <input name="g_img" type='file' style={{marginTop:'10px'}} onChange={onDocChange} ></input></div>}
+                     </GridItem>
               </GridContainer>:<p>Loading Data... if more than 30sec then refresh</p>}
                   </DialogContent>
                   <DialogActions className={classes.modalFooter}>
                 {!edit? 
                 <div>  
+                  
+                  
                   <Button
                       onClick={() => setEdit(true)}
                       color="info"
@@ -269,6 +257,7 @@ if(sendingData===true){
                     >
                       Edit Response
                   </Button>
+                  
                     <Button
                       onClick={() => setOpen(false)}
                       color="danger"

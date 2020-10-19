@@ -9,7 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
-
+import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 //Core Components
@@ -25,51 +25,46 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 Transition.displayName = "Transition";
-export default function CancelModal({
+export default function RemarkModal({
     open, 
     setOpen,
     setUpdated,
-    setSuccess,
-    setErr,
-    setErrMsg,
-    setSuccessMsg,
-    setAppln
+    data
    }){
 const classes=useStyles();
-
-
-const token=JSON.parse(localStorage.getItem("tokens"));
-
+const token=JSON.parse(localStorage.getItem("officialtokens"));
 const [loading,setLoading]=React.useState(false);
 const [sendingData,setSendingData]=React.useState(false);
-
+const [remark,setRemark]= React.useState('');
 
 React.useEffect(()=>{
   if(sendingData===true){
     try{
     const sendData=async ()=>{
       setLoading(true);  
-      const result= await fetch(`${BaseUrl}/api/mcn/delete`,{
+      const result= await fetch(`${BaseUrl}/api/o/mcn/change`,{
         method:'post',
         headers:{'Content-Type':"application/json",
-          Authorization:token
-        }
-       
+          Authorization:`Bearer ${token}`
+        },
+       body:JSON.stringify({
+            new_status:0,
+            remark:remark,
+            uid:data.uid
+       })
       })    
       const res = await result.json();
       if(res.err===false){     
       
-      setSuccess(true);
-      setSuccessMsg(res.msg);
+     
       setLoading(false);
-      setUpdated(res.msg);
+      setUpdated(`${data.uid}-${remark}`);
       setOpen(false);
-      setAppln(false);
+      
         
        }
        else if(res.err===false){
-           setErr(true);
-           setErrMsg(res.msg);
+          alert('Error in sending Request.Try Again')
        }
       }
     sendData();
@@ -114,15 +109,27 @@ React.useEffect(()=>{
                     >
                       <Close className={classes.modalClose} />
                     </IconButton>
-                    <h3 className={classes.modalTitle}><strong>Cancel Application</strong></h3>
+                    <h3 className={classes.modalTitle}><strong>Give Remarks to the applicant</strong></h3>
                   </DialogTitle>
                   <DialogContent
                     id="classic-modal-slide-description"
                     className={classes.modalBody}
                   >
-                    <div>
-                        <h4>Are you sure you want to remove your MCN Application?</h4>
-                    
+                    <div style={{display:'flex',flexDirection:'column',justifyContent:'center'}}>
+                <h4>Applicant's Name:&nbsp;&nbsp;&nbsp;{data.name}</h4>
+                <h4>Applicant's Uid:&nbsp;&nbsp;&nbsp;{data.uid}</h4>
+                    <TextField
+                        id="outlined-multiline-static"
+                        label="Remarks"
+                        multiline
+                        rows={4}
+                        defaultValue=""
+                        variant="outlined"
+                        value={remark}
+                        onChange={(e)=>{
+                            setRemark(e.target.value)
+                        }}
+                    />
                     </div>
                   
                   </DialogContent>
@@ -135,16 +142,19 @@ React.useEffect(()=>{
                       round
                       disabled={loading}
                     >
-                      Yes 
+                      Submit
                     </Button>
                     
                     <Button
-                      onClick={() => setOpen(false)}
+                      onClick={() => {
+                          setOpen(false)
+                          setRemark('');
+                        }}
                       color="danger"
                       solid="true"
                       round
                     >
-                      No
+                      Cancel
                     </Button>
                   </DialogActions>
                 </Dialog>

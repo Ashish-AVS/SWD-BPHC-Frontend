@@ -3,6 +3,10 @@ const imagesStyles = {
     width: "250px",
     height: "200px"
   },
+  imgFluid1: {
+    width: "170px",
+    height: "150px"
+  },
   imgRounded: {
     borderRadius: "12px !important"
   },

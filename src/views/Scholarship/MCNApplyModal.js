@@ -51,9 +51,8 @@ const token=JSON.parse(localStorage.getItem("tokens"));
 const [mcnData,setMcnData]=React.useState({
   fsalary:'',
     msalary:'',
-    mcertificate:'',
-    fcertificate:'',
-    categ:''
+    categ:'',
+    upload:null
 });
 const [sendingData,setSendingData]=React.useState(false)
 
@@ -62,31 +61,31 @@ const [sendingData,setSendingData]=React.useState(false)
 
 React.useEffect(()=>{
 if(sendingData===true){
-  console.log(mcnData); 
+ 
+  
   try{
-     // console.log(mcnData);
+    
     const fetchData= async ()=>{
+      const fileData= new FormData();
+      fileData.append('upload', mcnData.upload,`${uid}.zip`);
+      fileData.append('fsalary', mcnData.fsalary);
+      fileData.append('msalary', mcnData.msalary);
+      fileData.append('categ', mcnData.categ);
+     
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
-        headers:{'Content-Type':"application/json",
+        headers:{
           Authorization:token
         },
-        body:JSON.stringify({
-          uid:uid,
-          fsalary:mcnData.fsalary,
-          msalary:mcnData.fsalary,
-          mcertificate:mcnData.mcertificate,
-          fcertificate:mcnData.mcertificate,
-          categ:mcnData.categ
-          })
+        
+        body:fileData
       }) ;
       const res = await result.json();
       if(res.err===false){     
       setMcnData({
         fsalary:'',
           msalary:'',
-          mcertificate:'',
-          fcertificate:'',
+          upload:null,
           categ:''
       })
         setSuccess(true);
@@ -105,7 +104,8 @@ if(sendingData===true){
     
   }catch(err){
       console.log(err);
-    }}
+    }
+}
    
   });
  
@@ -118,6 +118,22 @@ if(sendingData===true){
      
  }
 
+ async function  onDocChange(e){
+  const file=e.target.files[0];
+  if(file!==undefined){
+  setMcnData(prevState=>({
+    ...prevState,
+    upload:file
+  }))
+  }
+  }
+  // function convertToFileData(file){
+  //   return new Promise((resolve,reject)=>{
+  //     const fileData = new FormData();
+  //     fileData.append('file', file)
+  //       resolve(fileData)
+  //   })
+  // }
 
     return(
         <Dialog
@@ -125,7 +141,7 @@ if(sendingData===true){
                     root: classes.center,
                     paper: classes.modal
                   }}
-                  maxWidth="md"
+                  maxWidth="sm"
                   fullWidth={true}
                   open={open}
                   TransitionComponent={Transition}
@@ -157,26 +173,10 @@ if(sendingData===true){
                 <GridContainer >
                   <GridItem xs={12} sm={12} md={12}>
                     <GridContainer justify="center" alignItems='center' >
-                    <GridItem xs={12} sm={12} md={5}>
-         <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}>Father's Income Certificate</InputLabel>
-                  <Select
-                   name="fcertificate"
-                   className={classes.input+" "+classes.underline}
-                   value={mcnData.fcertificate}
-                   onChange={onChange}
-                  >
-                     <MenuItem value={''}>SELECT DOCUMENT</MenuItem>
-                     <MenuItem value={'ITR-V'}>ITR-V</MenuItem>
-                     <MenuItem value={'DOC-2'}>DOC-2</MenuItem>
-                     <MenuItem value={'DOC-3'}>DOC-3</MenuItem>
-                     
-                  </Select>
-               </FormControl>
-                </GridItem>
+                    
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
-                                    labelText="Fathers Income"
+                                    labelText="Fathers Income(in ₹)"
                                     formControlProps={{
                                         fullWidth: true
                                     }}
@@ -184,38 +184,24 @@ if(sendingData===true){
                                     inputProps={{
                                       value:mcnData.fsalary,
                                         name: 'fsalary',
+                                        type:'number'
                                         
                                     }}
 
                                 />
                       </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
-         <FormControl fullWidth className={classes.formControl}>
-                  <InputLabel className={classes.labelRoot}>Mother's Income Certificate</InputLabel>
-                  <Select
-                   name="mcertificate"
-                   className={classes.input+" "+classes.underline}
-                   onChange={onChange}
-                   value={mcnData.mcertificate}
-                  >
-                     <MenuItem value={''}>SELECT DOCUMENT</MenuItem>
-                     <MenuItem value={'ITR-V'}>ITR-V</MenuItem>
-                     <MenuItem value={'DOC-2'}>DOC-2</MenuItem>
-                     <MenuItem value={'DOC-3'}>DOC-3</MenuItem>
                      
-                  </Select>
-               </FormControl>
-                </GridItem>
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
-                                    labelText="Mothers Income"
+                                    labelText="Mothers Income(in ₹)"
                                     formControlProps={{
                                         fullWidth: true
                                     }}
                                     onChange={onChange}
                                     inputProps={{  
                                       value:mcnData.msalary,                                      
-                                        name: 'msalary'    
+                                        name: 'msalary',
+                                        type:'number'    
                                        }}
 
                                 />
@@ -234,7 +220,12 @@ if(sendingData===true){
                                     onChange={onChange}
                                 />
                             </GridItem>
-
+                            <GridItem xs={12} sm={12} md={5}>
+                 <InputLabel className={classes.label}>
+                  Documents
+                 </InputLabel>
+                 <input name="g_img" type='file' style={{marginTop:'10px'}} onChange={onDocChange}></input>      
+                </GridItem>
                   
                   </GridContainer>
                  </GridItem>
@@ -244,7 +235,9 @@ if(sendingData===true){
                   <DialogActions className={classes.modalFooter}>
                    
                   <Button
-                      onClick={() => setSendingData(true)}
+                      onClick={() => 
+                        setSendingData(true)
+                        }
                       color="success"
                       solid="true"
                       round

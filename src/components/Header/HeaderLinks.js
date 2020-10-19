@@ -72,12 +72,12 @@ export default function HeaderLinks(props) {
       <ComplaintsModal Modal={complaintsModal} openModal={setComplaintsModal}/>
       <ListItem className={classes.listItem}>
         <Button
-          href="#"
+          href="/FAQs"
           color="transparent"
-          target="_blank"
+         
           className={classes.navLink}
         >
-          <BookIcon className={classes.icons} /> BITS CHRONICLES
+          <BookIcon className={classes.icons} /> FAQs
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>

@@ -4,14 +4,14 @@ import React from "react";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
-
+import classNames from "classnames";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 //import Danger from "components/Typography/Danger.js";
-
-
+import Footer from "components/Footer/Footer.js";
+import Img from 'assets/img/bitslogo.png'
 import General from './General';
 
 
@@ -26,11 +26,20 @@ Transition.displayName = "Transition";
 export default function KnowYourDept() {  
   
   const classes = useStyles();
+ 
+  const imageClasses = classNames(
+    classes.imgFluid1
+  );
   return (
     <div>
-      <div style={{display:'flex',justifyContent:'center'}}>
+      <GridContainer justify="center" alignItems="center">
+        <GridItem xs={6} sm={6} md={3}>
+          <img src={Img} alt="..." className={imageClasses} />
+        </GridItem>
+        <GridItem xs={6} sm={6} md={7}>
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
-      </div>
+        </GridItem>
+      </GridContainer>
       <div style={{display:'flex',justifyContent:'center'}}>
           <h4><strong>KNOW YOUR DEPARTMENT</strong></h4>
       </div>
@@ -129,6 +138,7 @@ export default function KnowYourDept() {
               </Card>
         </GridItem>*/}
       </GridContainer> 
+     <Footer />
       
     </div>
   );

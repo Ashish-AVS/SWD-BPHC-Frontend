@@ -52,16 +52,6 @@ export default function LandingPage(props) {
               Premier technical and science institutes of higher learning in India. It was established by Birla Institute of Technology and Science, Pilani (Rajasthan) as one of its latest campuses in the year 2008 with the first batch graduating in the year 2012
               </h4>
               <br />
-             { /*<Button
-                color="danger"
-                size="lg"
-                href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ref=creativetim"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fas fa-play" />
-                Watch video
-              </Button>*/}
             </GridItem>
           </GridContainer>
         </div>

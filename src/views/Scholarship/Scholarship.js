@@ -3,7 +3,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-
+import TextField from '@material-ui/core/TextField';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
@@ -15,6 +15,7 @@ import MCNApplyModal from './MCNApplyModal';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
 import {BaseUrl} from "variables/BaseUrl";
+
 //Created components
 import SAF from "./SAF";
 import MCN from "./MCN";
@@ -96,7 +97,7 @@ export default function Scholarship() {
             })
             const res=await result.json();
             if (result.status===200||result.status===201||result.status===304) {
-              
+              console.log(res.data.upload)
               setApplnData(res.data);
               setAppln(true);
               
@@ -104,7 +105,7 @@ export default function Scholarship() {
             }
             else if (result.status === 404||result.status === 400) {
               setAppln(false);
-              console.log("hii")
+              //console.log("hii")
             }
             else if (res.err === true) {
               setErr(true);
@@ -160,7 +161,23 @@ export default function Scholarship() {
                   }} >
                       Apply For MCN
                  </Button>:
-                 <div><Button 
+                 <GridContainer spacing={4} direction="column" justifyContent="center" alignItems="center">
+                   <GridItem xs={12} sm ={12} md={12} >
+                  <TextField
+                        id="outlined-multiline-static"
+                        label="Remarks"
+                        multiline
+                        rows={4}
+                        defaultValue={applnData.remark}
+                        variant="outlined"
+                        style={{marginTop:'20px'}}
+                        inputProps={{
+                          readOnly:true
+                        }}
+                    />
+                    </GridItem>
+                    <GridItem xs={12} sm ={12} md={12}>
+                  <Button 
                   round 
                   color="rose" 
                   disabled={!portalOn} 
@@ -175,7 +192,9 @@ export default function Scholarship() {
                   onClick={()=>{setOpenDelete(true)}}
                    >
                         Remove Application
-                 </Button></div>}
+                 </Button>
+                 </GridItem>
+                 </GridContainer>}
               </CardFooter>
          <MCNApplyModal 
          open={openApply} 
