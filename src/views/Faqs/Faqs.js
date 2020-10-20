@@ -76,93 +76,10 @@ export default function FAQ() {
       
      
       <GridContainer direction="column" justify="center" alignItems="center">
-        {/* <GridItem xs={12} sm={12} md={11}>
+       
+        <GridItem xs={12} sm={12} md={10}>
+          {faqData.length!==0?
           <CustomTabs
-           
-            headerColor="primary"
-            tabs={[
-              {
-                tabName: "ERP",                
-                tabContent: (
-
-                  <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                     <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>Q. What is the semester distribution like (including CDCs and Electives)</span></strong></p>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                  <div>
-                   
-                    <p style={{ marginTop: '0cm', marginRight: '0cm', marginBottom: '8.0pt', marginLeft: '0cm', lineHeight: '107%', fontSize: '15px', fontFamily: '"Calibri",sans-serif' }}><strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>*Note:</span></strong><span style={{ fontSize: '17px', lineHeight: '107%', fontFamily: '"Arial",sans-serif' }}>&nbsp;A thesis is for 16 units and for a full semester duration. But a student has the option of pursuing a Thesis of 9 units concurrently with coursework over a full semester, in which case the additional coursework would be at least 2 courses of total 6 units to meet the minimum unit requirements.</span></p>
-                  </div>
-                  </AccordionDetails>
-                </Accordion>
-                
-               )
-              },
-              {
-                tabName: "Computer Science(CS)",              
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "Electrical and Electronics(EEE)",                
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "Electronics and Communication(ECE)",                
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "Civil",                
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "Mechanical",                
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "Chemical",
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "B.Pharm",
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "M.Sc Chemistry",
-                tabContent: (
-                  <></>
-                )
-              },
-              {
-                tabName: "M.Sc Physics",
-                tabContent: (
-                  <></>
-                )
-              },
-            ]}
-          />
-        </GridItem> */}
-        <GridItem xs={12} sm={12} md={11}>
-          {faqData.length!==0?<CustomTabs
-           
             headerColor="primary"
             tabs={faqData.map(items=>{
               return({
@@ -179,6 +96,7 @@ export default function FAQ() {
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
+                        style={{whiteSpace:'pre-wrap'}}
                       >
                          <b>{qa.q}</b>
                       </AccordionSummary>

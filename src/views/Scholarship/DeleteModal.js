@@ -81,7 +81,7 @@ React.useEffect(()=>{
       console.log(err);
     }
   }
-},[sendingData,token])
+})
 
     
 

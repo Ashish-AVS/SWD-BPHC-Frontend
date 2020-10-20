@@ -4,7 +4,7 @@ import moment from 'moment';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 //import CircularProgress from '@material-ui/core/CircularProgress';
-import Snackbar from '@material-ui/core/Snackbar';
+
 import MuiAlert from '@material-ui/lab/Alert';
 import RefreshIcon from '@material-ui/icons/Refresh';
 // core components
@@ -151,7 +151,7 @@ export default function Outstation() {
 
   React.useEffect(()=>{
     try{
-      if (status == 0) {
+      if (status === 0) {
         const fetchData0 = async () => {
           const result = await fetch(`${BaseUrl}/api/o/counsellor/booked`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -176,29 +176,7 @@ export default function Outstation() {
         }
         fetchData0();
       }
-      if (status === 1) {
-        const fetchData1 = async () => {
-          const result = await fetch(`${BaseUrl}/api/o/counsellor/free`, {
-            headers: { Authorization: `Bearer ${token}` }
-
-          });
-          const res = await result.json();
-          if (res.err===false) {
-            setData1(
-              res.data.map((info, index) => {
-                let hour= moment(info.slot,'H').format('hh:mm a');
-                let hour1=moment(info.slot,'H').add(1,'h').format('hh:mm a');
-                return {sno:index+1,date:info.date,slotTime:`${hour}-${hour1}`,slot:info.slot}
-              })
-            )
-          }
-          else if (res.err === true) {
-            setErr(true);
-            setErrMsg(res.msg);
-          }
-        }
-        fetchData1();
-      } 
+       
 
   }catch(err){
       console.log(err);
@@ -218,7 +196,7 @@ export default function Outstation() {
         <GridItem xs={12} sm={12} md={12} >
         <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>GOODIES DATA</b></h4>
+              <h4 className={classes.cardTitleWhite}><b>COUNSELLOR </b></h4>
             </CardHeader>
             <MaterialTable
                   title="UPCOMING BOOKED SLOTS"

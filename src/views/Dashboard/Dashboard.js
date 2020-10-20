@@ -60,7 +60,12 @@ export default function Dashboard() {
   const [messDetails,setMessDetails]=React.useState({});
   let messNo=messDetails.mess;
   let [messMenu,setMessMenu]=React.useState([]);
-  
+  const logout=()=>{
+    localStorage.removeItem("tokens");
+    localStorage.removeItem("data");
+    onLogin(false);  
+    return (<Redirect exact to='/login-page' />);
+  }
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
@@ -80,7 +85,7 @@ export default function Dashboard() {
       console.log(err);
     }
   
-  },[uid]);
+  },[uid,token]);
   
   React.useEffect(()=>{
     if(messDetails.menu!==undefined){
@@ -92,12 +97,7 @@ export default function Dashboard() {
     ) 
     }
   },[messDetails])
-  const logout=()=>{
-    localStorage.removeItem("tokens");
-    localStorage.removeItem("data");
-    onLogin(false);  
-    return (<Redirect exact to='/login-page' />);
-  }
+  
 
   const classes = useStyles();
   return (

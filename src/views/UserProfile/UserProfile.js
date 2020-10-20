@@ -132,8 +132,10 @@ export default function UserProfile() {
   const [isSessionError, setIsSessionError] = React.useState(false);
   const { onLogin } = useAuth();
   const [isFetching,setIsFetching]=React.useState(true);
+  const [isFetching1,setIsFetching1]=React.useState(true);
   const [isEnabled,setIsEnabled]=React.useState(false);
   const [profileUpdated,setProfileUpdated]=React.useState(false);
+  const [mentorData,setMentorData]=React.useState(false);
  // const [valueChanged,setValueChanged]=React.useState(false);
   const [updatingProfile,setUpdatingProfile]=React.useState(false);
   React.useEffect(()=>{
@@ -155,6 +157,22 @@ export default function UserProfile() {
         }
   }
     fetchData();
+    const fetchData1= async ()=>{
+      
+      const result= await fetch(`${BaseUrl}/api/ll/mentor`,{
+        headers:{Authorization:token}
+      }) ;
+      const res = await result.json();
+      if(res.err===false){
+      setMentorData(res.data)
+      setIsFetching1(false);
+      }
+      else if(res.err===true && result.status===401){
+      setIsSessionError(true);
+          logout();
+        }
+  }
+    fetchData1();    
     
   }catch(err){
       console.log(err);
@@ -913,8 +931,10 @@ export default function UserProfile() {
             </CardFooter>
           </Card>
         </GridItem>
+        <GridItem xs={12} sm={12} md={4}>
         <GridContainer  direction="column" >
-          <GridItem  >
+         { mentorData.length===1?
+         <GridItem >
           <Card >
             <CardAvatar profile>
               <a href="#pablo" onClick={e => e.preventDefault()}>
@@ -923,14 +943,14 @@ export default function UserProfile() {
             </CardAvatar>
             <CardBody >
               <h6 >Your Mentor</h6>
-              <h4 className={classes.cardTitle}><b>Prof. G. Sunder</b></h4>
+              <h4 className={classes.cardTitle}><b>{mentorData[0].prof_name}</b></h4>
               <h7><b>
-              <a href="mailto:profmail@hyderabad.bits-pilani.ac.in?subject=Query"> profmail@hyderabad.bits-pilani.ac.in</a>
+              <a href={`mailto:${mentorData[0].prof_mail}?subject=Query`}> {mentorData[0].prof_mail}</a>
               </b> </h7>
-              <p>Ph No. 040-1111-1111</p>              
+                           
             </CardBody>
           </Card>
-          </GridItem>
+          </GridItem>:null}
           <GridItem >
             <Button  round color="info" onClick={()=>{setOpen(true)}} >
              Change Password
@@ -938,6 +958,7 @@ export default function UserProfile() {
           </GridItem>
           
          </GridContainer>
+         </GridItem>
       </GridContainer>
       <Snackbar
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}

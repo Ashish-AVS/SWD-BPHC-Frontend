@@ -10,7 +10,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
-
+import {BaseUrl} from "variables/BaseUrl";
 
 //Core Components
 import Button from "components/CustomButtons/Button.js";
@@ -37,31 +37,60 @@ const [open,setOpen]=React.useState(false);
 const [data,setData]=React.useState();
 const [isFetching,setIsfetching]=React.useState(false)
 const [isFetched,setIsFetched]=React.useState(false)
+//const [isFetched,setIsFetched]=React.useState(false)
+const token=JSON.parse(localStorage.getItem("tokens"));
+
 React.useEffect(()=>{
     
     try{
-      const fetchData= async ()=>{
-      setData( await csv(office)) ;
-      setIsfetching(true)        
-      
-      
-    }
-  fetchData();
- 
-  }catch(err){
-      console.log(err);
-    }
-  },[])
-  React.useEffect(()=>{
-if(isFetching===true)
-setIsFetched(true);
+        const fetchData= async ()=>{
+          const result= await fetch(`${BaseUrl}/api/con/office`,{
+            headers:{Authorization:token}
+          }) ;
+          const res = await result.json();
+          const off=[];
+          res.data.map(item=>{ 
+            item.off.map(item1=>{
+             off.push(item1);
+           })
+         })
+         //console.log(off)
+          setData(off.map((item,index)=>{
+            return {sno:index+1,name:item.name,designation:item.designation,email:item.email}
+          }))
+         setIsFetched(true);
 
-  },[isFetching])
+      }
+        fetchData();
+        
+      }catch(err){
+          console.log(err);
+        }
+      
+  },[])
+
+// React.useEffect(()=>{
+    
+//     try{
+//       const fetchData= async ()=>{
+//       setData( await csv(office)) ;
+//       setIsfetching(true)        
+      
+      
+//     }
+//   fetchData();
+ 
+//   }catch(err){
+//       console.log(err);
+//     }
+//   },[])
+//   React.useEffect(()=>{
+// if(isFetching===true)
+// setIsFetched(true);
+
+//   },[isFetching])
   let modal=<></>
   if(isFetched===true){
-    const columns1= data.columns.map(item=>{
-        return {title:item, field:item}
-    })
     modal=<Dialog
               classes={{
                 root: classes.center,
@@ -98,7 +127,11 @@ setIsFetched(true);
               >
                  <MaterialTable
                   title="ADMINISTRATIVE HEADS"
-                  columns={columns1}
+                  columns={[
+                    {title:"S.No", field:'sno'},
+                    {title:"Name", field:'name'},
+                    {title:"Email", field:'email'},
+                    {title:"Designation", field:'designation'}]}
                   data={data}
                   options={{
                     pageSize:20,

@@ -102,7 +102,7 @@ const dashboardRoutes = [
   },
   {
     path: "/counsellor",
-    id:"counselor",
+    id:"counsellor",
     name: "Counsellor",
     icon: EventNoteIcon,
     component: Counsellor,

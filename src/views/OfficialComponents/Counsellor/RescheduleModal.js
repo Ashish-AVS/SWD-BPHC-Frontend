@@ -44,7 +44,6 @@ export default function CancelModal({
    }){
 const classes=useStyles();
 let DateArray=[];
-const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("officialtokens"));
 const [bookData,setBookData]=React.useState({date:'',slot:''});
 const [slotData,setSlotData]=React.useState([]);
@@ -136,7 +135,7 @@ React.useEffect(()=>{
       console.log(err);
     }
   }
-},[sendingData,uid,token,cancelId,setOpen,setIsUpdated])
+},[sendingData,token,cancelId,setOpen,setIsUpdated,bookData])
 function removeDuplicates(array) {
     return [...new Set(array)]
   }
@@ -220,9 +219,10 @@ function removeDuplicates(array) {
                             >
                                 <MenuItem value={''}>Select</MenuItem>
                                 {slotData.map(item => {
-                                    if (bookData.date === item.date)
+                                    if (bookData.date === item.date){
                                         return <MenuItem value={item.slot}>{item.slotTime}</MenuItem>
-                                })}
+                                    }
+                                    })}
                             </Select>
                         </FormControl>
                     </GridItem>

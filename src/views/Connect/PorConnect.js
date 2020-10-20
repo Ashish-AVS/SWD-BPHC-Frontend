@@ -81,52 +81,49 @@ function PorModal({open,setOpen,porData}){
                 {
                   tabName: "SWD",                
                   tabContent: (
+                    <GridContainer >
+                <GridItem xs={12} sm={12} md={12}>
                     <MaterialTable
+                    title="SWD Nucleus"
                   columns=
                  {[{title:"Name", field:'name'},
                   {title:"User ID", field:'uid'},
                   {title:"Phone No.", field:'phone'},
                   {title:"Designation", field:'designation'}]}                  
                   data={porData.swd}
+                  
+                  options={{
+                    
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    
+                    }}
+                  
                   />
-                  )
-                },
-                {
-                  tabName: "CRC",                
-                  tabContent: (
-                    <MaterialTable
-                  columns=
-                 {[{title:"Name", field:'name'},
-                  {title:"User ID", field:'uid'},
-                  {title:"Phone No.", field:'phone'},
-                  {title:"Designation", field:'designation'}]}                  
-                  data={porData.crc}
-                  />
-                  )
-                },
-                {
-                  tabName: "SMC",                
-                  tabContent: (
-                    <MaterialTable
-                  columns=
-                 {[{title:"Name", field:'name'},
-                  {title:"User ID", field:'uid'},
-                  {title:"Phone No.", field:'phone'},
-                  {title:"Designation", field:'designation'}]}                  
-                  data={porData.smc}
-                  />
+                </GridItem>
+                   </GridContainer>
+                
                   )
                 },
                 {
                   tabName: "SUC",                
                   tabContent: (
                     <MaterialTable
+                    title="Student Union"
                   columns=
                  {[{title:"Name", field:'name'},
                   {title:"User ID", field:'uid'},
                   {title:"Phone No.", field:'phone'},
                   {title:"Designation", field:'designation'}]}                  
                   data={porData.suc}
+                  options={{
+                    
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    
+                    }}
                   />
                   )
                 },
@@ -134,12 +131,62 @@ function PorModal({open,setOpen,porData}){
                   tabName: "EC",                
                   tabContent: (
                     <MaterialTable
+                    title="Election Commission"
                   columns=
                  {[{title:"Name", field:'name'},
                   {title:"User ID", field:'uid'},
                   {title:"Phone No.", field:'phone'},
                   {title:"Designation", field:'designation'}]}                  
                   data={porData.ec}
+                  options={{
+                    
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    
+                    }}
+                  />
+                  )
+                },
+                {
+                  tabName: "CRC",                
+                  tabContent: (
+                    <MaterialTable
+                    title="CRC Committee"
+                  columns=
+                 {[{title:"Name", field:'name'},
+                  {title:"User ID", field:'uid'},
+                  {title:"Phone No.", field:'phone'},
+                  {title:"Designation", field:'designation'}]}                  
+                  data={porData.crc}
+                  options={{
+                    
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    
+                    }}
+                  />
+                  )
+                },
+                {
+                  tabName: "SMC",                
+                  tabContent: (
+                    <MaterialTable
+                    title="Student Mess Council"
+                  columns=
+                 {[{title:"Name", field:'name'},
+                  {title:"User ID", field:'uid'},
+                  {title:"Phone No.", field:'phone'},
+                  {title:"Designation", field:'designation'}]}                  
+                  data={porData.smc}
+                  options={{
+                    
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    
+                    }}
                   />
                   )
                 }
@@ -180,7 +227,7 @@ React.useEffect(()=>{
           }) ;
           const res = await result.json();
           setPorData(res.data)
-          console.log(res.data.swd);
+          console.log(res.data);
 
       }
         fetchData();

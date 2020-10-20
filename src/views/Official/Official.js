@@ -10,8 +10,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import People from "@material-ui/icons/People";
 
 // core components
-
-
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import GridContainer from "components/Grid/GridContainer0.js";
 import GridItem from "components/Grid/GridItem0.js";
 import Button from "components/CustomButtons/Button.js";
@@ -196,7 +198,7 @@ export default function OfficialLogin(props) {
                     <div style={{display:'flex',justifyContent:'center'}}>
                     <Link to="/"><h6>Back to home page </h6></Link>
                     </div>
-                    <CustomInput
+                    {/* <CustomInput
                       onChange={(e)=>{
                         setId(e.target.value);
                         }}
@@ -214,7 +216,27 @@ export default function OfficialLogin(props) {
                           </InputAdornment>
                         )
                       }}
-                    />
+                    /> */}
+                    <FormControl fullWidth className={classes.formControl}>
+      <InputLabel className={classes.labelRoot}>OfficialID</InputLabel>
+      <Select
+        id='id'
+        className={classes.input+" "+classes.underline}
+        onChange={(e)=>{
+          setId(e.target.value);
+          }}
+        
+       >
+         <MenuItem value={'swd'}>SWD</MenuItem>
+         <MenuItem value={'chief_warden'}>CHIEF WARDEN</MenuItem>
+         <MenuItem value={'MESS1'}>MESS 1</MenuItem>
+         <MenuItem value={'MESS2'}>MESS 2</MenuItem>
+         <MenuItem value={'vk'}>VISHWAKARMA BHAWAN</MenuItem>
+         <MenuItem value={'vy'}>VYAS BHAWAN</MenuItem>
+         <MenuItem value={'me'}>MEERA BHAWAN</MenuItem>
+         <MenuItem value={'vm'}>VALMIKI BHAWAN</MenuItem>
+      </Select>
+     </FormControl>
                     <CustomInput
                       labelText="Password"
                       id="pwd"

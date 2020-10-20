@@ -108,7 +108,7 @@ setIsFetched(true);
                       color: '#FFF'
                     },
                     rowStyle: {
-                      border: "1.4px solid black",
+                      border: "1px solid black",
                     }
                   }}
                   />           
