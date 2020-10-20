@@ -195,7 +195,7 @@ export default function UserProfile() {
               bank: profile.bank,
               blood: profile.blood,
               bonafide_no: profile.bonafide_no,
-              branch: profile.branch,
+              
               category: profile.category,
               city: profile.city,
               current_med: profile.current_med,
@@ -483,22 +483,7 @@ export default function UserProfile() {
       />
       </GridItem>
   </GridContainer>
-  <GridContainer direction="row"  justify="flex-start"  alignItems="flex-start">
-        <GridItem xs={12} sm={12} md={6}>
-      <CustomInput
-       labelText="Branch"
-       id="branch"
-        formControlProps={{
-          fullWidth: true
-        }}
-        inputProps={{
-          defaultValue:profile.branch,
-          name:'branch'
-        }}
-        onChange={onChange}
-      />
-      </GridItem>
-      </GridContainer>
+  
   <h3><b>MEDICAL DETAILS</b></h3>
   <GridContainer>
     <GridItem xs={12} sm={12} md={4}>
