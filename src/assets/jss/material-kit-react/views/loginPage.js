@@ -1,4 +1,8 @@
 import { container } from "assets/jss/material-kit-react.js";
+import {
+  primaryColor,
+  defaultFont
+} from "assets/jss/material-kit-react.js";
 
 const signupPageStyle = {
   container: {
@@ -85,7 +89,30 @@ const signupPageStyle = {
   },
   inputIconsColor: {
     color: "#495057"
-  }
+  },
+  underline: {
+    "&:hover:not($disabled):before,&:before": {
+      borderColor: "#D2D2D2 !important",
+      borderWidth: "1px !important"
+    },
+    "&:after": {
+      borderColor: primaryColor
+    }
+  },
+  label: {
+    color: "rgba(0, 0, 0, 0.26)",
+    top:"-17px",
+    fontSize: "12px",
+    transition: "0.3s ease all",
+    lineHeight: "1.428571429",
+    fontWeight: "400",
+    paddingLeft: "0",
+    letterSpacing: "normal",
+    "& + $underline": {
+      marginTop: "0px"
+    }
+  },
+  
 };
 
 export default signupPageStyle;

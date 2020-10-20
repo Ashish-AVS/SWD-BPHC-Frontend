@@ -96,11 +96,11 @@ export default function FAQ() {
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1a-content"
                         id="panel1a-header"
-                        style={{whiteSpace:'pre-wrap'}}
+                        
                       >
                          <b>{qa.q}</b>
                       </AccordionSummary>
-                      <AccordionDetails>
+                      <AccordionDetails style={{whiteSpace:'pre-wrap'}}>
                       {qa.a}
                       </AccordionDetails>
                     </Accordion>)

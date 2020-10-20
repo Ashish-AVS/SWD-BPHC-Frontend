@@ -7,7 +7,7 @@ import Icon from "@material-ui/core/Icon";
 import CircularProgress from '@material-ui/core/CircularProgress';
 // @material-ui/icons
 //import Email from "@material-ui/icons/Email";
-import People from "@material-ui/icons/People";
+//import People from "@material-ui/icons/People";
 
 // core components
 import InputLabel from "@material-ui/core/InputLabel";
@@ -22,17 +22,20 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import SnackbarContent from "components/Snackbar/SnackbarContent";
-import Clearfix from "components/Clearfix/Clearfix";
 import { useAuth } from "context/auth";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg-official.jpg";
-import { json } from "d3";
+//import { json } from "d3";
 import {BaseUrl} from "variables/BaseUrl";
 const useStyles = makeStyles(styles);
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 
 export default function OfficialLogin(props) {
@@ -42,6 +45,9 @@ export default function OfficialLogin(props) {
   const [isLoggingIn, setLoggingIn]=useState(false);
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
+  const [conError,setConError]=useState(false);
+  let t;
+  const [timer,setTimer]=React.useState(false);
   const [loading,setLoading]=React.useState(false);
   const [id,setId]= React.useState();
   const [pwd,setPwd]=React.useState();
@@ -95,7 +101,7 @@ export default function OfficialLogin(props) {
            body:JSON.stringify({
              id:id,
              password:pwd,
-             type:"0"
+             type:"1"
           }),
           signal:signal      
         })
@@ -110,13 +116,16 @@ export default function OfficialLogin(props) {
             setLoggingIn(false);
             setEmptyError(true);
             setLoading(false);
+            removeTimer();
           } 
           else if(result.status===401){
             setLoggingIn(false);
             setIsError(true);
             setLoading(false);
+            removeTimer()
           }     
         }
+        setTimer(true);
         fetchData();
       }catch(err){
           
@@ -143,7 +152,26 @@ export default function OfficialLogin(props) {
   }
  },[isLoggedIn,officialAuthTokens,props.history])
  
+ React.useEffect(()=>{
+  if(timer===true){
+    timeUp();
+    return ()=>{
+      removeTimer();
+      setTimer(false);
+    }
+  }
+})
 
+const timeUp=()=>{
+ t= setTimeout(()=>{
+    setLoading(false);
+    setLoggingIn(false);
+    setConError(true);
+  },12000)
+}
+const removeTimer=()=>{
+  clearTimeout(t);
+}
  setTimeout(function() {
     setCardAnimation("");
   }, 700);
@@ -170,31 +198,7 @@ export default function OfficialLogin(props) {
                   </CardHeader>
                  
                   <CardBody>
-                  {emptyError?
-                  <div>
-                    <SnackbarContent
-                      message={
-                      <span >
-                        <b>INVALID CREDENTIALS:</b>Provide valid input
-                      </span>
-                        }
-                      close
-                      color="danger"
-                      icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
-                    {isError?
-                  <div><SnackbarContent
-                    message={
-                      <span>
-                         <b>UN-AUTHORISED:</b>Incorrect credentials
-                       </span>
-                             }
-                    close
-                    color="danger"
-                    icon="info_outline"
-                    />
-                    <Clearfix /></div>:null}
+                  
                     <div style={{display:'flex',justifyContent:'center'}}>
                     <Link to="/"><h6>Back to home page </h6></Link>
                     </div>
@@ -266,9 +270,11 @@ export default function OfficialLogin(props) {
                              Login
                       </Button>
 
-                      {loading?<CircularProgress size={24} color="primary"/>:null}
-                      </GridItem>
                       
+                      </GridItem>
+                      <GridItem>
+                    {loading?<CircularProgress size={24}  style={{position:'inherit',left:'45%'}} color="primary"/>:null}                     
+                    </GridItem>
                     </GridContainer>
                   </CardFooter>
                 </form>
@@ -278,6 +284,51 @@ export default function OfficialLogin(props) {
         </div>
         
       </div>
+      <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={isError}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setIsError(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setIsError(false)
+              }}
+              severity="error">
+              Invalid Credentials
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={conError}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setConError(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setConError(false)
+              }}
+              severity="error">
+              Error in Connection
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'center',vertical:'top'}}
+            open={emptyError}
+            autoHideDuration={4000}
+            onClose={()=>{
+              setEmptyError(false)
+            }}>
+            <Alert
+              onClose={()=>{
+                setEmptyError(false)
+              }}
+              severity="error">
+              Empty Fields Detected!
+        </Alert>
+          </Snackbar>
     </div>
   );
 }
