@@ -215,12 +215,25 @@ const removeTimer=()=>{
        >
          <MenuItem value={'swd'}>SWD</MenuItem>
          <MenuItem value={'chief_warden'}>CHIEF WARDEN</MenuItem>
-         <MenuItem value={'MESS1'}>MESS 1</MenuItem>
-         <MenuItem value={'MESS2'}>MESS 2</MenuItem>
+         <MenuItem value={'mess1'}>MESS 1</MenuItem>
+         <MenuItem value={'mess2'}>MESS 2</MenuItem>
          <MenuItem value={'vk'}>VISHWAKARMA BHAWAN</MenuItem>
          <MenuItem value={'vy'}>VYAS BHAWAN</MenuItem>
-         <MenuItem value={'me'}>MEERA BHAWAN</MenuItem>
+         <MenuItem value={'m'}>MEERA BHAWAN</MenuItem>
          <MenuItem value={'vm'}>VALMIKI BHAWAN</MenuItem>
+         <MenuItem value={'s'}>SHANKAR BHAWAN</MenuItem>
+         <MenuItem value={'b'}>BUDH BHAWAN</MenuItem>
+         <MenuItem value={'mm'}>MALVIYA BHAWAN</MenuItem>
+         <MenuItem value={'g'}>GAUTAM BHAWAN</MenuItem>
+         <MenuItem value={'ga'}>GANDHI BHAWAN</MenuItem>
+         <MenuItem value={'k'}>KRISHNA BHAWAN</MenuItem>
+         <MenuItem value={'r'}>RAM BHAWAN</MenuItem>
+         <MenuItem value={'mcn'}>MCN COMMITTEE</MenuItem>
+         <MenuItem value={'smc'}>SMC</MenuItem>
+         
+
+     
+     
       </Select>
      </FormControl>
                     <CustomInput
