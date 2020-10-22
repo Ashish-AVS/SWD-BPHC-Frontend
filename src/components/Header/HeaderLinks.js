@@ -61,9 +61,7 @@ export default function HeaderLinks(props) {
             >
               <AssignmentIcon className={classes.icons} />Complaints
             </Link>,
-             <Link to="/know-your-dept" className={classes.dropdownLink}>
-             <ImportContactsIcon className={classes.icons} /> Know Your Dept.
-            </Link>
+             
           ]}
         />
 
