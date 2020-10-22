@@ -11,9 +11,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
 import {BaseUrl} from "variables/BaseUrl";
-
+import Button from '@material-ui/core/Button';
 //Core Components
-import Button from "components/CustomButtons/Button.js";
+// import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -171,14 +171,13 @@ React.useEffect(()=>{
             </CardHeader>
             <CardBody>
                 <p>A complete Directory of all the office in-charges and administrative heads. </p>
-            </CardBody>
-            <CardFooter stats onClick={()=>{setOpen(true)}}>
-              <div className={classes.stats}>
-                <Button round color="info" >
+                <div className={classes.stats} style={{display:'flex',justifyContent:'center',marginTop:'30px'}}>
+                <Button variant="outlined" style={{borderRadius:'30px',border:"1px solid blue"}} color="primary" onClick={()=>{setOpen(true)}}>
                   View Directory
                 </Button>
               </div>
-            </CardFooter>    
+            </CardBody>
+           
             {modal}      
         </Card>
     );

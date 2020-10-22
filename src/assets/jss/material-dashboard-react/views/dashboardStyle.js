@@ -51,6 +51,12 @@ const dashboardStyle = {
     position: "relative",
     
   },
+  note3: {
+    paddingLeft: "40%",
+    marginBottom: "30px",
+    position: "relative",
+    
+  },
   stats: {
     color: grayColor[0],
     display: "inline-flex",

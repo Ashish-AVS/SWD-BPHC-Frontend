@@ -2,14 +2,9 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
-import Card from "components/Card/Card.js";
+
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter";
-import Button from "components/CustomButtons/Button.js";
-import MCNApplyModal from './MCNApplyModal';
-import EditModal from './EditModal';
-import DeleteModal from './DeleteModal';
-import {BaseUrl} from "variables/BaseUrl";
+
 const styles = {
   typo: {
     paddingLeft: "10%",

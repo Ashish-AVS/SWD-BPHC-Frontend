@@ -100,7 +100,7 @@ export default function FAQ() {
                       >
                          <b>{qa.q}</b>
                       </AccordionSummary>
-                      <AccordionDetails style={{whiteSpace:'pre-wrap'}}>
+                      <AccordionDetails style={{whiteSpace:'pre-wrap',fontSize:'17.5px',fontWeight:'400'}} >
                       {qa.a}
                       </AccordionDetails>
                     </Accordion>)

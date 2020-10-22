@@ -11,8 +11,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import Button from "components/CustomButtons/Button.js";
-
+import Button from '@material-ui/core/Button';
 import BusModal from "views/Modals/BusModal.js";
 import ProfConnect from "./ProfConnect";
 import OfficeConnect from "./OfficeConnect";
@@ -61,15 +60,16 @@ export default function Connect() {
             </CardHeader>
             <CardBody>
                 <p>Timings of 212 bus from Campus to Secundrabad Railway Station and vice-versa</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info" onClick={()=>{setBusModal(true)}}>
+                <div className={classes.stats} style={{display:'flex',justifyContent:'center',marginTop:'30px'}}>
+                <Button variant="outlined" style={{borderRadius:'30px',border:"1px solid blue"}} color="primary" onClick={()=>{setBusModal(true)}}>
                   View Directory
                 </Button>
-              </div>
+                </div>
+            </CardBody>
+            
+            
               <BusModal Modal={busModal} openModal={setBusModal}/>
-            </CardFooter>
+            
           </Card>
         </GridItem>
             </GridContainer>

@@ -911,7 +911,7 @@ export default function UserProfile() {
              {UserComponent}
             </CardBody>
             <CardFooter>
-              <Button color="info" disabled={!isEnabled} onClick={()=>{setUpdatingProfile(true)}}>Update Profile</Button>
+              <Button color="primary"  round disabled={!isEnabled} onClick={()=>{setUpdatingProfile(true)}}>Update Profile</Button>
              
             </CardFooter>
           </Card>
@@ -937,7 +937,7 @@ export default function UserProfile() {
           </Card>
           </GridItem>:null}
           <GridItem >
-            <Button  round color="info" onClick={()=>{setOpen(true)}} >
+            <Button  round color="primary" onClick={()=>{setOpen(true)}} >
              Change Password
             </Button>
           </GridItem>

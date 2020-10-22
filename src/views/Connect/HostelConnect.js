@@ -10,14 +10,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
-
+import Button from '@material-ui/core/Button';
 
 //Core Components
-import Button from "components/CustomButtons/Button.js";
+//import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 
 
 //import Table from "components/Table/Table";
@@ -138,14 +137,13 @@ setIsFetched(true);
             </CardHeader>
             <CardBody>
                 <p>A complete Directory of all contacts of wardens, Assistant wardens ,Hostel officials and Chief Warden</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info" onClick={()=>{setOpen(true)}}>
+                <div className={classes.stats} style={{display:'flex',justifyContent:'center',marginTop:'30px'}}>
+                <Button variant="outlined" style={{borderRadius:'30px',border:"1px solid blue"}} color="primary" onClick={()=>{setOpen(true)}}>
                   View Directory
                 </Button>
               </div>
-            </CardFooter>    
+            </CardBody>
+
             {modal}      
         </Card>
     );

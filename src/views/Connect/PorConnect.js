@@ -11,14 +11,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import IconButton from "@material-ui/core/IconButton";
-
+import Button from '@material-ui/core/Button';
 
 //Core Components
-import Button from "components/CustomButtons/Button.js";
+// import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 import {BaseUrl} from "variables/BaseUrl";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -249,14 +248,13 @@ React.useEffect(()=>{
             </CardHeader>
             <CardBody>
                 <p>A complete Directory of all the students holding some position in various places</p>
-            </CardBody>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Button round color="info" onClick={()=>{setOpen(true)}}>
+                <div className={classes.stats} style={{display:'flex',justifyContent:'center',marginTop:'30px'}}>
+                <Button variant="outlined" style={{borderRadius:'30px',border:"1px solid blue"}} color="primary" onClick={()=>{setOpen(true)}}>
                   View Directory
                 </Button>
-              </div>
-            </CardFooter>
+                </div>
+            </CardBody>
+            
            {isFetched?<PorModal open={open} setOpen={setOpen} porData={porData} />:null}
   
                 </Card>

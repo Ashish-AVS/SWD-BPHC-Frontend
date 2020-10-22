@@ -122,12 +122,12 @@ export default function Dashboard() {
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Button round color="rose" disabled={messNo===undefined} onClick={()=>{openMess(true)}}>
+                <Button round color="primary" disabled={messNo===undefined} onClick={()=>{openMess(true)}}>
                   Check Menu
                 </Button>
               </div>
               <div className={classes.stats}>
-                <Button round color="rose" disabled={messNo===undefined} onClick={()=>{openGrace(true)}}>
+                <Button round color="primary" disabled={messNo===undefined} onClick={()=>{openGrace(true)}}>
                   Grace
                 </Button>
               </div>
@@ -148,7 +148,7 @@ export default function Dashboard() {
             </CardBody>*/}
             <CardFooter stats>
               <div className={classes.stats}>
-                <Button round color="rose">Check Events Calender</Button>
+                <Button round color="primary">Check Events Calender</Button>
               </div>
             </CardFooter>
           </Card>
@@ -164,7 +164,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Button round color="rose" onClick={()=>{openModal(true)}}>Post a Complaint</Button>
+                <Button round color="primary" onClick={()=>{openModal(true)}}>Post a Complaint</Button>
                 
               </div>
             </CardFooter>

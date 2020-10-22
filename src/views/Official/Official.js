@@ -202,25 +202,7 @@ const removeTimer=()=>{
                     <div style={{display:'flex',justifyContent:'center'}}>
                     <Link to="/"><h6>Back to home page </h6></Link>
                     </div>
-                    {/* <CustomInput
-                      onChange={(e)=>{
-                        setId(e.target.value);
-                        }}
-                      labelText="OfficialID"
-                      
-                      id="id"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "text",
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <People className={classes.inputIconsColor} />
-                          </InputAdornment>
-                        )
-                      }}
-                    /> */}
+                   
                     <FormControl fullWidth className={classes.formControl}>
       <InputLabel className={classes.labelRoot}>OfficialID</InputLabel>
       <Select

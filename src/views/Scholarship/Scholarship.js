@@ -97,7 +97,7 @@ export default function Scholarship() {
             })
             const res=await result.json();
             if (result.status===200||result.status===201||result.status===304) {
-              console.log(res.data.upload)
+              
               setApplnData(res.data);
               setAppln(true);
               
@@ -161,7 +161,7 @@ export default function Scholarship() {
                   }} >
                       Apply For MCN
                  </Button>:
-                 <GridContainer spacing={4} direction="column" justifyContent="center" alignItems="center">
+                 <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
                    <GridItem xs={12} sm ={12} md={12} >
                   <TextField
                         id="outlined-multiline-static"
@@ -188,7 +188,7 @@ export default function Scholarship() {
                  <Button 
                   round 
                   color="danger" 
-                  disabled={!portalOn} 
+                  disabled={portalOn} 
                   onClick={()=>{setOpenDelete(true)}}
                    >
                         Remove Application

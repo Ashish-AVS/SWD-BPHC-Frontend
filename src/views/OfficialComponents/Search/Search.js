@@ -306,7 +306,7 @@ export default function Search() {
                        <MenuItem value={''}>Select</MenuItem>
                        <MenuItem value={'M'}>Male</MenuItem>
                        <MenuItem value={'F'}>Female</MenuItem>
-                       <MenuItem value={'Others'}>Others</MenuItem>
+                       <MenuItem value={'O'}>Others</MenuItem>
                   </Select>
                 </FormControl>
                      :
@@ -409,7 +409,7 @@ export default function Search() {
                  <MenuItem value={''}>Select</MenuItem>
                  <MenuItem value={'M'}>Male</MenuItem>
                  <MenuItem value={'F'}>Female</MenuItem>
-                 <MenuItem value={'Others'}>Others</MenuItem>
+                 <MenuItem value={'O'}>Others</MenuItem>
                </Select>
              </FormControl>
                   :

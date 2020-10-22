@@ -125,7 +125,10 @@ else{
          deduction={deductions}
          setIsUpdated={setIsUpdated}
          />)
-  }):null}
+  }):
+  <div className={classes.note}>
+  <h3><b>No Goodies to show </b></h3>
+</div>}
   {!addGoodie?
   <GridItem xs={12} sm={12} md={12}>
     <div style={{display:'flex',justifyContent:'center'}}>
