@@ -1,4 +1,4 @@
-const BaseUrl='http://swdnucleus.ml:3000';
+const BaseUrl='http://swd.bits-hyderbad.ac.in';
 
 module.exports={
     BaseUrl

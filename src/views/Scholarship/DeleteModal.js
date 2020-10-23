@@ -73,7 +73,7 @@ React.useEffect(()=>{
        }
       }
     sendData();
-    //console.log(totalQty);
+
    
     setSendingData(false);  
     }

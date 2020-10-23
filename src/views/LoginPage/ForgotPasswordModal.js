@@ -18,6 +18,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 import {BaseUrl} from "variables/BaseUrl";
@@ -42,10 +43,9 @@ const classes=useStyles();
 
 const [isError,setIsError]=React.useState(false);
 const [errMsg,setErrMsg]=React.useState('');
-
 const [uid,setUid]=React.useState('');
 const [sendingData,setSendingData]=React.useState(false)
-
+const [loading,setLoading]=React.useState(false);
 
 
 React.useEffect(()=>{
@@ -53,14 +53,17 @@ if(sendingData===true){
   
   try{
     const fetchData= async ()=>{
+      setLoading(true);
       const result= await fetch(`${BaseUrl}/api/auth/reset?uid=${uid}`) ;
       const res = await result.json();
       if(res.err===false&& result.status===201){      
       setUid('');
+      setLoading(false);
       setOpen(false); 
       setMailSent(true);      
   }
   else if(res.err===true){
+      setLoading(false);
       setIsError(true);
       setErrMsg(res.msg);
   }
@@ -128,8 +131,8 @@ if(sendingData===true){
                                     onChange={onChange}
                                     inputProps={{
                                       value:uid,
-                                        name: 'uid',
-                                        
+                                      name: 'uid',
+                                      placeholder:'f20XXXXXX'                                        
                                     }}
 
                                 />
@@ -143,12 +146,13 @@ if(sendingData===true){
 
                   </DialogContent>
                   <DialogActions className={classes.modalFooter}>
-                   
+                  {loading?<CircularProgress size={24} />:null} 
                   <Button
                       onClick={() => setSendingData(true)}
                       color="success"
                       solid="true"
                       round
+                      disabled={loading}
                     >
                      Submit
                   </Button>

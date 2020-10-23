@@ -220,13 +220,13 @@ const removeTimer=()=>{
                         setUid(e.target.value);
                         }}
                       labelText="UserID"
-                      placeholder="f201XXXXX"
                       id="uid"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
                         type: "text",
+                        placeholder:"f20XXXXXX",
                         value:uid,
                         endAdornment: (
                           <InputAdornment position="end">
