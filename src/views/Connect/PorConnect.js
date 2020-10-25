@@ -188,6 +188,27 @@ function PorModal({open,setOpen,porData}){
                     }}
                   />
                   )
+                },
+                {
+                  tabName: "PU",                
+                  tabContent: (
+                    <MaterialTable
+                    title="Placement Unit"
+                  columns=
+                 {[{title:"Name", field:'name'},
+                  {title:"User ID", field:'uid'},
+                  {title:"Phone No.", field:'phone'},
+                  {title:"Designation", field:'designation'}]}                  
+                  data={porData.pu}
+                  options={{
+                    
+                    search:true,
+                    pageSize:10,
+                    emptyRowsWhenPaging:false,
+                    
+                    }}
+                  />
+                  )
                 }
               ]}
             />
