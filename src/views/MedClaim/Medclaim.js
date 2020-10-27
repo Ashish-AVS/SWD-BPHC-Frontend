@@ -94,9 +94,9 @@ export default function Medclaim() {
 		<b>Name:</b> Raju Kumar, ADITYA BIRLA INSURANCE BROKERS LTD<br/>
 		<b>Email:</b> <a href="mailto:raju.r.kumar@adityabirlacapital.com">raju.r.kumar@adityabirlacapital.com</a><br/>
 		<b>Mobile Number:</b>+91 8510006711<br/><br/></p>
-		<b><p>For Group Mediclaim Policy Ready Reckoner of BITS Pilani Hyderabad Campus for AY 2020 - 21 :</p></b><Button disabled round color="info">Click Here</Button><br/><br/>
+		<b><p>For Group Mediclaim Policy Ready Reckoner of BITS Pilani Hyderabad Campus for AY 2020 - 21 :</p></b><Button disabled round color="primary">Click Here</Button><br/><br/>
 		<p><b>For Policy related assistance:</b> Contact Mr. Prasant Inturi on 9010202837 or Visit SWD office</p>
-		<b><p>For more details:</p></b><Button disabled round color="info">Click Here</Button><br/>
+		<b><p>For more details:</p></b><Button disabled round color="primary">Click Here</Button><br/>
 		<center><p><b>OR</b></p></center>
 		<p>Please feel free to write to them on <b><a href="mailto:care@libertyvideocon.com?subject=Query Regarding Medical Insurance Policy">care@libertyvideocon.com</a></b></p>
 		<center><p><b>OR</b></p></center>
@@ -108,7 +108,7 @@ export default function Medclaim() {
   <p><b>Membership ID:</b> {polNo}</p>
       </CardBody>
       <CardFooter>
-          <Button round color="info" disabled> Download PDF</Button>
+          <Button round color="primary" disabled> Download PDF</Button>
       </CardFooter>
     </Card>
   </div>
