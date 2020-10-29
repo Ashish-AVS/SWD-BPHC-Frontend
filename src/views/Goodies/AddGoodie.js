@@ -506,7 +506,7 @@ function convertTobase64(file){
                     checked={goodieAddData.xxxl}
                     control={<Checkbox color="primary" />}
                     label="XXXL"
-                    name='xxl'
+                    name='xxxl'
                     onChange={onCheckChange}
                     labelPlacement="end"
                   />

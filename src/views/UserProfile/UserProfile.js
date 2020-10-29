@@ -132,7 +132,7 @@ export default function UserProfile() {
   const [isSessionError, setIsSessionError] = React.useState(false);
   const { onLogin } = useAuth();
   const [isFetching,setIsFetching]=React.useState(true);
-  const [isFetching1,setIsFetching1]=React.useState(true);
+  const [fileSizeError,setFileSizeError]=React.useState(false);
   const [isEnabled,setIsEnabled]=React.useState(false);
   const [profileUpdated,setProfileUpdated]=React.useState(false);
   const [mentorData,setMentorData]=React.useState(false);
@@ -147,6 +147,7 @@ export default function UserProfile() {
       }) ;
       const res = await result.json();
       if(res.err===false){
+        console.log(res)
       setProfile(res.data.profile);
       setHostels(res.data.hostels);
       setIsFetching(false);
@@ -165,7 +166,7 @@ export default function UserProfile() {
       const res = await result.json();
       if(res.err===false){
       setMentorData(res.data)
-      setIsFetching1(false);
+      
       }
       else if(res.err===true && result.status===401){
       setIsSessionError(true);
@@ -189,13 +190,11 @@ export default function UserProfile() {
             headers:{'Content-Type':"application/json",Authorization:token},
             body:JSON.stringify({
               uid:uid,
-              
               aadhaar: profile.aadhaar,
               acno: profile.acno,
               bank: profile.bank,
               blood: profile.blood,
               bonafide_no: profile.bonafide_no,
-              
               category: profile.category,
               city: profile.city,
               current_med: profile.current_med,
@@ -284,19 +283,41 @@ export default function UserProfile() {
       }));
       
   }
+
+  async function  onImgChange(e){
+    const file=e.target.files[0];
+    if(file.size>1000000){
+      setFileSizeError(true);
+    }
+    else if(file!==undefined){
+      setFileSizeError(false)
+    const base64= await convertTobase64(file);
+    setProfile(prevState=>({
+      ...prevState,
+      pimage:base64
+    }))
+    }
+    }
+    function convertTobase64(file){
+      return new Promise((resolve,reject)=>{
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+        fileReader.onload=()=>{
+          resolve(fileReader.result)
+        }
+        fileReader.onerror=(error)=>{
+          reject(error)
+        }
+      })
+    }
+
   const UserComponent=isFetching?
-
- 
-
-  <h4>Loading Your Profile....</h4>
-
-  :
+  <h4>Loading Your Profile....</h4>  :
   <CardBody>
   <h3><b>PERSONAL DETAILS</b></h3>
   <GridContainer  justify="center">
     
     <GridItem xs={12} sm={12} md={4}>
-      
       <CustomInput
         labelText="Name"
         id="name"                    
@@ -441,17 +462,21 @@ export default function UserProfile() {
       />                  
     </GridItem>
     <GridItem xs={12} sm={12} md={4}>
-      <CustomInput
-        labelText="Category"
-        id="category"
-        formControlProps={{
-          fullWidth: true
-        }}
-        inputProps={{
-          defaultValue:profile.category,name:"category"
-        }}
+      
+      <FormControl fullWidth className={classes.formControl}>
+      <InputLabel className={classes.labelRoot}>Category</InputLabel>
+      <Select
+        name="category"
+        className={classes.input+" "+classes.underline}
+        value={profile.category}
         onChange={onChange}
-      />                  
+       >
+         <MenuItem value={'General'}>General</MenuItem>
+         <MenuItem value={'SC'}>Scheduled Caste (SC)</MenuItem>
+         <MenuItem value={'ST'}>Scheduled Tribe (ST)</MenuItem>
+         <MenuItem value={'OBC'}>Other Backward Class (OBC)</MenuItem>
+      </Select>
+     </FormControl>                 
     </GridItem>
     <GridItem xs={12} sm={12} md={6}>
       <CustomInput
@@ -878,7 +903,14 @@ export default function UserProfile() {
       />
       </GridItem>
   </GridContainer>
-  <GridItem xs={12} sm={12}>
+  { profile.uploadImage===1?
+         <GridItem style={{marginBottom:'50px'}}>
+           <h4><b>ID CARD IMAGE</b>(One Time Only)</h4>
+             <p >Hello ,{profile.name}<br/> Kindly upload your image below in .jpg/.jpeg format only (Maximum size-<b>2MB</b>)</p>
+             <input name="p_img" type='file' accept="image/jpeg" style={{marginTop:'10px'}} onChange={onImgChange}></input>                           
+            {fileSizeError?<p style={{color:'red'}}>*File size limit exceeded</p>:null}
+          </GridItem>:null}
+  <GridItem xs={12} sm={12} >
     <FormControlLabel
         control=
         {<Checkbox 
@@ -936,6 +968,7 @@ export default function UserProfile() {
             </CardBody>
           </Card>
           </GridItem>:null}
+          
           <GridItem >
             <Button  round color="primary" onClick={()=>{setOpen(true)}} >
              Change Password

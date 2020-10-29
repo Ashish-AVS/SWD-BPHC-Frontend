@@ -8,8 +8,8 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
-import BaseUrl from "variables/BaseUrl";
-import { set } from "d3";
+import {BaseUrl} from "variables/BaseUrl";
+
 const styles = {
   typo: {
     paddingLeft: "25%",
@@ -50,19 +50,21 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Medclaim() {
-  const [polNo,setPolNo]=React.useState("");
+  const [polNo,setPolNo]=React.useState(null);
   const classes = useStyles();
-  const token = JSON.stringify(localStorage.getItem("tokens"));
-  const medData=React.useState({})
+  const token=JSON.parse(localStorage.getItem("tokens"));
+  
   React.useEffect(()=>{
     try{
+
     const fetchData1= async ()=>{
       const result= await fetch(`${BaseUrl}/api/ll/insurance`,{
         headers:{Authorization:token}
       }) ;
       const res = await result.json();
       if(res.err===false){
-      setPolNo(res.data.pol_no);
+
+      setPolNo(res.data[0].pol_no);
       }
       else if(res.err===true) {
           alert(res.msg)
@@ -74,7 +76,7 @@ export default function Medclaim() {
       console.log(err);
     }
   
-  },[token]);
+  },[]);
   return (
       <div>
         <div className={classes.typo} style={{marginTop:"-50px"}}>

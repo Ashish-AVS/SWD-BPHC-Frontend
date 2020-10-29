@@ -14,6 +14,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Badge from "components/Badge/Badge.js";
 import CustomTabs from "components/CustomTabs/EditedTabs.js";
 import RemarkModal from "./RemarkModal";
+import RejectModal from "./RejectModal";
 import {BaseUrl} from "variables/BaseUrl";
 import {
     primaryColor,
@@ -122,7 +123,7 @@ export default function Outstation() {
   const [data0,setData0]=React.useState([]);
   const [data1,setData1]=React.useState([]);
   const [data2,setData2]=React.useState([]);
-  const [data3,setData3]=React.useState([]);  
+
   const [status,setStatus]=React.useState(0);
   const [dataSent,setDataSent]=React.useState(false)
   //const [loading,setLoading]=React.useState(false)
@@ -131,7 +132,9 @@ export default function Outstation() {
       //new_status:null
   //})
   const [success, setSuccess] = React.useState(false);
-  const [remarkData,setRemarkData]=React.useState({})
+  const [remarkData,setRemarkData]=React.useState({});
+  const [rejectData,setRejectData]=React.useState({});
+  const [openRejectModal,setOpenRejectModal]=React.useState(false);
   const [open,setOpen]=React.useState(false)
   const [updated,setUpdated]=React.useState(false)
   
@@ -424,7 +427,8 @@ export default function Outstation() {
                         disabled:rowData.statusCode!==0,
                         tooltip: 'Reject',
                         onClick: async (event, rowData) => {
-                          sendDenyData(rowData.uid)
+                          setRejectData(rowData);
+                          setOpenRejectModal(true);
                           }         
             
                       }),
@@ -501,6 +505,7 @@ export default function Outstation() {
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},                  
                    {title:"Category",field:"categ"},
+                   {title:"Remarks",field:"remark"},
                    {title:"Appln Status",field:"status"}
                   ]}
                   data={data2}
@@ -553,6 +558,7 @@ export default function Outstation() {
         </GridItem>
         </GridContainer>
          <RemarkModal open={open} setOpen={setOpen} setUpdated={setUpdated} data={remarkData}/>
+         <RejectModal open={openRejectModal} setOpen={setOpenRejectModal} setUpdated={setUpdated} data={rejectData}/>
   </div>
     );
 }

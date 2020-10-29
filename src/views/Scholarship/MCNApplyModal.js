@@ -207,18 +207,21 @@ if(sendingData===true){
                                 />
                       </GridItem>
                             <GridItem xs={12} sm={12} md={5}>
-                                <CustomInput
-                                    labelText="Category"                                 
-
-                                    formControlProps={{
-                                        fullWidth: true
-                                    }}
-                                    inputProps={{
-                                      value:mcnData.categ,
-                                         name: 'categ'
-                                    }}
-                                    onChange={onChange}
-                                />
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel className={classes.labelRoot}>Category</InputLabel>
+                    <Select
+                      name="categ"
+                      className={classes.input + " " + classes.underline}
+                      value={mcnData.categ}
+                      onChange={onChange}
+                    >
+                      
+                      <MenuItem value={'General'}>General</MenuItem>
+                      <MenuItem value={'SC'}>Scheduled Caste (SC)</MenuItem>
+                      <MenuItem value={'ST'}>Scheduled Tribe (ST)</MenuItem>
+                      <MenuItem value={'OBC'}>Other Backward Class (OBC)</MenuItem>
+                    </Select>
+                  </FormControl> 
                             </GridItem>
                             <GridItem xs={12} sm={12} md={5}>
                  <InputLabel className={classes.label}>

@@ -188,7 +188,7 @@ export default function Scholarship() {
                  <Button 
                   round 
                   color="danger" 
-                  disabled={portalOn} 
+                  disabled={!portalOn}
                   onClick={()=>{setOpenDelete(true)}}
                    >
                         Remove Application
