@@ -1,5 +1,10 @@
 import React from "react";
 import MaterialTable from "material-table";
+import {Redirect} from 'react-router-dom';
+import {saveAs} from 'file-saver';
+
+//Auth Components
+import { useAuth } from "context/auth";
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,6 +20,7 @@ import Badge from "components/Badge/Badge.js";
 import CustomTabs from "components/CustomTabs/EditedTabs.js";
 import RemarkModal from "./RemarkModal";
 import RejectModal from "./RejectModal";
+import Button from "components/CustomButtons/Button.js";
 import {BaseUrl} from "variables/BaseUrl";
 import {
     primaryColor,
@@ -123,22 +129,20 @@ export default function Outstation() {
   const [data0,setData0]=React.useState([]);
   const [data1,setData1]=React.useState([]);
   const [data2,setData2]=React.useState([]);
-
+  const [sendingData,setSendingData]=React.useState(false)
   const [status,setStatus]=React.useState(0);
   const [dataSent,setDataSent]=React.useState(false)
-  //const [loading,setLoading]=React.useState(false)
-  //const [outData,setOutData]=React.useState({
-    //  fsalary:null,
-      //new_status:null
-  //})
+  
   const [success, setSuccess] = React.useState(false);
   const [remarkData,setRemarkData]=React.useState({});
   const [rejectData,setRejectData]=React.useState({});
   const [openRejectModal,setOpenRejectModal]=React.useState(false);
   const [open,setOpen]=React.useState(false)
   const [updated,setUpdated]=React.useState(false)
-  
-    
+  const date = new Date()
+  const [err,setErr]=React.useState(false);
+  const [errMsg,setErrMsg]=React.useState('');
+  const {onOfficialLogin}=useAuth();  
   
 
   const handleClose = (event, reason) => {
@@ -175,15 +179,17 @@ export default function Outstation() {
                     badge=<Badge color="success">Accepted</Badge>
                 }
                
-                return { sno: index + 1, uid: info.uid, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload }
+                return { sno: index + 1, uid: info.uid,id: info.id , name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload,attached:info.attached}
               })
             )
           }
-          else if (result.status === 400) {
-            alert('task not completed');
+         
+          else if (res.err === true && result.status === 401) {
+            logout();
           }
-          else if (result.status === 401) {
-            alert('Session timed out. Login again');
+          else if (res.err===true) {
+            setErr(true);
+            setErrMsg(res.msg);
           }
         }
         fetchData0();
@@ -211,7 +217,7 @@ export default function Outstation() {
                 else if(info.status===1){
                     badge=<Badge color="success">Accepted</Badge>
                 }
-                return { sno: index + 1, uid: info.uid, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload }
+                return { sno: index + 1, uid: info.uid,id: info.id, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload,attached:info.attached }
               })
             )
           }
@@ -248,7 +254,7 @@ export default function Outstation() {
                     badge=<Badge color="success">Accepted</Badge>
                 }
                
-                return { sno: index + 1, uid: info.uid, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload }
+                return { sno: index + 1, uid: info.uid,id: info.id, name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload,attached:info.attached }
               })
 
             )
@@ -272,6 +278,37 @@ export default function Outstation() {
     }
   
   },[status,token,dataSent,updated]);
+
+  React.useEffect(()=>{
+    if(sendingData===true){
+    try{
+      const SendData=async ()=>{
+        const result =await fetch(`${BaseUrl}/api/o/mcn/export`,{
+          headers:{Authorization:`Bearer ${token}`,
+          Accept: "text/csv"}
+        })
+        const res= await result.text();
+        if(result.status===201||result.status===200||result.status===304){
+          const csvBlob=new Blob([res],{type:'text/csv'});
+          saveAs(csvBlob,`MCN-Data.csv`);
+          setSuccess(true);
+        }
+        else {
+          setErr(true);
+          setErrMsg('Error in Downloading!');
+        }
+        }
+      SendData();
+      setSendingData(false);
+      
+    }
+    catch(err){
+      console.log(err);
+      
+    }
+  }
+  
+  })
 
   const sendApplyData = async (uid) => {
 
@@ -332,35 +369,41 @@ export default function Outstation() {
     }
 
   }
-  const sendDenyData = async (uid) => {
-
-    const result = await fetch(`${BaseUrl}/api/o/mcn/change`, {
-      method: "post",
-      headers: { 'Content-Type': "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({
-        uid:uid,
-        new_status:-1,
-        remark:"Application Rejected"
-      })
-    })
-    const res = await result.json();
-    if (result.status === 200 || result.status === 201 || result.status === 304) {
-     setDataSent(`deny-${uid}`);
-     setSuccess(true);
-     
-     
-    }
-    else if (res.err===false) {
-      alert("error")
-    }
-    else if (result.status === 422) {
-      alert("Empty field")
-    }
-    else if (result.status === 500) {
-      alert("Server Error Contact SWD Nucleus")
-    }
-
+  const logout=()=>{
+    localStorage.removeItem("officialtokens");
+    onOfficialLogin(false);  
+    return (<Redirect exact to='/' />);
   }
+
+  // const sendDenyData = async (uid) => {
+
+  //   const result = await fetch(`${BaseUrl}/api/o/mcn/change`, {
+  //     method: "post",
+  //     headers: { 'Content-Type': "application/json", Authorization: `Bearer ${token}` },
+  //     body: JSON.stringify({
+  //       uid:uid,
+  //       new_status:-1,
+  //       remark:"Application Rejected"
+  //     })
+  //   })
+  //   const res = await result.json();
+  //   if (result.status === 200 || result.status === 201 || result.status === 304) {
+  //    setDataSent(`deny-${uid}`);
+  //    setSuccess(true);
+     
+     
+  //   }
+  //   else if (res.err===false) {
+  //     alert("error")
+  //   }
+  //   else if (result.status === 422) {
+  //     alert("Empty field")
+  //   }
+  //   else if (result.status === 500) {
+  //     alert("Server Error Contact SWD Nucleus")
+  //   }
+
+  // }
   
       
 
@@ -386,11 +429,12 @@ export default function Outstation() {
                   title="PENDING MCN APPLICATIONS"
                   columns={[
                    {title:"S No.",field:"sno"},
-                   {title:"Student ID",field:"uid"},
+                   {title:"Student ID",field:"id"},
                    {title:"Name",field:"name"},                   
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},                  
                    {title:"Category",field:"categ"},
+                   {title:"Documents Provided",field:"attached"},
                    {title:"Remarks",field:"remark"},
                    {title:"Appln Status",field:"status"}
                   ]}
@@ -454,7 +498,7 @@ export default function Outstation() {
                   title="ACCEPTED APPLICATIONS"
                   columns={[
                    {title:"S No.",field:"sno"},
-                   {title:"Student ID",field:"uid"},
+                   {title:"Student ID",field:"id"},
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},
                    {title:"Category",field:"categ"},
@@ -500,7 +544,7 @@ export default function Outstation() {
                   title="REJECTED APPLICATIONS"
                   columns={[
                     {title:"S No.",field:"sno"},
-                   {title:"Student ID",field:"uid"},
+                   {title:"Student ID",field:"id"},
                    {title:"Name",field:"name"},                   
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},                  
@@ -555,6 +599,22 @@ export default function Outstation() {
               Task Completed SuccessFully
         </Alert>
           </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={err}
+            autoHideDuration={4000}
+            onClose={()=>{setErr(false)}}>
+            <Alert
+              onClose={()=>{setErr(false)}}
+              severity="error">
+              {errMsg}
+        </Alert>
+          </Snackbar>
+        </GridItem>
+        <GridItem>
+        <Button  round color="success" onClick={()=>{setSendingData(true)}} >
+             Download CSV Data
+            </Button>
         </GridItem>
         </GridContainer>
          <RemarkModal open={open} setOpen={setOpen} setUpdated={setUpdated} data={remarkData}/>

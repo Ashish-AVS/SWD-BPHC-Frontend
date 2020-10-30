@@ -11,6 +11,7 @@ import CardFooter from "components/Card/CardFooter";
 import GridContainer from "components/Grid/GridContainer.js";
 import CustomTabs from "components/CustomTabs/EditedTabs1";
 import Button from "components/CustomButtons/Button.js";
+import Badge from "components/Badge/Badge.js";
 import MCNApplyModal from './MCNApplyModal';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
@@ -97,7 +98,7 @@ export default function Scholarship() {
             })
             const res=await result.json();
             if (result.status===200||result.status===201||result.status===304) {
-              
+               
               setApplnData(res.data);
               setAppln(true);
               
@@ -163,6 +164,9 @@ export default function Scholarship() {
                  </Button>:
                  <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
                    <GridItem xs={12} sm ={12} md={12} >
+                  <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{applnData.status===-1?<Badge color="danger">Rejected</Badge>:applnData.status===1?<Badge color="success">Accepted</Badge>:applnData.status===0 && applnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Pending</Badge>}
+                    </GridItem>
+                   <GridItem xs={12} sm ={12} md={12} >
                   <TextField
                         id="outlined-multiline-static"
                         label="Remarks"
@@ -170,7 +174,7 @@ export default function Scholarship() {
                         rows={4}
                         defaultValue={applnData.remark}
                         variant="outlined"
-                        style={{marginTop:'20px'}}
+                        style={{marginTop:'20px',marginBottom:"30px"}}
                         inputProps={{
                           readOnly:true
                         }}
@@ -182,7 +186,8 @@ export default function Scholarship() {
                   color="rose" 
                   disabled={!portalOn} 
                   onClick={()=>{setOpenEdit(true)}}
-                   >
+                  style={{marginRight:'10px'}}
+                  >
                       Review/Edit Application
                  </Button>
                  <Button 
@@ -190,6 +195,7 @@ export default function Scholarship() {
                   color="danger" 
                   disabled={!portalOn}
                   onClick={()=>{setOpenDelete(true)}}
+                  
                    >
                         Remove Application
                  </Button>

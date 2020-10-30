@@ -10,7 +10,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Close from "@material-ui/icons/Close";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from "@material-ui/core/IconButton";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
@@ -52,7 +54,16 @@ const [mcnData,setMcnData]=React.useState({
   fsalary:'',
     msalary:'',
     categ:'',
-    upload:null
+    upload:null,
+    fitr:'',
+    mitr:'',
+    fbs:'',
+    mbs:'',
+    pc:'',
+    f16:'',
+    tehsil:'',
+    fci:'',
+    mci:''
 });
 const [sendingData,setSendingData]=React.useState(false)
 
@@ -71,13 +82,12 @@ if(sendingData===true){
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
       fileData.append('categ', mcnData.categ);
-     
+      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}`.slice(0,-1))
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
         headers:{
           Authorization:token
-        },
-        
+        },  
         body:fileData
       }) ;
       const res = await result.json();
@@ -85,8 +95,17 @@ if(sendingData===true){
       setMcnData({
         fsalary:'',
           msalary:'',
+          categ:'',
           upload:null,
-          categ:''
+          fitr:'',
+          mitr:'',
+          fbs:'',
+          mbs:'',
+          pc:'',
+          f16:'',
+          tehsil:'',
+          fci:'',
+          mci:''
       })
         setSuccess(true);
         setSuccessMsg(res.msg);
@@ -98,6 +117,7 @@ if(sendingData===true){
       setErr(true);
       setErrMsg(res.msg);
   }
+  
 }
     fetchData();
     setSendingData(false)
@@ -134,7 +154,25 @@ if(sendingData===true){
   //       resolve(fileData)
   //   })
   // }
+  function onCheckChange(e){
+    const {name,checked,value}=e.target;
+    console.log(e.target)
+   if(checked===true){
+     console.log(value);
+    setMcnData(prevState=>({
+      ...prevState,
+      [name]:`${value} ,`
+    }))
+   }    
+   else{
+    setMcnData(prevState=>({
+      ...prevState,
+      [name]:''
+    }))
+   
+   }
 
+    }
     return(
         <Dialog
                   classes={{
@@ -215,11 +253,11 @@ if(sendingData===true){
                       value={mcnData.categ}
                       onChange={onChange}
                     >
-                      
                       <MenuItem value={'General'}>General</MenuItem>
                       <MenuItem value={'SC'}>Scheduled Caste (SC)</MenuItem>
                       <MenuItem value={'ST'}>Scheduled Tribe (ST)</MenuItem>
                       <MenuItem value={'OBC'}>Other Backward Class (OBC)</MenuItem>
+                      <MenuItem value={'Others'}>Others</MenuItem>
                     </Select>
                   </FormControl> 
                             </GridItem>
@@ -232,6 +270,94 @@ if(sendingData===true){
                   
                   </GridContainer>
                  </GridItem>
+                 <GridItem xs={12} sm={12} md={12}>
+                <h6 style={{display:"flex",justifyContent:"center"}}><b>Submitted Documents</b></h6>
+                <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start'}}>
+                  <FormControlLabel
+                    
+                    //}
+                    control={<Checkbox color="primary" />}
+                    label="Father/Guardian's ITR"
+                    value="Father/Guardian's ITR"
+                    name='fitr'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Mother/Guardian's ITR"
+                    name='mitr'
+                    value="Mother/Guardian's ITR"
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Bank Statement of Father/Guardian"
+                    value="Bank Statement of Father/Guardian"
+                    name='fbs'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Bank Statement of Mother/Guardian"
+                    value="Bank Statement of Mother/Guardian"
+                    name='mbs'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                  
+                    control={<Checkbox color="primary" />}
+                    label="Pension Certificate(if applicable)"
+                    value="Pension Certificate"
+                    name='pc'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Form 16(if applicable)"
+                    value="Form 16"
+                    name='f16'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Tehsildar's Income Certificate(if applicable)"
+                    value="Tehsildar's Income Certificate"
+                    name='tehsil'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Computation of Income(Father)"
+                    value="Computation of Income(Father)"
+                    name='fci'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    
+                    control={<Checkbox color="primary" />}
+                    label="Computation of Income(Mother)"
+                    value="Computation of Income(Mother)"
+                    name='mci'
+                    onChange={onCheckChange}
+                    labelPlacement="end"
+                  />
+                  
+                </FormGroup>
+                </GridItem>
               </GridContainer>
 
                   </DialogContent>

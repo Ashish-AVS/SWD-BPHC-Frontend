@@ -225,7 +225,7 @@ export default function UserProfile() {
               nation: profile.nation,
               pan_card: profile.pan_card,
               phone: profile.phone,
-              pimage: profile.pimage,
+              dp: profile.dp,
               hostel:profile.hostel,
               room: profile.room,
               state: profile.state,
@@ -294,7 +294,7 @@ export default function UserProfile() {
     const base64= await convertTobase64(file);
     setProfile(prevState=>({
       ...prevState,
-      pimage:base64
+      dp:base64
     }))
     }
     }
@@ -475,6 +475,7 @@ export default function UserProfile() {
          <MenuItem value={'SC'}>Scheduled Caste (SC)</MenuItem>
          <MenuItem value={'ST'}>Scheduled Tribe (ST)</MenuItem>
          <MenuItem value={'OBC'}>Other Backward Class (OBC)</MenuItem>
+         <MenuItem value={'Others'}>Others</MenuItem>
       </Select>
      </FormControl>                 
     </GridItem>
