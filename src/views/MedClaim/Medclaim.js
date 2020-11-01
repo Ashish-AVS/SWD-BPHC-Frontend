@@ -50,7 +50,12 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Medclaim() {
-  const [polNo,setPolNo]=React.useState(null);
+  const [medData,setMedData]=React.useState({
+    member_id:'',
+    username:'',
+    password:'',
+    card:''
+  });
   const classes = useStyles();
   const token=JSON.parse(localStorage.getItem("tokens"));
   
@@ -63,8 +68,7 @@ export default function Medclaim() {
       }) ;
       const res = await result.json();
       if(res.err===false){
-
-      setPolNo(res.data[0].pol_no);
+      setMedData(res.data);
       }
       else if(res.err===true) {
           alert(res.msg)
@@ -107,10 +111,14 @@ export default function Medclaim() {
 
 		<h3 style={{display:"flex",justifyContent:"center"}}><b>POLICY DETAILS OF STUDENT</b></h3>
 		<p><b>Policy Number:</b> 51-20-00561-00-00</p>
-  <p><b>Membership ID:</b> {polNo}</p>
+    <p><b>Membership ID:</b> {medData.member_id}</p>
+    <p><b>Username:</b> {medData.username}</p>
+    <p><b>Password:</b> {medData.password}</p> 
+    <p>For information about claiming Medical Insurance download your medical card<br/></p>
       </CardBody>
       <CardFooter>
-          <Button round color="primary" disabled> Download PDF</Button>
+       
+          <Button round color="primary" onClick={()=>{window.open(medData.card)}}> Download Medical Card</Button>
       </CardFooter>
     </Card>
   </div>

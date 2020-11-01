@@ -16,7 +16,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from "@material-ui/core/IconButton";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
-
+import TextField from '@material-ui/core/TextField';
 
 //Core Components
 import Button from "components/CustomButtons/Button.js";
@@ -63,10 +63,11 @@ const [mcnData,setMcnData]=React.useState({
     f16:'',
     tehsil:'',
     fci:'',
-    mci:''
+    mci:'',
+    others:''
 });
 const [sendingData,setSendingData]=React.useState(false)
-
+const [others,setOthers]=React.useState(false);
 
 
 
@@ -78,11 +79,13 @@ if(sendingData===true){
     
     const fetchData= async ()=>{
       const fileData= new FormData();
+      if(mcnData.upload!==null)
       fileData.append('upload', mcnData.upload,`${uid}.zip`);
+      
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
       fileData.append('categ', mcnData.categ);
-      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}`.slice(0,-1))
+      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
         headers:{
@@ -105,7 +108,8 @@ if(sendingData===true){
           f16:'',
           tehsil:'',
           fci:'',
-          mci:''
+          mci:'',
+          others:''
       })
         setSuccess(true);
         setSuccessMsg(res.msg);
@@ -156,9 +160,9 @@ if(sendingData===true){
   // }
   function onCheckChange(e){
     const {name,checked,value}=e.target;
-    console.log(e.target)
+   
    if(checked===true){
-     console.log(value);
+     
     setMcnData(prevState=>({
       ...prevState,
       [name]:`${value} ,`
@@ -274,8 +278,6 @@ if(sendingData===true){
                 <h6 style={{display:"flex",justifyContent:"center"}}><b>Submitted Documents</b></h6>
                 <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start'}}>
                   <FormControlLabel
-                    
-                    //}
                     control={<Checkbox color="primary" />}
                     label="Father/Guardian's ITR"
                     value="Father/Guardian's ITR"
@@ -357,6 +359,53 @@ if(sendingData===true){
                   />
                   
                 </FormGroup>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={12}>
+                <GridContainer >
+                  <GridItem xs={12} sm={12} md={2}>
+                  <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start',flexDirection:'row'}}>
+                <FormControlLabel 
+                    control={<Checkbox color="primary" />}
+                    label="Others"
+                    value="Others"
+                    name='mci'
+                    onChange={(e)=>{
+                      const {checked} = e.target;
+                      if (checked === true) {
+                        setOthers(true)
+                      }
+                      else {
+                        setOthers(false);
+                        setMcnData(prevState=>({
+                          ...prevState,
+                          others:''
+                        }))
+                      }
+
+                    }}
+                    labelPlacement="end"
+                  />
+                </FormGroup>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={8}>
+                  {others ?
+                   <TextField
+                   id="outlined-multiline-static"
+                   label="Other Documents(with reasons)"
+                   name="others"
+                   multiline
+                   rows={4}
+                   defaultValue=""
+                   variant="outlined"
+                   value={mcnData.others}
+                   onChange={onChange}
+                   fullWidth={true}
+                    /> 
+                   : null}
+                  </GridItem>
+                </GridContainer>
+               
+            
                 </GridItem>
               </GridContainer>
 

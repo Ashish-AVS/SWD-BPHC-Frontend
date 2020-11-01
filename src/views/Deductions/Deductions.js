@@ -158,9 +158,7 @@ export default function Deductions() {
             <h4 className={classes.cardTitleWhite}>
               <b>MESS DEDUCTIONS</b>
             </h4>
-            <p className={classes.cardCategoryWhite}>
-              Here you can see all the mess related deductions
-            </p>
+            
           </CardHeader>
           <CardBody>
             <h3>We haven't recieved any data for this semester</h3>
@@ -174,9 +172,7 @@ export default function Deductions() {
             <h4 className={classes.cardTitleWhite}>
               <b>OTHER ADVANCE DEDUCTIONS</b>
             </h4>
-            <p className={classes.cardCategoryWhite}>
-              Here you can see all the deductions from other advances
-            </p>
+            
           </CardHeader>
           <CardBody>
             <h3>We haven't recieved any data for this semester</h3>

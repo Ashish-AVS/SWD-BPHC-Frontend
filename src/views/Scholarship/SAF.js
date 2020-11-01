@@ -94,7 +94,7 @@ export default function SAF() {
             </div>
       </CardBody>
      <CardFooter>
-         <Button round color="info">Download Application</Button>
+         <Button round color="info" disabled>Download Application</Button>
      </CardFooter>
     </Card>);
     

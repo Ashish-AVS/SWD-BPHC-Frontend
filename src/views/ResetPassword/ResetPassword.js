@@ -61,6 +61,44 @@ const [confError,setConfError]=React.useState(true);
   });
   const [sendingData,setSendingData]=React.useState(false)
   const [entryStarted,setEntryStarted]=React.useState(false)
+ 
+ 
+  React.useEffect(()=>{
+    var userInput = document.getElementById("newPwd");
+    userInput.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("login").click();
+      }
+    });
+    return ()=>{
+      userInput.removeEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+         event.preventDefault();
+         document.getElementById("login").click();
+        }
+      });
+    }
+   })
+  React.useEffect(()=>{
+    var pwdInput = document.getElementById("confPwd");
+    pwdInput.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+       event.preventDefault();
+       document.getElementById("login").click();
+      }
+    });
+    return ()=>{
+      pwdInput.removeEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+         event.preventDefault();
+         document.getElementById("login").click();
+        }
+      });
+    }
+   })
+ 
+ 
   React.useEffect(()=>{
     if(!pwdData.newPwd.localeCompare(pwdData.confPwd)){
     setConfError(false);
@@ -155,6 +193,7 @@ const [confError,setConfError]=React.useState(true);
                       <GridItem xs={12} sm={12} md={12}>
                                 <CustomInput
                                     labelText="New Password"
+                                    id='newPwd'
                                     formControlProps={{
                                         fullWidth: true
                                     }}
@@ -172,7 +211,8 @@ const [confError,setConfError]=React.useState(true);
                       </GridItem>
                             <GridItem xs={12} sm={12} md={12}>
                                 <CustomInput
-                                    labelText="Confirm Password"                                 
+                                    labelText="Confirm Password" 
+                                    id="confPwd"                                
                                     formControlProps={{
                                         fullWidth: true
                                     }}
@@ -194,7 +234,7 @@ const [confError,setConfError]=React.useState(true);
             <CardFooter style={{display:'flex',justifyContent:'center'}}>
                 
                     
-              <Button color="success" onClick={()=>{setSendingData(true)}}>Confirm</Button>
+              <Button id="login" color="success" onClick={()=>{setSendingData(true)}}>Confirm</Button>
                   
             </CardFooter>
           </Card>
