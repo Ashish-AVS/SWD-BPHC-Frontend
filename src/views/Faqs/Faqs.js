@@ -1,6 +1,7 @@
 
 import React from "react";
 import classNames from "classnames";
+import Autolinker from 'react-autolinker';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -40,7 +41,7 @@ export default function FAQ() {
         const result =await fetch(`${BaseUrl}/api/faq`)
          const res = await result.json();
         if(result.status===200||result.status===201){
-        console.log(res.data.faqs);
+        
         setFaqData(res.data.faqs);
         setDataLoaded(true)  
         }
@@ -101,7 +102,7 @@ export default function FAQ() {
                          <b>{qa.q}</b>
                       </AccordionSummary>
                       <AccordionDetails style={{whiteSpace:'pre-wrap',fontSize:'17.5px',fontWeight:'400'}} >
-                      {qa.a}
+                      <Autolinker text={qa.a}/>
                       </AccordionDetails>
                     </Accordion>)
                   })}
