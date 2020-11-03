@@ -82,13 +82,20 @@ if(sendingData===true){
     
     const fetchData= async ()=>{
       const fileData= new FormData();
+      if(mcnData.others !=='')
+      {
+        fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`)
+      }
+      else
+      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+     
       if(mcnData.upload!==null)
       fileData.append('upload', mcnData.upload,`${uid}.zip`);
 
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
       fileData.append('categ', mcnData.categ);
-      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+      
       fileData.append('loan', mcnData.loan);
       fileData.append('cgpa', mcnData.cgpa);
       const result= await fetch(`${BaseUrl}/api/mcn`,{
