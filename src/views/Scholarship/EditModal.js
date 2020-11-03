@@ -26,6 +26,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 //import CustomInput from "components/CustomInput/CustomInput";
+import Switch from '@material-ui/core/Switch';
 
 
 import {BaseUrl} from "variables/BaseUrl";
@@ -69,14 +70,25 @@ const [mcnData,setMcnData]=React.useState({
     tehsil:'',
     fci:'',
     mci:'',
-    others:''
+    others:'',
+    loan:'',
+    cgpa:''
 });
 const [sendingData,setSendingData]=React.useState(false)
-
 const [others,setOthers]=React.useState(false);
 
 React.useEffect(()=>{
-    setMcnData(data)
+    setMcnData(prevstate=>({
+      ...prevstate,
+      name:data.name,
+      fsalary:data.fsalary,
+      msalary:data.msalary,
+      categ:data.categ,
+      upload:data.upload,
+      attached:data.attached,
+      loan:data.loan,
+      cgpa:data.cgpa
+    }))
 },[data])
 
 React.useEffect(()=>{
@@ -87,13 +99,15 @@ if(sendingData===true){
     const fetchData= async ()=>{
       const fileData= new FormData();
 
-      if(mcnData.upload !==null){
+      if(mcnData.upload !==null||mcnData.upload !==undefined){
       fileData.append('upload', mcnData.upload,`${uid}.zip`);
       }
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
       fileData.append('categ', mcnData.categ);
       fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+      fileData.append('loan', mcnData.loan);
+      fileData.append('cgpa', mcnData.cgpa);
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
         headers:{
@@ -108,7 +122,7 @@ if(sendingData===true){
         setSuccess(true);
         setSuccessMsg(res.msg);
         setOpen(false);
-        setUpdated(res.msg);
+        setUpdated(`${res.msg} Updated`);
         setOpen(false);
         setEdit(false);
   }
@@ -226,7 +240,6 @@ if(sendingData===true){
                     value={mcnData.categ}
                     onChange={onChange}
                   >
-
                     <MenuItem value={'General'}>General</MenuItem>
                     <MenuItem value={'SC'}>Scheduled Caste (SC)</MenuItem>
                     <MenuItem value={'ST'}>Scheduled Tribe (ST)</MenuItem>
@@ -266,6 +279,45 @@ if(sendingData===true){
                                        }}
 
                                 />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText="Current CGPA"
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      defaultValue:mcnData.cgpa,                                      
+                                        name: 'cgpa',
+                                        disabled:!edit    
+                                       }}
+
+                                />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={5}>
+                    <FormControlLabel
+                      control={<Switch  color="primary" />}
+                      label={<h5 style={{ color: "black" }}>Applied for loan</h5>}
+                      name='loan'
+                      disabled={!edit}
+                      checked={mcnData.loan}
+                      onChange={(e) => {
+                        const { checked } = e.target;
+                        if (checked) {
+                          setMcnData(prevData => ({
+                            ...prevData,
+                            loan: 1
+                          }))
+                        }
+                        else
+                          setMcnData(prevData => ({
+                            ...prevData,
+                            loan: 0
+                          }))
+                      }}
+                      labelPlacement="start"
+                    />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={8}>
                   {!edit ?

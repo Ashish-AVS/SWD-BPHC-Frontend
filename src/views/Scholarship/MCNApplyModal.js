@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from '@material-ui/core/TextField';
+import Switch from '@material-ui/core/Switch';
 
 //Core Components
 import Button from "components/CustomButtons/Button.js";
@@ -64,7 +65,9 @@ const [mcnData,setMcnData]=React.useState({
     tehsil:'',
     fci:'',
     mci:'',
-    others:''
+    others:'',
+    cgpa:'',
+    loan:''
 });
 const [sendingData,setSendingData]=React.useState(false)
 const [others,setOthers]=React.useState(false);
@@ -81,11 +84,13 @@ if(sendingData===true){
       const fileData= new FormData();
       if(mcnData.upload!==null)
       fileData.append('upload', mcnData.upload,`${uid}.zip`);
-      
+
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
       fileData.append('categ', mcnData.categ);
       fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+      fileData.append('loan', mcnData.loan);
+      fileData.append('cgpa', mcnData.cgpa);
       const result= await fetch(`${BaseUrl}/api/mcn`,{
         method:'post',
         headers:{
@@ -109,7 +114,9 @@ if(sendingData===true){
           tehsil:'',
           fci:'',
           mci:'',
-          others:''
+          others:'',
+          cgpa:'',
+          loan:0
       })
         setSuccess(true);
         setSuccessMsg(res.msg);
@@ -248,6 +255,7 @@ if(sendingData===true){
 
                                 />
                       </GridItem>
+                      
                             <GridItem xs={12} sm={12} md={5}>
                   <FormControl fullWidth className={classes.formControl}>
                     <InputLabel className={classes.labelRoot}>Category</InputLabel>
@@ -265,11 +273,50 @@ if(sendingData===true){
                     </Select>
                   </FormControl> 
                             </GridItem>
-                            <GridItem xs={12} sm={12} md={5}>
-                 <InputLabel className={classes.label}>
-                  Documents
+                <GridItem xs={12} sm={12} md={5}>
+                  <InputLabel className={classes.label}>
+                    Documents
                  </InputLabel>
-                 <input name="g_img" type='file' style={{marginTop:'10px'}} onChange={onDocChange}></input>      
+                  <input name="g_img" type='file' style={{ marginTop: '10px' }} onChange={onDocChange}></input>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={5}>
+                <CustomInput
+                    labelText="Current CGPA"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    onChange={onChange}
+                    inputProps={{
+                      value: mcnData.cgpa,
+                      name: 'cgpa',
+                      type: 'number'
+                    }}
+
+                  />
+               
+                </GridItem>
+                <GridItem xs={12} sm={12} md={5}>
+                <FormControlLabel
+                    control={<Switch color="primary" />}
+                    label={<h5 style={{color:"black"}}>Applied for loan</h5>} 
+                    name='loan'
+                    checked={mcnData.loan}
+                    onChange={(e)=>{
+                      const {checked}=e.target;
+                      if(checked){
+                        setMcnData(prevData=>({
+                          ...prevData,
+                          loan:1
+                        }))
+                      }
+                      else
+                      setMcnData(prevData=>({
+                        ...prevData,
+                        loan:0
+                      }))
+                    }}
+                    labelPlacement="start"
+                  />
                 </GridItem>
                   
                   </GridContainer>

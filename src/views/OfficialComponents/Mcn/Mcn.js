@@ -166,6 +166,7 @@ export default function Outstation() {
             setData0(
               res.data.map((info, index) => {
                 let badge=null;  
+                let loan="";
                 if(info.status===-1){
                    badge=<Badge color="danger">Rejected</Badge>
                    }
@@ -178,8 +179,15 @@ export default function Outstation() {
                 else if(info.status===1){
                     badge=<Badge color="success">Accepted</Badge>
                 }
-               
-                return { sno: index + 1, uid: info.uid,id: info.id , name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload,attached:info.attached}
+               if(info.loan===1){
+                loan='Yes';
+               }
+               else if(info.loan===0){
+                 loan="No";
+               }
+
+
+                return { sno: index + 1, uid: info.uid,id: info.id , name:info.name,fsalary: info.fsalary, msalary: info.msalary,  categ: info.categ,status:badge,statusCode:info.status,remark:info.remark,upload:info.upload,attached:info.attached,cgpa:info.cgpa,loan:loan}
               })
             )
           }
@@ -435,6 +443,8 @@ export default function Outstation() {
                    {title:"Mother's Salary",field:"msalary"},                  
                    {title:"Category",field:"categ"},
                    {title:"Documents Provided",field:"attached"},
+                   {title:"CGPA",field:"cgpa"},
+                   {title:"Applied for Loan",field:"loan"},
                    {title:"Remarks",field:"remark"},
                    {title:"Appln Status",field:"status"}
                   ]}
@@ -502,6 +512,7 @@ export default function Outstation() {
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},
                    {title:"Category",field:"categ"},
+                  
                    {title:"Remarks",field:"remark"},                  
                    {title:"Appln Status",field:"status"}
                   ]}
@@ -549,6 +560,7 @@ export default function Outstation() {
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},                  
                    {title:"Category",field:"categ"},
+                   
                    {title:"Remarks",field:"remark"},
                    {title:"Appln Status",field:"status"}
                   ]}
