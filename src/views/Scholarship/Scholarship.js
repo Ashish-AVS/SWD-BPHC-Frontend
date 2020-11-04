@@ -202,6 +202,25 @@ export default function Scholarship() {
                  </GridItem>
                  </GridContainer>}
               </CardFooter>
+              <br/>
+              <center>
+              To stay up to date with your application and to receive notifications on changes in your application status, 
+              download the SWD Android app from the Google Play Store. <br/>
+              <a href="https://play.google.com/store/apps/details?id=in.ac.bits_hyderabad.swd.swd&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" 
+              style={{
+                paddingTop: '5px', 
+                paddingBottom: '5px', 
+                paddingLeft: '5px', 
+                paddingRight: '5px', 
+                display: 'inline', 
+                color: '#0068a5', 
+                fontFamily: 'Arial, Helvetica Neue, Helvetica, sans-serif', 
+                fontSize: '14px', 
+                textDecoration: 'none'
+                }}>
+              <img alt="Get it on Google Play" style={{width: '13%'}} src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" />
+              </a>
+              </center>
          <MCNApplyModal 
          open={openApply} 
          setOpen={setOpenApply} 
