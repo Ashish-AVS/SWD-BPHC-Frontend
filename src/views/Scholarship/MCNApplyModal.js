@@ -77,22 +77,43 @@ const [uploading,setUploading]=React.useState(false);
 
 React.useEffect(()=>{
 if(sendingData===true){
- 
-  
   try{
-    
     const fetchData= async ()=>{
       const fileData= new FormData();
+      /*Performing validation over mcn data*/
+      if (mcnData.cgpa < 0 || mcnData.cgpa > 10) {
+        setErr(true);
+        setErrMsg("CGPA should be 0-10 inclusive");
+        return;
+      }
       if(mcnData.others !=='')
       {
         fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`)
       }
-      else
-      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
-     
-      if(mcnData.upload!==null)
-      fileData.append('upload', mcnData.upload,`${uid}.zip`);
-
+      else {
+        fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+      }
+      if(mcnData.upload instanceof Blob) {
+        /*Performing validation over attached file*/
+        let attachedFile = mcnData.upload;
+        let attachedFileSize = attachedFile.size / (1024*1024);
+        let attachedFileType = attachedFile.type;
+        if (attachedFileSize >= 10) {
+          setErr(true);
+          setErrMsg("File size exceeded, limit is 10 MB");
+          return;
+        }
+        if (!attachedFileType.includes("zip")) {
+          setErr(true);
+          setErrMsg("Invalid file type, allowed file type(s): .zip");
+          return;
+        }
+        fileData.append('upload', mcnData.upload,`${uid}.zip`);
+      } else {
+        setErr(true);
+        setErrMsg("No zip file attached");
+        return;
+      }
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
       fileData.append('categ', mcnData.categ);
@@ -100,18 +121,23 @@ if(sendingData===true){
       fileData.append('loan', mcnData.loan);
       fileData.append('cgpa', mcnData.cgpa);
       setUploading(true);
+      let caughtInError = 0;
       const res= await axios.post(`${BaseUrl}/api/mcn`,fileData,{
         headers:{
           Authorization:token
         },  
         onUploadProgress:progressEvent=>{
-          
           setUploadMsg(`${Math.round(progressEvent.loaded*100/progressEvent.total)} % uploaded`)
-         
         }
-      }) ;
-      //console.log(res);
-      //const res = await result.json();
+      }).catch((e) => {
+        setUploading(false);
+        setErr(true);
+        setErrMsg("Invalid application, please check your details");
+        caughtInError = 1;
+      });
+      if (caughtInError === 1) {
+        return;
+      }
       if(res.data.err===false){     
       setMcnData({
         fsalary:'',
@@ -136,9 +162,7 @@ if(sendingData===true){
         setSuccessMsg(res.data.msg);
         setUpdated(`${res.msg} applied`);
         setOpen(false);
-        
-  }
-  else if(res.data.err===true){
+  } else {
     setUploading(false)
       setErr(true);
       setErrMsg(res.data.msg);
@@ -148,7 +172,7 @@ if(sendingData===true){
     fetchData();
     setSendingData(false)
     
-  }catch(err){
+  } catch(err){
       console.log(err);
     }
 }

@@ -100,16 +100,37 @@ if(sendingData===true){
     
     const fetchData= async ()=>{
       const fileData= new FormData();
+      /*Performing validation over mcn data*/
+      if (mcnData.cgpa < 0 || mcnData.cgpa > 10) {
+        setErr(true);
+        setErrMsg("CGPA should be 0-10 inclusive");
+        return;
+      }
       if(mcnData.others !=='')
       {
         fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`)
       }
-      else
-      fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
-   
-
-      if(mcnData.upload !==null||mcnData.upload !==undefined){
-      fileData.append('upload', mcnData.upload,`${uid}.zip`);
+      else {
+        fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+      }
+      if(mcnData.upload instanceof Blob) {
+        /*Performing validation over attached file*/
+        let attachedFile = mcnData.upload;
+        let attachedFileSize = attachedFile.size / (1024*1024);
+        let attachedFileType = attachedFile.type;
+        if (attachedFileSize >= 10) {
+          setErr(true);
+          setErrMsg("File size exceeded, limit is 10 MB");
+          return;
+        }
+        if (!attachedFileType.includes("zip")) {
+          setErr(true);
+          setErrMsg("Invalid file type, allowed file type(s): .zip");
+          return;
+        }
+        fileData.append('upload', mcnData.upload,`${uid}.zip`);
+      } else {
+        alert("Since you have not attached a new zip file while editing your application, previously uploaded zip file will be considered.");
       }
       fileData.append('fsalary', mcnData.fsalary);
       fileData.append('msalary', mcnData.msalary);
