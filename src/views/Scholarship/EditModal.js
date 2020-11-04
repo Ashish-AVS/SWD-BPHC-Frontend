@@ -140,6 +140,7 @@ if(sendingData===true){
       fileData.append('loan', mcnData.loan);
       fileData.append('cgpa', mcnData.cgpa);
       setUploading(true);
+      let caughtInError = 0;
       const res= await axios.post(`${BaseUrl}/api/mcn`,fileData,{ 
         headers:{
           Authorization:token
@@ -150,7 +151,15 @@ if(sendingData===true){
          
         }
         
-      }) ;
+      }).catch((e) => {
+        setUploading(false);
+        setErr(true);
+        setErrMsg("Invalid application, please check your details");
+        caughtInError = 1;
+      });
+      if (caughtInError === 1) {
+        return;
+      }
      // const res = await result.json();
       if(res.data.err===false){     
         setUploading(false)
