@@ -509,6 +509,7 @@ export default function Outstation() {
                   columns={[
                    {title:"S No.",field:"sno"},
                    {title:"Student ID",field:"id"},
+                   {title:"Name",field:"name"},
                    {title:"Father's Salary",field:"fsalary"},
                    {title:"Mother's Salary",field:"msalary"},
                    {title:"Category",field:"categ"},

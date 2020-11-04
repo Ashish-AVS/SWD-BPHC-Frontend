@@ -1,5 +1,5 @@
 import React from "react";
-
+import axios from 'axios';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -25,7 +25,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
 //import CustomInput from "components/CustomInput/CustomInput";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {BaseUrl} from "variables/BaseUrl";
 import styles from "assets/jss/material-kit-react/modalStyle";
@@ -71,7 +71,8 @@ const [mcnData,setMcnData]=React.useState({
 });
 const [sendingData,setSendingData]=React.useState(false)
 const [others,setOthers]=React.useState(false);
-
+const [uploadMsg,setUploadMsg]=React.useState("");
+const [uploading,setUploading]=React.useState(false);
 
 
 React.useEffect(()=>{
@@ -98,15 +99,20 @@ if(sendingData===true){
       
       fileData.append('loan', mcnData.loan);
       fileData.append('cgpa', mcnData.cgpa);
-      const result= await fetch(`${BaseUrl}/api/mcn`,{
-        method:'post',
+      setUploading(true);
+      const res= await axios.post(`${BaseUrl}/api/mcn`,fileData,{
         headers:{
           Authorization:token
         },  
-        body:fileData
+        onUploadProgress:progressEvent=>{
+          
+          setUploadMsg(`${Math.round(progressEvent.loaded*100/progressEvent.total)} % uploaded`)
+         
+        }
       }) ;
-      const res = await result.json();
-      if(res.err===false){     
+      //console.log(res);
+      //const res = await result.json();
+      if(res.data.err===false){     
       setMcnData({
         fsalary:'',
           msalary:'',
@@ -125,15 +131,17 @@ if(sendingData===true){
           cgpa:'',
           loan:0
       })
+      setUploading(false)
         setSuccess(true);
-        setSuccessMsg(res.msg);
-        setUpdated(res.msg);
+        setSuccessMsg(res.data.msg);
+        setUpdated(`${res.msg} applied`);
         setOpen(false);
         
   }
-  else if(res.err===true){
+  else if(res.data.err===true){
+    setUploading(false)
       setErr(true);
-      setErrMsg(res.msg);
+      setErrMsg(res.data.msg);
   }
   
 }
@@ -232,7 +240,7 @@ if(sendingData===true){
                     
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
-                                    labelText="Fathers Income(in ₹)"
+                                    labelText={<p>Father's Income(in ₹) <span style={{color:'red'}}>*</span></p>}
                                     formControlProps={{
                                         fullWidth: true
                                     }}
@@ -249,7 +257,7 @@ if(sendingData===true){
                      
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
-                                    labelText="Mothers Income(in ₹)"
+                                    labelText={<p>Mother's Income(in ₹) <span style={{color:'red'}}>*</span></p>}
                                     formControlProps={{
                                         fullWidth: true
                                     }}
@@ -265,7 +273,7 @@ if(sendingData===true){
                       
                             <GridItem xs={12} sm={12} md={5}>
                   <FormControl fullWidth className={classes.formControl}>
-                    <InputLabel className={classes.labelRoot}>Category</InputLabel>
+                    <InputLabel className={classes.labelRoot}>Category<span style={{color:'red'}}>*</span></InputLabel>
                     <Select
                       name="categ"
                       className={classes.input + " " + classes.underline}
@@ -282,13 +290,13 @@ if(sendingData===true){
                             </GridItem>
                 <GridItem xs={12} sm={12} md={5}>
                   <InputLabel className={classes.label}>
-                    Documents
+                    Documents<span style={{color:'red'}}>*</span>
                  </InputLabel>
                   <input name="g_img" type='file' style={{ marginTop: '10px' }} onChange={onDocChange}></input>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={5}>
                 <CustomInput
-                    labelText="Current CGPA"
+                    labelText={<p>Current CGPA <span style={{color:'red'}}>*</span></p>}
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -329,7 +337,7 @@ if(sendingData===true){
                   </GridContainer>
                  </GridItem>
                  <GridItem xs={12} sm={12} md={12}>
-                <h6 style={{display:"flex",justifyContent:"center"}}><b>Submitted Documents</b></h6>
+                <h6 style={{display:"flex",justifyContent:"center"}}><b>Submitted Documents<span style={{color:'red'}}>*</span></b></h6>
                 <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start'}}>
                   <FormControlLabel
                     control={<Checkbox color="primary" />}
@@ -465,7 +473,7 @@ if(sendingData===true){
 
                   </DialogContent>
                   <DialogActions className={classes.modalFooter}>
-                   
+                  {uploading?<div style={{display:'flex',flexDirection:'row'}}><CircularProgress size={20} style={{marginRight:"10px"}} /><p>{uploadMsg}</p></div>:null}
                   <Button
                       onClick={() => 
                         setSendingData(true)
@@ -473,6 +481,7 @@ if(sendingData===true){
                       color="success"
                       solid="true"
                       round
+                      disabled={uploading}
                     >
                       Submit
                   </Button>
