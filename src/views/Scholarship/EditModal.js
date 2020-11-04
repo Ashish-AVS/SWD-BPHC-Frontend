@@ -160,8 +160,7 @@ if(sendingData===true){
         setUpdated(`${res.data.msg} Updated`);
         setOpen(false);
         setEdit(false);
-  }
-  else if(res.data.err===true){
+  } else {
     setUploading(false)
       setErr(true);
       setErrMsg(res.data.msg);
