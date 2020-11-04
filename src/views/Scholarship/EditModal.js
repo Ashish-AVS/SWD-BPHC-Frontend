@@ -327,6 +327,7 @@ if(sendingData===true){
                                     inputProps={{  
                                       defaultValue:mcnData.cgpa,                                      
                                         name: 'cgpa',
+                                        type:'number',
                                         disabled:!edit    
                                        }}
 

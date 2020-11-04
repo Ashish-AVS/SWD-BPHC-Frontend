@@ -204,6 +204,41 @@ if(sendingData===true){
   //       resolve(fileData)
   //   })
   // }
+
+  function onCgChange(e){
+    const { name,id} = e.target;
+    document.getElementById(id).oninput = function () {
+        var max = parseInt(this.max);
+        var min = parseInt(this.min);
+        if (parseInt(this.value) > max) {
+            this.value = max;
+            setMcnData(prevState=>({
+                ...prevState,
+                [name]: this.value
+            })
+            ); 
+        }
+        else if (parseInt(this.value) < min) {
+            this.value = min;
+            setMcnData(prevState=>({
+                ...prevState,
+                [name]: this.value
+            })
+            ); 
+        }
+        else{
+        setMcnData(prevState=>({
+            ...prevState,
+            [name]: this.value
+        })
+        );  
+      }  
+    }
+    
+    }
+
+
+
   function onCheckChange(e){
     const {name,checked,value}=e.target;
    
@@ -324,11 +359,13 @@ if(sendingData===true){
                     formControlProps={{
                       fullWidth: true
                     }}
-                    onChange={onChange}
-                    inputProps={{
-                      value: mcnData.cgpa,
+                    onChange={onCgChange}
+                    inputProps={{ 
                       name: 'cgpa',
-                      type: 'number'
+                      id:'cgp',
+                      type: "number",
+                      inputProps:{ min: 0, max: 10 },
+                      value: mcnData.cgpa,
                     }}
 
                   />
