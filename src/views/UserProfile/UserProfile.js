@@ -185,6 +185,12 @@ export default function UserProfile() {
     if(updatingProfile===true){
       try{
         const sendData=async ()=>{
+          let dp = profile.dp || '';
+          if (profile.uploadImage === 1 && dp.length < 5) {
+            setIsError(true);
+            setUpdatingProfile(false);
+            return;
+          } 
           const result =await fetch(`${BaseUrl}/api/usr/profile`,{
             method:"post",            
             headers:{'Content-Type':"application/json",Authorization:token},
@@ -251,7 +257,6 @@ export default function UserProfile() {
          else{
            setIsError(true);
            setUpdatingProfile(false);
-          
          }
         }
         sendData();
