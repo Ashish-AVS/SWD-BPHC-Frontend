@@ -186,7 +186,7 @@ export default function UserProfile() {
       try{
         const sendData=async ()=>{
           let dp = profile.dp || '';
-          if (profile.uploadImage === 1 && dp.length < 5) {
+          if (parseInt(profile.uploadImage) === 1 && dp.length < 5) {
             setIsError(true);
             setUpdatingProfile(false);
             return;
