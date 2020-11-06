@@ -190,14 +190,14 @@ export default function UserProfile() {
             headers:{'Content-Type':"application/json",Authorization:token},
             body:JSON.stringify({
               uid:uid,
-              aadhaar: profile.aadhaar,
-              acno: profile.acno,
+              aadhaar: profile.aadhaar || 'null',
+              acno: profile.acno || 'null',
               bank: profile.bank,
               blood: profile.blood,
               bonafide_no: profile.bonafide_no,
               category: profile.category,
               city: profile.city,
-              current_med: profile.current_med,
+              current_med: profile.current_med || 'NA',
               dob: profile.dob,
               email: profile.email,
               father: profile.father,
@@ -209,7 +209,7 @@ export default function UserProfile() {
               gender: profile.gender,
               gphone: profile.gphone,
               guardian: profile.guardian,
-              homeadd: profile.homeadd,
+              homeadd: profile.homeadd || 'NA',
               hphone: profile.hphone,
               id: profile.id,
               ifsc: profile.ifsc,
@@ -217,7 +217,7 @@ export default function UserProfile() {
               localadd: profile.localadd,
               mcomp: profile.mcomp,
               mdesg: profile.mdesg,
-              med_history: profile.med_history,
+              med_history: profile.med_history || 'NA',
               mmail:profile.mmail,
               moccup: profile.moccup,
               mother: profile.mother,
@@ -225,12 +225,13 @@ export default function UserProfile() {
               nation: profile.nation,
               pan_card: profile.pan_card,
               phone: profile.phone,
+              alt_phone: profile.alt_phone,
               dp: profile.dp,
               hostel:profile.hostel,
-              room: profile.room,
+              room: profile.room || 'NA',
               state: profile.state,
+              pin_code: profile.pin_code,
               time:profile.time,
-              
             })
            })
           if(result.status===200||result.status===201){
@@ -315,7 +316,7 @@ export default function UserProfile() {
   <h4>Loading Your Profile....</h4>  :
   <CardBody>
   <h3><b>PERSONAL DETAILS</b></h3>
-  <GridContainer  justify="center">
+  <GridContainer  justify="left">
     
     <GridItem xs={12} sm={12} md={4}>
       <CustomInput
@@ -375,6 +376,20 @@ export default function UserProfile() {
         onChange={onChange}
       />                  
     </GridItem>
+    <GridItem xs={12} sm={12} md={4}>
+      <CustomInput
+        labelText="Alternate Phone No."
+        id="alt_phone"
+        formControlProps={{
+          fullWidth: true
+        }}
+        inputProps={{
+          defaultValue:profile.alt_phone,
+          name:'alt_phone'
+        }}
+        onChange={onChange}
+      />                  
+    </GridItem> <br></br>
     <GridItem xs={12} sm={12} md={4}>
       <CustomInput
         labelText="ID"
@@ -604,6 +619,20 @@ export default function UserProfile() {
         inputProps={{
           defaultValue:profile.state,
           name:'state'
+        }}
+        onChange={onChange}
+      />
+    </GridItem>
+    <GridItem xs={12} sm={12} md={6}>
+      <CustomInput
+        labelText="Pin code"
+        id="pin_code"
+        formControlProps={{
+          fullWidth: true
+        }}
+        inputProps={{
+          defaultValue:profile.pin_code,
+          name:'pin_code'
         }}
         onChange={onChange}
       />
@@ -1020,7 +1049,7 @@ export default function UserProfile() {
         <Alert
           onClose={() => { setIsError(false) }}
           severity="error">
-          Unknown Error Contact SWD Nucleus 
+          An error occured, check details again. 
                   </Alert>
       </Snackbar>
       <ChangePasswordModal open={open} setOpen={setOpen} />
