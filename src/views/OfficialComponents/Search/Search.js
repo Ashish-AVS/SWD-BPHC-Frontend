@@ -1,6 +1,7 @@
 import React from "react";
 import Datetime from "react-datetime";
 import MaterialTable from "material-table";
+import {saveAs} from 'file-saver';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -19,7 +20,8 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import SearchDetails from "./SearchDetails";
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import {
   primaryColor,
   defaultFont
@@ -106,6 +108,9 @@ const styles = {
       marginTop: "0px"
     }}
 };
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(styles);
 
@@ -124,14 +129,25 @@ export default function Search() {
   const [recievedDetailsData,setRecievedDetailsData]=React.useState(false);
   const [detailsData,setDetailsData]=React.useState({})
   const [detailsReq,setDetailsReq]=React.useState(false);
-  const [uid,setUid]=React.useState()
+  const [uid,setUid]=React.useState();
+  const [sendingData1,setSendingData1]=React.useState();
   const classes = useStyles();
+  const [success, setSuccess] = React.useState(false);
+  const [err,setErr]=React.useState(false);
+  const [errMsg,setErrMsg]=React.useState('');
   var today = Datetime.moment();
   var valid = function( current ){
     return current.isBefore( today );
   };
  // let value1=<></>
-  
+ const handleClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+
+  setSuccess(false);
+};
+
   function onChange(e){
     const { name, value } = e.target;
     setCriteria(prevState=>({
@@ -217,6 +233,36 @@ export default function Search() {
       } 
     }
   },[detailsReq,uid,token])
+  React.useEffect(()=>{
+    if(sendingData1===true){
+      setRecievedData(false);
+      try{
+        const SendData=async ()=>{
+          const result =await fetch(`${BaseUrl}/api/o/search/export`,{
+            headers:{Authorization:`Bearer ${token}`,
+            Accept: "text/csv"}
+          })
+          const res= await result.text();
+          if(result.status===201||result.status===200||result.status===304){
+            const csvBlob=new Blob([res],{type:'text/csv'});
+            saveAs(csvBlob,`Database.csv`);
+            setSuccess(true);
+          }
+          else {
+            setErr(true);
+            setErrMsg('Error in Downloading!');
+          }
+          }
+        SendData();
+        setSendingData1(false);
+        
+        
+      }
+      catch(err){
+        console.log(err);
+      } 
+    } 
+    })
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -505,9 +551,36 @@ export default function Search() {
                   //}}
                   />:null} 
         </GridItem>
+        <GridItem xs={12} sm={12} md={12} style={{display:'flex',justifyContent:'center'}} >
+        <Button color="success" round onClick={()=>{setSendingData1(true)}}>
+                      Download DB
+                    </Button>
+        </GridItem>
       </GridContainer>
       {/* {recievedDetailsData?
       <SearchDetails open={open} setOpen={setOpen} data={detailsData} setRecievedDetailsData={setRecievedDetailsData} />:null} */}
+   <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={success}
+            autoHideDuration={4000}
+            onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              severity="success">
+              Task Completed SuccessFully
+        </Alert>
+          </Snackbar>
+          <Snackbar
+           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
+            open={err}
+            autoHideDuration={4000}
+            onClose={()=>{setErr(false)}}>
+            <Alert
+              onClose={()=>{setErr(false)}}
+              severity="error">
+              {errMsg}
+        </Alert>
+          </Snackbar>
     </div>
   );
 }

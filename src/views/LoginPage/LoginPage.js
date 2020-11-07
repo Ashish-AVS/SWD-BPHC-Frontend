@@ -54,6 +54,7 @@ export default function LoginPage(props) {
   const [isLoggedIn, setLoggedIn]=useState(false);
   const [isError, setIsError] = useState(false);
   const [conError,setConError]=useState(false);
+  const [errMsg,setErrorMsg]=React.useState('');
   const [loading,setLoading]=React.useState(false);
   const [uid,setUid]= React.useState();
   const [pwd,setPwd]=React.useState();
@@ -129,14 +130,16 @@ export default function LoginPage(props) {
               setLoading(false);
               removeTimer()
             }
-            else if (result.response.status === 401) {
-
+            else if (result.response.status === 401||result.response.status === 400||result.response.status === 404||result.response.status === 500) {
+//console.log(result.response)
               setLoggingIn(false);
               setIsError(true);
+              setErrorMsg(result.response.data.msg);
               setPwd('');
               setLoading(false);
               removeTimer();
             }
+            
           }
         })      
         
@@ -296,7 +299,7 @@ const removeTimer=()=>{
                 setIsError(false)
               }}
               severity="error">
-              Invalid Credentials
+              {errMsg}
         </Alert>
           </Snackbar>
           <Snackbar
