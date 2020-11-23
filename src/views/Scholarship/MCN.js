@@ -102,7 +102,7 @@ export default function MCN() {
   <ol>
     <li><strong>AFFIDAVITS </strong>are directly rejected.</li>
     <li><strong>Mere income statements</strong> and <strong>declarations</strong> by parents/their employers, notary affidavit, a certificate from bank, annual pension statements, etc., will not be accepted.</li>
-    <li>Every document needs to be self-attested with a date of submission.</li>
+    <li>Every document needs to be self-attested with a date of submission.(Signature on the first page of every document by your parents)</li>
     <li>Income certificates of<strong> BOTH </strong>parents must be provided irrespective of whether or not they are earning.</li>
     <li>All the income statements should be for the Financial Year 2019-20 (Assessment Year 2020-21).</li>
     <li>Income statements for <strong>earlier years</strong> will be <strong>directly rejected.</strong></li>

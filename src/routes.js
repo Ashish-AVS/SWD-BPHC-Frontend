@@ -16,6 +16,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
@@ -28,7 +29,7 @@ import Documents from "views/Documents/Documents.js";
 import Medclaim from "views/MedClaim/Medclaim.js";
 import Scholarship from "views/Scholarship/Scholarship.js";
 import Outstation from "views/Outstation/Outstation";
-
+import Kya from "views/KYA/KYA.js";
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -98,6 +99,13 @@ const dashboardRoutes = [
     name: "Outstation",
     icon:AirplanemodeActiveIcon,
     component: Outstation,
+    layout: "/admin"
+  },
+  {
+    path: "/know-your-acad",
+    name: "Know Your Acad.",
+    icon: MenuBookIcon,
+    component: Kya,
     layout: "/admin"
   }
   /*

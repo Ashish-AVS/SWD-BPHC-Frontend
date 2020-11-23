@@ -60,8 +60,7 @@ export default function HeaderLinks(props) {
               className={classes.dropdownLink}
             >
               <AssignmentIcon className={classes.icons} />Complaints
-            </Link>,
-             
+            </Link>
           ]}
         />
 
