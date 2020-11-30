@@ -101,13 +101,13 @@ const dashboardRoutes = [
     component: Outstation,
     layout: "/admin"
   },
-  {
-    path: "/know-your-acad",
-    name: "Know Your Acad.",
-    icon: MenuBookIcon,
-    component: Kya,
-    layout: "/admin"
-  }
+  // {
+  //   path: "/know-your-acad",
+  //   name: "Know Your Acad.",
+  //   icon: MenuBookIcon,
+  //   component: Kya,
+  //   layout: "/admin"
+  // }
   /*
   {
     path: "/typography",
