@@ -72,8 +72,6 @@ let deptData=faqData.depts.map(items=>{
                return(
                 <div>
                 {/* <strong><h3 style={{display:"flex",justifyContent:'center'}}>{content.main_topic.toUpperCase()}</h3></strong> */}
-              
-              
                 <Accordion style={{marginTop:"5px",background:'#e8eaed'}}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -128,7 +126,7 @@ let gen_elecData=[{
                   
     let course_guidesData=   
     [{
-    tabName:"Course Guide",
+    tabName:"Course Guide-1st year",
     tabContent:(
     faqData.course_guides.map(content=>{
     return(
@@ -198,12 +196,12 @@ let gen_elecData=[{
 
 
                    
-                    contentData1.push(deptData,gen_elecData,course_guidesData,minorsData);
+                    contentData1.push(...gen_elecData,...course_guidesData,...minorsData,...deptData);
                     //setContentData(contentData1)
                     
                 data=    <CustomTabs
                           headerColor="primary"
-                           tabs={course_guidesData,deptData                     
+                           tabs={contentData1                 
                   }
                           
                         />
