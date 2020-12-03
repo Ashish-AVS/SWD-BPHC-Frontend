@@ -132,7 +132,8 @@ if(sendingData===true){
       }).catch((e) => {
         setUploading(false);
         setErr(true);
-        setErrMsg("Invalid application, please check your details");
+        let message = e.response.data.msg;
+        setErrMsg(message);
         caughtInError = 1;
       });
       if (caughtInError === 1) {

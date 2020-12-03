@@ -121,7 +121,9 @@ React.useEffect(()=>{
                     className={classes.modalBody}
                   >
                     <div>
-                        <h4>Are you sure you want to remove your MCN Application?</h4>
+                        <h4>This is an irreversible process. Depending on the status of MCN portal you may or may not be able to re-apply.
+                          Are you sure you want to remove your MCN Application?
+                        </h4>
                     
                     </div>
                   
