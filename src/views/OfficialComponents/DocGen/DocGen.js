@@ -144,8 +144,6 @@ export default function MessGrace() {
          const res = await result.json();
         if (res.err === false) {
           setDocData(res.data);
-          console.log(res.data)
-          
         }
         else if (res.err === true && result.status === 401) {
           logout();
