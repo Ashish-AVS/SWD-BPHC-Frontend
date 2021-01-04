@@ -32,6 +32,8 @@ import image from "assets/img/bgimg.jpg";
 import { TimelapseOutlined } from "@material-ui/icons";
 
 import {BaseUrl} from "variables/BaseUrl";
+import { GoogleLogin } from 'react-google-login';
+
 const useStyles = makeStyles(styles);
 
 let data={
@@ -109,9 +111,7 @@ export default function LoginPage(props) {
              password:pwd,
              type:'0'        
         }).then(result=>{
-          if(result.status===200||result.status===201||result.status===304){
-            //console.log(result.headers.get('Set-Cookie')); 
-             
+          if(result.status===200||result.status===201||result.status===304){ 
             onLogin(result.headers.authorization); 
              data.name=result.data.data.name;
              data.id=result.data.data.id;
@@ -191,6 +191,50 @@ const removeTimer=()=>{
  setTimeout(function() {
     setCardAnimation("");
   }, 700);
+  const onSuccess = async (res) => {
+    let idToken = res.tokenId;
+    axios.post(`${BaseUrl}/api/auth/google_oauth`, {
+      id_token: idToken
+    }).then((result) => {
+      if (result.status === 200||result.status===201||result.status==304) {
+        onLogin(result.headers.authorization); 
+        data.name=result.data.data.name;
+        data.id=result.data.data.id;
+        data.isComplete=result.data.data.isComplete;
+        data.uid=uid;
+        setLoggedIn(true);
+      } 
+    }).catch((result) => {
+      if (result.response !== undefined) {
+        if (result.response.status === 422) {
+          setLoggingIn(false);
+          setPwd('');
+          setEmptyError(true);
+          setLoading(false);
+          removeTimer()
+        }
+        else if (result.response.status === 401||result.response.status === 400||result.response.status === 404||result.response.status === 500) {
+          setLoggingIn(false);
+          setIsError(true);
+          setErrorMsg(result.response.data.msg);
+          setPwd('');
+          setLoading(false);
+          removeTimer();
+        }
+      }
+    });
+  };
+  const onFailure = async (res) => {
+    if (res.error === 'idpiframe_initialization_failed') {
+      return 0;
+    }
+    setLoggingIn(false);
+    setIsError(true);
+    setErrorMsg("Google sign in failed. Please try again later");
+    setPwd('');
+    setLoading(false);
+    removeTimer();
+  };
   const classes = useStyles(); 
 
   return (
@@ -214,10 +258,23 @@ const removeTimer=()=>{
                   </CardHeader>
                   {/*<p className={classes.divider}>Or Be Classical</p>*/}
                   <CardBody>
-                  
                     <div style={{display:'flex',justifyContent:'center'}}>
-                    <Link to="/"><h6>Back to home page </h6></Link>
+                      <Link to="/"><h6>Back to home page </h6></Link>
                     </div>
+                    <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                      <GoogleLogin
+                      clientId='961006653268-qevln9qnigjef6qa3jiovcggij64p0sb.apps.googleusercontent.com'
+                      buttonText='Login using BITS Mail'
+                      onSuccess={onSuccess}
+                      onFailure={onFailure}
+                      cookiePolicy='single_host_origin'
+                      isSignedIn={false}
+                      />
+                    </div>
+                    <br/>
+                    <center>
+                      ----------or----------
+                    </center>
                     <CustomInput
                       onChange={(e)=>{
                         setUid(e.target.value);
