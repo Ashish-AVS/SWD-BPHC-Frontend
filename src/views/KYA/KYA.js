@@ -13,10 +13,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import Button from "components/CustomButtons/Button.js";
-//import Danger from "components/Typography/Danger.js";
-import Footer from "components/Footer/Footer.js";
-import Img from 'assets/img/bitslogo.png'
 import {BaseUrl} from "variables/BaseUrl";
 
 
