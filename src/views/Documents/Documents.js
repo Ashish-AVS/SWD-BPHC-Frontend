@@ -78,25 +78,28 @@ export default function Documents() {
           const result =await fetch(`${BaseUrl}/api/doc?uid=${uid}&key=${docKey}`,{
             headers:{Authorization:token}
           });
-          const res= await result.blob();       
-          if(result.status===200||result.status===201){  
+          if (result.status===201) {
+            const res = await result.blob();   
             const pdfBlob=new Blob([res],{type:'application/pdf'});
-          saveAs(pdfBlob,`${uid}-${docKey}`);
-          setSendingData(false);
-          setDocKey('');
-          setLoading(false);  
-          setSuccess(true)        
+            saveAs(pdfBlob,`${uid}-${docKey}`);
+            setSendingData(false);
+            setDocKey('');
+            setLoading(false);  
+            setSuccess(true); 
+            return;
           }
-          else if(res.err===true&&result.status===401){
-          logout()
+          const resultBody = await result.json();
+          if (result.status==401) {
+            logout();
+            return;
+          }
+          setErr(true);
+          setErrMsg(resultBody.msg);
+          setLoading(false);
+          setSendingData(false);
+          return;      
         }
-         else if(res.err===true){
-           setErr(true);
-           setErrMsg(res.msg);
-         }
-        }
-      sendData();
-        
+        sendData();
       }
       catch(err){
         console.log(err);
