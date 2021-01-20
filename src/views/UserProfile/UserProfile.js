@@ -142,7 +142,7 @@ export default function UserProfile() {
     try{
     const fetchData= async ()=>{
       
-      const result= await fetch(`${BaseUrl}/api/usr/profile?uid=${uid}`,{
+      const result= await fetch(`${BaseUrl}/api/usr/profile`,{
         headers:{Authorization:token}
       }) ;
       const res = await result.json();

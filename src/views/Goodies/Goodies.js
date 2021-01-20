@@ -44,7 +44,7 @@ export default function Goodies() {
   React.useEffect(()=>{
     try{
         const fetchData= async ()=>{
-        const result= await fetch(`${BaseUrl}/api/goodies?uid=${user.uid}`,{
+        const result= await fetch(`${BaseUrl}/api/goodies`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
@@ -62,7 +62,7 @@ export default function Goodies() {
         
       }
       const fetchDeduction= async ()=>{
-        const result= await fetch(`${BaseUrl}/api/deductions?uid=${user.uid}`,{
+        const result= await fetch(`${BaseUrl}/api/deductions`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();

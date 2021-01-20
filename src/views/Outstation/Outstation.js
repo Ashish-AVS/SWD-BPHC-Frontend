@@ -154,7 +154,7 @@ export default function Outstation() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`${BaseUrl}/api/outstation/?uid=${uid}`,{
+      const result= await fetch(`${BaseUrl}/api/outstation/`,{
         headers:{Authorization:token}
       }) ;
       const res = await result.json();
