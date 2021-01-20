@@ -147,7 +147,6 @@ export default function UserProfile() {
       }) ;
       const res = await result.json();
       if(res.err===false){
-        console.log(res)
       setProfile(res.data.profile);
       setHostels(res.data.hostels);
       setIsFetching(false);
