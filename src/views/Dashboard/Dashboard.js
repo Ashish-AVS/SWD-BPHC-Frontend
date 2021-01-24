@@ -69,7 +69,7 @@ export default function Dashboard() {
   React.useEffect(()=>{
     try{
     const fetchData= async ()=>{
-      const result= await axios.get(`${BaseUrl}/api/mess/menu?uid=${uid}`,{headers:{
+      const result= await axios.get(`${BaseUrl}/api/mess/menu`,{headers:{
         Authorization:token
       }}) ;
       //const res = await result.json();

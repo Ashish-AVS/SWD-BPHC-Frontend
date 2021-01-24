@@ -40,7 +40,9 @@ export default function GoodieItem({
   size,
   limit,
   deduction,
-  setIsUpdated}) {
+  setIsUpdated,
+delivery,
+paymentStrategy}) {
   const [goodieModal, openGoodieModal] = React.useState(false);
   const [cancelModal, openCancelModal] = React.useState(false);
   const [infoModal,openInfoModal]=React.useState(false);
@@ -130,6 +132,8 @@ export default function GoodieItem({
             goodieType={goodieType}
             goodieId={goodieId}
             setIsUpdated={setIsUpdated}
+            delivery={delivery}
+            paymentStrategy={paymentStrategy}
            />
           <CancelModal 
           open={cancelModal} 

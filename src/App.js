@@ -45,3 +45,7 @@ return(
 
     );
 }
+// 1. Adding Private Routes
+// 2. Adding Login, Register
+// 3. Removing Unnecessary Components 
+// 4. Changing Class to Functional Components

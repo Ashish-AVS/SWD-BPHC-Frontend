@@ -31,6 +31,7 @@ Transition.displayName = "Transition";
 export default function GoodieModal({
     open, 
     setOpen,
+    size,
     goodieType,
     goodieName,
     goodieId, 
@@ -175,6 +176,7 @@ if(goodieType===0){
         </GridItem>
         <GridItem>
       <GridContainer spacing={2}>
+       {size[0]?
         <GridItem>
         <CustomInput
         labelText="XS"
@@ -188,8 +190,8 @@ if(goodieType===0){
         value:goodieData.xs
           }}  
       />
-      </GridItem>
-      <GridItem>
+      </GridItem>:null}
+     {size[1]? <GridItem>
       <CustomInput
         labelText="S"
         id="s"
@@ -202,8 +204,8 @@ if(goodieType===0){
         value:goodieData.s
           }}
        />
-       </GridItem>
-       <GridItem>
+       </GridItem>:null}
+      { size[2]?<GridItem>
        <CustomInput
         labelText="M"
         id="m"
@@ -216,8 +218,8 @@ if(goodieType===0){
         value:goodieData.m
           }}
        />
-       </GridItem>
-       <GridItem>
+       </GridItem>:null}
+       {size[3]?<GridItem>
        <CustomInput
         labelText="L"
         id="l"
@@ -230,8 +232,8 @@ if(goodieType===0){
         value:goodieData.l
           }}
        />
-       </GridItem>
-       <GridItem>
+       </GridItem>:null}
+       {size[5]?<GridItem>
        <CustomInput
         labelText="XL"
         id="xl"
@@ -244,8 +246,8 @@ if(goodieType===0){
         value:goodieData.xl
           }}
        />
-       </GridItem>
-       <GridItem>
+       </GridItem>:null}
+      {size[6] ?<GridItem>
        <CustomInput
         labelText="XXL"
         id="xxl"
@@ -258,8 +260,8 @@ if(goodieType===0){
         value:goodieData.xxl
           }}
        />
-       </GridItem>
-       <GridItem>
+       </GridItem>:null}
+       {size[7]?<GridItem>
        <CustomInput
         labelText="XXXL"
         id="xxxl"
@@ -273,7 +275,7 @@ if(goodieType===0){
           }}
 
        />
-       </GridItem>
+       </GridItem>:null}
        </GridContainer>
        </GridItem>
        <GridItem>
@@ -385,10 +387,10 @@ if(goodieType===0){
                     className={classes.modalBody}
                   >
                 <GridContainer direction="row" justify="center" alignItems="center">
-                    <GridItem xs={12} sm={6}>
+                    <GridItem xs={12} sm={6} md={3}>
                        <img className={classes.imgRounded + " " + classes.imgFluid} src={goodieImage} alt="goodie"></img>
                    </GridItem>
-                   <GridItem xs={12} sm={4}>
+                   <GridItem xs={12} sm={4} md={8}>
                    <GridContainer  direction="column"  justify="center" alignItems="center">
                         <GridItem >
                             <div>
@@ -403,7 +405,7 @@ if(goodieType===0){
 
                                 Place Order
                             </Button>
-                             
+                             {totalAmt>maxAmount?<p style={{color:'red',fontSize:'10px'}}>*Total Amount Exceeds Maximum Premissible Amount</p>:null}
                              </GridItem>
                   </GridContainer>
                   </GridItem>

@@ -66,7 +66,7 @@ React.useEffect(()=>{
 
     try{
     const fetchData= async ()=>{
-      const result= await fetch(`${BaseUrl}/api/mess/grace?uid=${uid}`,{
+      const result= await fetch(`${BaseUrl}/api/mess/grace`,{
         headers:{
           Authorization:token
         }

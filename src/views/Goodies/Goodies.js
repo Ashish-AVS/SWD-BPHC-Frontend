@@ -48,7 +48,7 @@ export default function Goodies() {
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
-       //console.log(res);
+       console.log(res);
        if(res.err===false){
         setGoodie(res.data);   
         setIsFetching(false);
@@ -109,19 +109,21 @@ else{
   {goodie.length!==0? goodie.map((item,index)=>{
        return(<GoodieItem
          key={index} 
-         goodieId={item.g_id}
-         goodieType={item.g_type}
-         goodieName={item.g_name}
-         goodieImage={item.g_img}
+         goodieId={item._id}
+         goodieType={item.type}
+         goodieName={item.name}
+         goodieImage={item.img}
          goodieHostId={item.host_id}
          goodieContactName={item.host_name}
          goodieContactNo={item.host_mobile}
-         goodieSeller={item.g_host}
-         goodiePrice={item.g_price}
+         goodieSeller={item.host_org}
+         goodiePrice={item.price}
          minAmount={item.min_amount}
          maxAmount={item.max_amount}
          size={item.sizes}
          limit={item.limit}
+         paymentStrategy={item.payment_strategy}
+         delivery={item.delivery}
          deduction={deductions}
          setIsUpdated={setIsUpdated}
          />)

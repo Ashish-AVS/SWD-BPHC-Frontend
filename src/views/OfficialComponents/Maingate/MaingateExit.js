@@ -11,11 +11,13 @@ import CancelIcon from '@material-ui/icons/Cancel';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
+// import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import {BaseUrl} from "variables/BaseUrl";
 import {
@@ -106,23 +108,34 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function Search() {
 
  const token=JSON.parse(localStorage.getItem("officialtokens"));
  const data= JSON.parse(atob(token.split('.')[1]));
+ const uidRef=React.useRef()
  const [uid,setUid]=React.useState();
  const [SendReq,setSendReq]=React.useState(false);
  const [exitData,setExitData]=React.useState({});
  const [recievedData,setRecievedData]=React.useState(false);
  const [blacklist,setBlacklist]=React.useState(false);
  const [timer,setTimer]=React.useState(false);
+ const [removeData,setRemoveData]=React.useState(false);
+ const [success,setSuccess]=React.useState(false)
+ const [successMsg,setSuccessMsg]=React.useState(false)
+ const [err,setErr]=React.useState(false)
+ const [errMsg,setErrMsg]=React.useState(false)
   let t;
   const classes = useStyles();
-  
+const [closeReq,setCloseReq]=React.useState(false)
    
   React.useEffect(()=>{
       if(SendReq===true){
         try{
+          setRemoveData(true);
             const sendData=async ()=>{
               const result =await fetch(`${BaseUrl}/api/o/maingate/log`,{
                   method:"post",
@@ -132,23 +145,27 @@ export default function Search() {
                     },
                   body:JSON.stringify({
                     id:data.id,
-                    uid:uid,
+                    uid:uidRef.current.value,
                     token:token,
                     action:"exit"
                   })
                  })
                const res = await result.json();
               if(result.status===200||result.status===201){
+                setRemoveData(false);
                 setBlacklist(false);
-                setExitData(res.data);
+                setExitData(res);
                 setRecievedData(true);
                 setTimer(true);
+                uidRef.current.value=''
               }
               else if(result.status===400){
+                setRemoveData(false);
                 setBlacklist(true);
-                setExitData(res.data);
+                setExitData(res);
                 setRecievedData(true);
                 setTimer(true);
+                uidRef.current.value=''
               }
             
           }
@@ -162,6 +179,39 @@ export default function Search() {
           
       }
   })
+
+  React.useEffect(()=>{
+    if(closeReq===true){
+      try{
+        console.log('hi')
+      const sendCloseReq=async ()=>{
+        console.log('hi')
+        const result=await fetch(`${BaseUrl}/api/o/maingate/close`,{
+          method:"post",
+          headers:{
+            'Content-Type':"application/json",
+             Authorization:`Bearer ${token}`
+            }
+         })
+        const res = await result.json() 
+        if(res.err===false){
+          setSuccessMsg(res.msg)
+          setSuccess(true)
+        }
+        else{
+          setErr(true)
+          setErrMsg(res.msg)
+        } 
+      }
+      sendCloseReq()
+      setCloseReq(false)
+      }catch(err){
+       console.log(err)
+      }
+    }
+  })
+
+
   React.useEffect(()=>{
     if(timer===true){
       removeDiv();
@@ -177,13 +227,13 @@ const removeTimer=()=>{
 }
 
  
-  const removeDiv=()=>{
-    setTimeout(()=>{
-      setRecievedData(false);
-    },5000)
-  }
+const removeDiv=()=>{
+  t= setTimeout(()=>{
+     setRemoveData(true);
+   },5000)
+ }
  
- const onChange=(e)=>{setUid(e.target.value)}
+ //const onChange=(e)=>{setUid(e.target.value)}
  
   return ( <div>
     <div className={classes.typo} style={{ marginTop: "-50px" }}>
@@ -207,7 +257,8 @@ const removeTimer=()=>{
                                 <InputLabel htmlFor="component-outlined">Student UID</InputLabel>
                                 <OutlinedInput 
                                 id="component-outlined"  
-                                onChange={onChange} 
+                                //onChange={onChange} 
+                                inputRef={uidRef}
                                 inputProps={{
                                   id:"uid",
                                   onKeyPress:(event)=>{
@@ -225,9 +276,8 @@ const removeTimer=()=>{
                         </GridItem>
                         <GridItem xs={12} sm={12} md={12}>
                             <GridContainer direction="row" justify="center" alignItems="center" >
-                                <GridItem>
-                                    <Button color="success" id="submit" onClick={()=>{setSendReq(true)}}
-                                    >
+                                <GridItem xs={6} sm={6} md={3}>
+                                    <Button color="success" id="submit" onClick={()=>{setSendReq(true)}}>
                                         Submit
                                      </Button>
                                 </GridItem>
@@ -236,16 +286,16 @@ const removeTimer=()=>{
                       
                         </GridItem>
           <GridItem xs={12} sm={12} md={12}>
-           {(recievedData===true) && (exitData.error===false) &&(blacklist===false)?
+           {(recievedData===true) && (exitData.err===false) &&(blacklist===false)  && (removeData === false)?
                   <div style={{ background: "#a1d993", borderRadius: '16px', border: '1px solid black' }}>
                     <GridContainer direction="row"  >
                       <GridItem xs={12} sm={12} md={7}>
                         <div ><GridContainer direction="column" justify="center" alignItems="center" >
                           <GridItem xs={12} sm={12} md={12} >
-                            <h3 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "600" }}> {exitData.name}</span></h3>
+                            <h3 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "600" }}> {exitData.data.name}</span></h3>
                           </GridItem >
                           <GridItem xs={12} sm={12} md={12}>
-                            <h4 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{exitData.id}</span></h4>
+                            <h4 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{exitData.data.id}</span></h4>
                           </GridItem>
                         </GridContainer></div>
                       </GridItem>
@@ -262,16 +312,16 @@ const removeTimer=()=>{
                     </GridContainer>
                   </div>
                   :
-                  (recievedData === true) && (exitData.error === true) &&(blacklist===false)?
+                  (recievedData === true) && (exitData.err === true) &&(blacklist===false) && (removeData === false)?
                     <div style={{ background: "#FFCC00", borderRadius: '16px', border: '1px solid black' }}>
                       <GridContainer direction="row"  >
                         <GridItem xs={12} sm={12} md={7}>
                           <div ><GridContainer direction="column" justify="center" alignItems="center" >
                             <GridItem xs={12} sm={12} md={12} >
-                              <h3 style={{ color: "#914d03" }}><span style={{ fontWeight: "600" }}> {exitData.name}</span></h3>
+                              <h3 style={{ color: "#914d03" }}><span style={{ fontWeight: "600" }}> {exitData.data.name}</span></h3>
                             </GridItem >
                             <GridItem xs={12} sm={12} md={12}>
-                              <h4 style={{ color: "#914d03" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{exitData.id}</span></h4>
+                              <h4 style={{ color: "#914d03" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{exitData.data.id}</span></h4>
                             </GridItem>
                           </GridContainer></div>
                         </GridItem>
@@ -287,16 +337,16 @@ const removeTimer=()=>{
                         </GridItem>
                       </GridContainer>
                     </div> : 
-                     (recievedData === true) && (exitData.error === true) &&(blacklist===true)?
+                     (recievedData === true) && (exitData.err === true) &&(blacklist===true) && (removeData === false)?
                      <div style={{background:"#9e0b03",borderRadius:'16px',border:'1px solid black'}}>
             <GridContainer direction="row"  >
               <GridItem xs={12} sm={12} md={7}>
                             <div ><GridContainer direction="column" justify="center" alignItems="center" >
                                 <GridItem xs={12} sm={12} md={12} >
-                                   <h3 style={{color:"white"}}>{exitData.name}</h3> 
+                                   <h3 style={{color:"white"}}>{exitData.data.name}</h3> 
                                 </GridItem >
                                 <GridItem xs={12} sm={12} md={12}>
-                                  <h4 style={{color:"white"}}>ID :<span style={{fontWeight:"500"}}>{exitData.id}</span></h4>
+                                  <h4 style={{color:"white"}}>ID :<span style={{fontWeight:"500"}}>{exitData.data.id}</span></h4>
                                 </GridItem>
                                 </GridContainer></div>
                                 </GridItem>
@@ -350,8 +400,49 @@ const removeTimer=()=>{
                 </CardBody>
             </Card>
         </GridItem>
-
+<GridItem xs={12} sm={12} md={8}>
+  <Card>
+    <CardBody>
+      <GridContainer justify="center">
+        <GridItem xs={8} sm={8} md={4}>
+        <Button color="danger" disabled={closeReq} onClick={()=>{setCloseReq(true)}}> Close The Gate </Button>  
+        </GridItem>
+      </GridContainer>
+    
+    </CardBody>
+  </Card>
+</GridItem>
     </GridContainer>
+    <Snackbar
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      open={success}
+      autoHideDuration={4000}
+      onClose={() => {
+        setSuccess(false)
+      }}>
+      <Alert
+        onClose={() => {
+          setSuccess(false)
+        }}
+        severity="success">
+        {successMsg}
+        </Alert>
+    </Snackbar>
+    <Snackbar
+      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      open={err}
+      autoHideDuration={4000}
+      onClose={() => {
+        setErr(false)
+      }}>
+      <Alert
+        onClose={() => {
+          setErr(false)
+        }}
+        severity="error">
+        {errMsg}
+      </Alert>
+    </Snackbar>
 </div>
   );
 }

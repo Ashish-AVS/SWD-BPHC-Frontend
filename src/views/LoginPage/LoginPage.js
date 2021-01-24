@@ -256,7 +256,7 @@ const removeTimer=()=>{
                   <CardHeader color="rose" className={classes.cardHeader}>
                     <h4><strong>STUDENT LOGIN</strong></h4>
                   </CardHeader>
-                  {/*<p className={classes.divider}>Or Be Classical</p>*/}
+                 
                   <CardBody>
                     <div style={{display:'flex',justifyContent:'center'}}>
                       <Link to="/"><h6>Back to home page </h6></Link>

@@ -114,6 +114,7 @@ export default function Search() {
 
  const token=JSON.parse(localStorage.getItem("officialtokens"));
  const data= JSON.parse(atob(token.split('.')[1]));
+ const uidRef=React.useRef()
  const [uid,setUid]=React.useState();
  const [SendReq,setSendReq]=React.useState(false);
  const [entryData,setEntryData]=React.useState({});
@@ -127,9 +128,8 @@ let t;
   React.useEffect(()=>{
       if(SendReq===true){
         try{
-         
           setRemoveData(true);
-          setErr(false);
+          // setErr(false);
             const sendData=async ()=>{
               const result =await fetch(`${BaseUrl}/api/o/maingate/log`,{
                   method:"post",
@@ -139,24 +139,31 @@ let t;
                     },
                   body:JSON.stringify({
                     id:data.id,
-                    uid:uid,
+                    uid:uidRef.current.value,
                     token:token,
                     action:"enter"
                   })
                  })
                const res = await result.json();
+               console.log(res.err)
               if(res.err===false){
+                setErr(false)
+                console.log('yahan')
                 setRemoveData(false);
-                setEntryData(res.data);
+                setEntryData(res);
                 setRecievedData(true);
+                
                 setTimer(true);
+                uidRef.current.value=''
               }
               else if(res.err===true)
-              setRemoveData(false);
-              setEntryData(res.data);
-              setRecievedData(true);
               setErr(true)
+              setRemoveData(false);
+              setEntryData(res);
+              setRecievedData(true);
+              
               setTimer(true);
+              uidRef.current.value=''
           }
             sendData();
             setSendReq(false);
@@ -189,7 +196,7 @@ const removeTimer=()=>{
      setRemoveData(true);
    },5000)
  }
- const onChange=(e)=>{setUid(e.target.value)}
+ //const onChange=(e)=>{setUid(e.target.value)}
   
 
   return (
@@ -215,7 +222,8 @@ const removeTimer=()=>{
                         <InputLabel htmlFor="component-outlined">Student UID</InputLabel>
                         <OutlinedInput
                           id="component-outlined"
-                          onChange={onChange}
+                          // onChange={onChange}
+                          inputRef={uidRef}
                           inputProps={{
                             id: "uid",
                             onKeyPress: (event) => {
@@ -242,16 +250,16 @@ const removeTimer=()=>{
 
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
-                  {(recievedData === true) && (err === false) && (removeData === false) ?
+                  {((recievedData === true) && (entryData.err === false) && (removeData === false) )?
                     <div style={{ background: "#a1d993", borderRadius: '16px', border: '1px solid black' }}>
                       <GridContainer direction="row"  >
                         <GridItem xs={12} sm={12} md={7}>
                           <div ><GridContainer direction="column" justify="center" alignItems="center" >
                             <GridItem xs={12} sm={12} md={12} >
-                              <h3 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "600" }}> {entryData.name}</span></h3>
+                              <h3 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "600" }}> {entryData.data.name}</span></h3>
                             </GridItem >
                             <GridItem xs={12} sm={12} md={12}>
-                              <h4 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{entryData.id}</span></h4>
+                              <h4 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{entryData.data.id}</span></h4>
                             </GridItem>
                           </GridContainer></div>
                         </GridItem>
@@ -268,16 +276,16 @@ const removeTimer=()=>{
                       </GridContainer>
                     </div>
                     :
-                    (recievedData === true) && (err === true) && (removeData === false) ?
+                    (recievedData === true) && (entryData.err === true) && (removeData === false) ?
                       <div style={{ background: "#FFCC00", borderRadius: '16px', border: '1px solid black' }}>
                         <GridContainer direction="row"  >
                           <GridItem xs={12} sm={12} md={7}>
                             <div ><GridContainer direction="column" justify="center" alignItems="center" >
                               <GridItem xs={12} sm={12} md={12} >
-                                <h3 style={{ color: "#914d03" }}><span style={{ fontWeight: "600" }}> {entryData.name}</span></h3>
+                                <h3 style={{ color: "#914d03" }}><span style={{ fontWeight: "600" }}>{entryData.data.name}</span></h3>
                               </GridItem >
                               <GridItem xs={12} sm={12} md={12}>
-                                <h4 style={{ color: "#914d03" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{entryData.id}</span></h4>
+                                <h4 style={{ color: "#914d03" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{entryData.data.id}</span></h4>
                               </GridItem>
                             </GridContainer></div>
                           </GridItem>
