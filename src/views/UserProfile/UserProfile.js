@@ -142,12 +142,11 @@ export default function UserProfile() {
     try{
     const fetchData= async ()=>{
       
-      const result= await fetch(`${BaseUrl}/api/usr/profile?uid=${uid}`,{
+      const result= await fetch(`${BaseUrl}/api/usr/profile`,{
         headers:{Authorization:token}
       }) ;
       const res = await result.json();
       if(res.err===false){
-        console.log(res)
       setProfile(res.data.profile);
       setHostels(res.data.hostels);
       setIsFetching(false);

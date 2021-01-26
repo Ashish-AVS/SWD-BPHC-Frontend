@@ -38,7 +38,6 @@ export default function Documents() {
   const [isFetching,setIsFetching]=React.useState(true);
   const [doc,setDoc]=React.useState([])
   const [docKey,setDocKey]=React.useState('')
-  const user=JSON.parse(localStorage.getItem("data"));
   const [success,setSuccess]=React.useState(false);
   const token=JSON.parse(localStorage.getItem("tokens"));
   const [err,setErr]=React.useState(false);
@@ -47,7 +46,7 @@ export default function Documents() {
   React.useEffect(()=>{
     try{
       const fetchData= async ()=>{
-        const result= await fetch(`${BaseUrl}/api/doc/list?uid=${user.uid}`,{
+        const result= await fetch(`${BaseUrl}/api/doc/list`,{
           headers:{Authorization:token}
         }) ;
         const res = await result.json();
