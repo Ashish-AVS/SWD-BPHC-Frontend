@@ -164,7 +164,7 @@ export default function Scholarship() {
                  </Button>:
                  <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
                    <GridItem xs={12} sm ={12} md={12} >
-                  <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{applnData.status===-1?<Badge color="danger">Rejected</Badge>:applnData.status===1?<Badge color="success">Accepted</Badge>:applnData.status===0 && applnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Under Review</Badge>}
+                  <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{applnData.status===-1?<Badge color="danger">Rejected</Badge>:applnData.status===1?<Badge color="success">Being Reviewed By SWD</Badge>:applnData.status===0 && applnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Being Reviewed By SWD</Badge>}
                     </GridItem>
                    <GridItem xs={12} sm ={12} md={12} >
                   <TextField
