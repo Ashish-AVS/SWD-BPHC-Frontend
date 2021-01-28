@@ -74,7 +74,7 @@ export default function Documents() {
       setLoading(true);
       try{
       const sendData=async ()=>{
-          const result =await fetch(`${BaseUrl}/api/doc?uid=${uid}&key=${docKey}`,{
+          const result =await fetch(`${BaseUrl}/api/doc?key=${docKey}`,{
             headers:{Authorization:token}
           });
           if (result.status===201) {
