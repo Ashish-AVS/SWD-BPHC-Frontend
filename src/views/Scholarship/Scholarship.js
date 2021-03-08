@@ -12,14 +12,22 @@ import GridContainer from "components/Grid/GridContainer.js";
 import CustomTabs from "components/CustomTabs/EditedTabs1";
 import Button from "components/CustomButtons/Button.js";
 import Badge from "components/Badge/Badge.js";
-import MCNApplyModal from './MCNApplyModal';
-import EditModal from './EditModal';
-import DeleteModal from './DeleteModal';
+
 import {BaseUrl} from "variables/BaseUrl";
 
 //Created components
-import SAF from "./SAF";
-import MCN from "./MCN";
+import SAFContent from "./SAF/SAF";
+import MCNContent from "./MCN/MCN";
+
+import MCNApplyModal from './MCN/MCNApplyModal';
+import MCNEditModal from './MCN/EditModal';
+import MCNDeleteModal from './MCN/DeleteModal';
+
+
+import SAFApplyModal from './SAF/SAFApplyModal';
+import SAFEditModal from './SAF/EditModal';
+import SAFDeleteModal from './SAF/DeleteModal';
+
 const styles = {
   typo: {
     paddingLeft: "25%",
@@ -58,34 +66,46 @@ export default function Scholarship() {
   const classes = useStyles();
   const token=JSON.parse(localStorage.getItem('tokens'));
   const [status,setStatus]=React.useState(0);
-  const [portalOn,setPortalOn]=React.useState(false);
+ 
+  const [updated,setUpdated]=React.useState(false);
+
+  const [mcnPortalOn,setMcnPortalOn]=React.useState(false);
+  const [mcnAppln,setMcnAppln]=React.useState(false);
+  const [mcnApplnData,setMcnApplnData]=React.useState({});
+  const [openMcnApply,setOpenMcnApply]=React.useState(false)
+  const [openMcnEdit,setOpenMcnEdit]=React.useState(false);
+  const [openMcnDelete,setOpenMcnDelete]=React.useState(false);
+  const [recievedMcnData,setRecievedMcnData]=React.useState(false);
+
+  
+  const [safPortalOn,setSafPortalOn]=React.useState(false);
+  const [safAppln,setSafAppln]=React.useState(false);
+  const [safApplnData,setSafApplnData]=React.useState({});
+  const [openSafApply,setOpenSafApply]=React.useState(false)
+  const [openSafEdit,setOpenSafEdit]=React.useState(false);
+  const [openSafDelete,setOpenSafDelete]=React.useState(false);
+  const [recievedSafData,setRecievedSafData]=React.useState(false);
+
   const [success,setSuccess]=React.useState(false);
   const [err,setErr]=React.useState(false);
   const [errMsg,setErrMsg]=React.useState('');
   const [successMsg,setSuccessMsg]=React.useState('');
-  const [appln,setAppln]=React.useState(false);
-  const [applnData,setApplnData]=React.useState({});
-  const [recievedData,setRecievedData]=React.useState(false);
-  const [updated,setUpdated]=React.useState(false);
-  const [openApply,setOpenApply]=React.useState(false)
-  const [openEdit,setOpenEdit]=React.useState(false);
-  const [openDelete,setOpenDelete]=React.useState(false);
+ 
   React.useEffect(()=>{
-    if(status===0 ||recievedData===true){
-      
+    if(status===0){
+      //*********  MCN API CALL ****************//
       try{
-       
         const SendData=async ()=>{
           const result =await fetch(`${BaseUrl}/api/mcn/portal`,{
             headers:{Authorization: token}
           })
           const res=await result.json();
           if (result.status===200||result.status===304) {
-            setPortalOn(true);
+            setMcnPortalOn(true);
           }
           else if (result.status === 404||result.status === 400) {
            setErr(true);
-           setPortalOn(false);
+           setMcnPortalOn(false);
            setErrMsg('MCN Portal is not open');
           }
           else if (res.err === true) {
@@ -99,13 +119,13 @@ export default function Scholarship() {
             const res=await result.json();
             if (result.status===200||result.status===201||result.status===304) {
                
-              setApplnData(res.data);
-              setAppln(true);
+              setMcnApplnData(res.data);
+              setMcnAppln(true);
               
               
             }
             else if (result.status === 404||result.status === 400) {
-              setAppln(false);
+              setMcnAppln(false);
               //console.log("hii")
             }
             else if (res.err === true) {
@@ -114,18 +134,61 @@ export default function Scholarship() {
             }}
         SendData();
         SendData1();
-        setRecievedData(true)
+        setRecievedMcnData(true)
       }
       catch(err){
-        console.log('hi');
+        console.log(err);
+      }
+     }
+     else if(status===1){
+      //********** SAF API CALL *****************//
+      try{
+        const SendData=async ()=>{
+          const result =await fetch(`${BaseUrl}/api/saf/portal`,{
+            headers:{Authorization: token}
+          })
+          const res=await result.json();
+          if (result.status===200||result.status===304) {
+            setSafPortalOn(true);
+          }
+          else if (result.status === 404||result.status === 400) {
+           setErr(true);
+           setSafPortalOn(false);
+           setErrMsg('MCN Portal is not open');
+          }
+          else if (res.err === true) {
+            setErr(true);
+            setErrMsg(res.msg);
+          }}
+          const SendData1=async ()=>{
+            const result =await fetch(`${BaseUrl}/api/saf/get`,{
+              headers:{Authorization: token}
+            })
+            const res=await result.json();
+              if (result.status === 200 || result.status === 201 || result.status === 304) {
+                setSafApplnData(res.data);
+                setSafAppln(true);
+              }
+            else if (result.status === 404||result.status === 400) {
+              setSafAppln(false);
+              //console.log("hii")
+            }
+            else if (res.err === true) {
+              setErr(true);
+              setErrMsg(res.msg);
+            }}
+        SendData();
+        SendData1();
+        setRecievedSafData(true)
+      }
+      catch(err){
+        console.log(err);
         
       }
      }
     
-    },[updated])
+    },[updated,status])
   
-
-
 
   return (
       <div>
@@ -148,23 +211,23 @@ export default function Scholarship() {
                 tabName: "MCN",                
                 tabContent: (
                   <div>
-                {recievedData? 
+                {recievedMcnData? 
                 <Card>
-                <MCN />
+                <MCNContent />
                 <CardFooter style={{display:'flex',justifyContent:'center'}}>
-                {!appln?
+                {!mcnAppln?
                 <Button 
                   round 
                   color="info" 
-                  disabled={!portalOn} 
+                  disabled={!mcnPortalOn} 
                   onClick={()=>{
-                      setOpenApply(true)
+                      setOpenMcnApply(true)
                   }} >
                       Apply For MCN
                  </Button>:
                  <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
                    <GridItem xs={12} sm ={12} md={12} >
-                  <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{applnData.status===-1?<Badge color="danger">Rejected</Badge>:applnData.status===1?<Badge color="success">Accepted</Badge>:applnData.status===0 && applnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Under Review</Badge>}
+                  <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{mcnApplnData.status===-1?<Badge color="danger">Rejected</Badge>:mcnApplnData.status===1?<Badge color="success">Accepted</Badge>:mcnApplnData.status===0 && mcnApplnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Under Review</Badge>}
                     </GridItem>
                    <GridItem xs={12} sm ={12} md={12} >
                   <TextField
@@ -172,7 +235,7 @@ export default function Scholarship() {
                         label="Remarks"
                         multiline
                         rows={4}
-                        defaultValue={applnData.remark}
+                        defaultValue={mcnApplnData.remark}
                         variant="outlined"
                         style={{marginTop:'20px',marginBottom:"30px"}}
                         inputProps={{
@@ -184,8 +247,8 @@ export default function Scholarship() {
                   <Button 
                   round 
                   color="rose" 
-                  disabled={!portalOn} 
-                  onClick={()=>{setOpenEdit(true)}}
+                  disabled={!mcnPortalOn} 
+                  onClick={()=>{setOpenMcnEdit(true)}}
                   style={{marginRight:'10px'}}
                   >
                       Review/Edit Application
@@ -193,8 +256,8 @@ export default function Scholarship() {
                  <Button 
                   round 
                   color="danger" 
-                  disabled={!portalOn}
-                  onClick={()=>{setOpenDelete(true)}}
+                  disabled={!mcnPortalOn}
+                  onClick={()=>{setOpenMcnDelete(true)}}
                   
                    >
                         Remove Application
@@ -222,18 +285,18 @@ export default function Scholarship() {
               </a>
               </center>
          <MCNApplyModal 
-         open={openApply} 
-         setOpen={setOpenApply} 
+         open={openMcnApply} 
+         setOpen={setOpenMcnApply} 
          setUpdated={setUpdated}
          setSuccess={setSuccess}
          setErr={setErr}
          setErrMsg={setErrMsg}
          setSuccessMsg={setSuccessMsg}
          />
-         <EditModal 
-         open={openEdit} 
-         setOpen={setOpenEdit} 
-         data={applnData}
+         <MCNEditModal 
+         open={openMcnEdit} 
+         setOpen={setOpenMcnEdit} 
+         data={mcnApplnData}
          setUpdated={setUpdated}
          setSuccess={setSuccess}
          setErr={setErr}
@@ -241,13 +304,13 @@ export default function Scholarship() {
          setSuccessMsg={setSuccessMsg}
           />
          
-         <DeleteModal  
-         open={openDelete} 
-         setOpen={setOpenDelete} 
+         <MCNDeleteModal  
+         open={openMcnDelete} 
+         setOpen={setOpenMcnDelete} 
          setUpdated={setUpdated}
          setSuccess={setSuccess}
          setErr={setErr}
-         setAppln={setAppln}
+         setMcnAppln={setMcnAppln}
          setErrMsg={setErrMsg}
          setSuccessMsg={setSuccessMsg}/>
                </Card>:
@@ -258,7 +321,93 @@ export default function Scholarship() {
               {
                 tabName: "SAF",              
                 tabContent: (
-                  <SAF/>
+                  <div>
+                  {recievedSafData? 
+                  <Card>
+                  <SAFContent />
+                  <CardFooter style={{display:'flex',justifyContent:'center'}}>
+                  {!safAppln?
+                  <Button 
+                    round 
+                    color="info" 
+                    disabled={!safPortalOn} 
+                    onClick={()=>{
+                        setOpenSafApply(true)
+                    }} >
+                        Apply For SAF
+                   </Button>:
+                   <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
+                     <GridItem xs={12} sm ={12} md={12} >
+                    <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{safApplnData.status===-1?<Badge color="danger">Rejected</Badge>:safApplnData.status===1?<Badge color="success">Accepted</Badge>:safApplnData.status===0 && safApplnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Under Review</Badge>}
+                      </GridItem>
+                     <GridItem xs={12} sm ={12} md={12} >
+                    <TextField
+                          id="outlined-multiline-static"
+                          label="Remarks"
+                          multiline
+                          rows={4}
+                          defaultValue={safApplnData.remark}
+                          variant="outlined"
+                          style={{marginTop:'20px',marginBottom:"30px"}}
+                          inputProps={{
+                            readOnly:true
+                          }}
+                      />
+                      </GridItem>
+                      <GridItem xs={12} sm ={12} md={12}>
+                    <Button 
+                    round 
+                    color="rose" 
+                    disabled={!safPortalOn} 
+                    onClick={()=>{setOpenSafEdit(true)}}
+                    style={{marginRight:'10px'}}
+                    >
+                        Review/Edit Application
+                   </Button>
+                   <Button 
+                    round 
+                    color="danger" 
+                    disabled={!safPortalOn}
+                    onClick={()=>{setOpenSafDelete(true)}}
+                    
+                     >
+                          Remove Application
+                   </Button>
+                   </GridItem>
+                   </GridContainer>}
+                </CardFooter>
+           <SAFApplyModal 
+           open={openSafApply} 
+           setOpen={setOpenSafApply} 
+           setUpdated={setUpdated}
+           setSuccess={setSuccess}
+           setErr={setErr}
+           setErrMsg={setErrMsg}
+           setSuccessMsg={setSuccessMsg}
+           />
+           <SAFEditModal 
+           open={openSafEdit} 
+           setOpen={setOpenSafEdit} 
+           data={safApplnData}
+           setUpdated={setUpdated}
+           setSuccess={setSuccess}
+           setErr={setErr}
+           setErrMsg={setErrMsg}
+           setSuccessMsg={setSuccessMsg}
+            />
+           
+           <MCNDeleteModal  
+           open={openSafDelete} 
+           setOpen={setOpenSafDelete} 
+           setUpdated={setUpdated}
+           setSuccess={setSuccess}
+           setErr={setErr}
+           setMcnAppln={setSafAppln}
+           setErrMsg={setErrMsg}
+           setSuccessMsg={setSuccessMsg}/>
+                 </Card>:
+                  null}
+                  </div>
                 )
               }
             ]}
