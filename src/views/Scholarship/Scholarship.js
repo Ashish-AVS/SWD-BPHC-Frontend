@@ -310,7 +310,7 @@ export default function Scholarship() {
          setUpdated={setUpdated}
          setSuccess={setSuccess}
          setErr={setErr}
-         setMcnAppln={setMcnAppln}
+         setAppln={setMcnAppln}
          setErrMsg={setErrMsg}
          setSuccessMsg={setSuccessMsg}/>
                </Card>:
@@ -396,13 +396,13 @@ export default function Scholarship() {
            setSuccessMsg={setSuccessMsg}
             />
            
-           <MCNDeleteModal  
+           <SAFDeleteModal  
            open={openSafDelete} 
            setOpen={setOpenSafDelete} 
            setUpdated={setUpdated}
            setSuccess={setSuccess}
            setErr={setErr}
-           setMcnAppln={setSafAppln}
+           setAppln={setSafAppln}
            setErrMsg={setErrMsg}
            setSuccessMsg={setSuccessMsg}/>
                  </Card>:

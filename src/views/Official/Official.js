@@ -228,7 +228,7 @@ const removeTimer=()=>{
          <MenuItem value={'ga'}>GANDHI BHAWAN</MenuItem>
          <MenuItem value={'k'}>KRISHNA BHAWAN</MenuItem>
          <MenuItem value={'r'}>RAM BHAWAN</MenuItem>
-         <MenuItem value={'mcn'}>MCN COMMITTEE</MenuItem>
+         <MenuItem value={'isac'}>ISAC COMMITTEE</MenuItem>
          <MenuItem value={'smc'}>SMC</MenuItem>
          
 

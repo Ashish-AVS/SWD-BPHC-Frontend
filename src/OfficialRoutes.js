@@ -29,6 +29,7 @@ import MessGrace from "views/OfficialComponents/Mess/MessGrace";
 import Exit from "views/OfficialComponents/Maingate/MaingateExit";
 import Outstation from "views/OfficialComponents/Outstation/Outstation";
 import Mcn from 'views/OfficialComponents/Mcn/Mcn';
+import Saf from 'views/OfficialComponents/Saf/Saf';
 import GoodieExport from "views/OfficialComponents/GoodiesExport/GoodiesExport";
 import Counsellor from "views/OfficialComponents/Counsellor/Counsellor";
 import Blacklist from "views/OfficialComponents/Blacklist/Blacklist";
@@ -82,6 +83,14 @@ const dashboardRoutes = [
     name: "MCN Portal",
     icon: AccountBalanceWalletIcon,
     component: Mcn ,
+    layout: "/official"
+  },
+  {
+    path: "/saf",
+    id:"saf",
+    name: "SAF Portal",
+    icon: AccountBalanceWalletIcon,
+    component: Saf ,
     layout: "/official"
   },
   {

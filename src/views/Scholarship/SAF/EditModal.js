@@ -57,7 +57,7 @@ const classes=useStyles();
 const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("tokens"));
 const [edit,setEdit]=React.useState(false);
-const [mcnData,setMcnData]=React.useState({
+const [safData,setSafData]=React.useState({
     fsalary:'',
     msalary:'',
     categ:'',
@@ -80,7 +80,7 @@ const [others,setOthers]=React.useState(false);
 const [uploadMsg,setUploadMsg]=React.useState("");
 const [uploading,setUploading]=React.useState(false);
 React.useEffect(()=>{
-    setMcnData(prevstate=>({
+    setSafData(prevstate=>({
       ...prevstate,
       name:data.name,
       fsalary:data.fsalary,
@@ -101,21 +101,21 @@ if(sendingData===true){
     const fetchData= async ()=>{
       const fileData= new FormData();
       /*Performing validation over mcn data*/
-      if (mcnData.cgpa < 0 || mcnData.cgpa > 10) {
+      if (safData.cgpa < 0 || safData.cgpa > 10) {
         setErr(true);
         setErrMsg("CGPA should be 0-10 inclusive");
         return;
       }
-      if(mcnData.others !=='')
+      if(safData.others !=='')
       {
-        fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`)
+        fileData.append('attached',`${safData.fitr}${safData.mitr}${safData.fbs}${safData.mbs}${safData.pc}${safData.f16}${safData.tehsil}${safData.fci}${safData.mci}${safData.others}`)
       }
       else {
-        fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
+        fileData.append('attached',`${safData.fitr}${safData.mitr}${safData.fbs}${safData.mbs}${safData.pc}${safData.f16}${safData.tehsil}${safData.fci}${safData.mci}${safData.others}`.slice(0,-1))
       }
-      if(mcnData.upload instanceof Blob) {
+      if(safData.upload instanceof Blob) {
         /*Performing validation over attached file*/
-        let attachedFile = mcnData.upload;
+        let attachedFile = safData.upload;
         let attachedFileSize = attachedFile.size / (1024*1024);
         let attachedFileType = attachedFile.type;
         if (attachedFileSize >= 10) {
@@ -128,20 +128,20 @@ if(sendingData===true){
           setErrMsg("Invalid file type, allowed file type(s): .zip");
           return;
         }
-        fileData.append('upload', mcnData.upload,`${uid}.zip`);
+        fileData.append('upload', safData.upload,`${uid}.zip`);
       } else {
         alert("Since you have not attached a new zip file while editing your application, previously uploaded zip file will be considered.");
       }
-      fileData.append('fsalary', mcnData.fsalary);
-      fileData.append('msalary', mcnData.msalary);
-      fileData.append('categ', mcnData.categ);
+      fileData.append('fsalary', safData.fsalary);
+      fileData.append('msalary', safData.msalary);
+      fileData.append('categ', safData.categ);
       
-     // fileData.append('attached',`${mcnData.fitr}${mcnData.mitr}${mcnData.fbs}${mcnData.mbs}${mcnData.pc}${mcnData.f16}${mcnData.tehsil}${mcnData.fci}${mcnData.mci}${mcnData.others}`.slice(0,-1))
-      fileData.append('loan', mcnData.loan);
-      fileData.append('cgpa', mcnData.cgpa);
+     // fileData.append('attached',`${safData.fitr}${safData.mitr}${safData.fbs}${safData.mbs}${safData.pc}${safData.f16}${safData.tehsil}${safData.fci}${safData.mci}${safData.others}`.slice(0,-1))
+      fileData.append('loan', safData.loan);
+      fileData.append('cgpa', safData.cgpa);
       setUploading(true);
       let caughtInError = 0;
-      const res= await axios.post(`${BaseUrl}/api/mcn`,fileData,{ 
+      const res= await axios.post(`${BaseUrl}/api/saf`,fileData,{ 
         headers:{
           Authorization:token
         },
@@ -187,7 +187,7 @@ if(sendingData===true){
  
   function onChange(e){
     const { name, value } = e.target;
-    setMcnData(prevState=>({
+    setSafData(prevState=>({
          ...prevState,
          [name]: value
      }));
@@ -197,7 +197,7 @@ if(sendingData===true){
  async function  onDocChange(e){
   const file=e.target.files[0];
   if(file!==undefined){
-  setMcnData(prevState=>({
+  setSafData(prevState=>({
     ...prevState,
     upload:file
   }))
@@ -208,13 +208,13 @@ if(sendingData===true){
    
    if(checked===true){
      
-    setMcnData(prevState=>({
+    setSafData(prevState=>({
       ...prevState,
       [name]:`${value} ,`
     }))
    }    
    else{
-    setMcnData(prevState=>({
+    setSafData(prevState=>({
       ...prevState,
       [name]:''
     }))
@@ -254,13 +254,13 @@ if(sendingData===true){
                     >
                       <Close className={classes.modalClose} />
                     </IconButton>
-                    <h3 className={classes.modalTitle}><strong>EDIT MCN APPLICATION</strong></h3>
+                    <h3 className={classes.modalTitle}><strong>EDIT SAF APPLICATION</strong></h3>
                   </DialogTitle>
                   <DialogContent
                     id="classic-modal-slide-description"
                     className={classes.modalBody}
                   >
-               {mcnData.name!==undefined?
+               {safData.name!==undefined?
                 <GridContainer justify="center" alignItems="center">
                  
                 <GridItem xs={12} sm={12} md={6}>
@@ -270,7 +270,7 @@ if(sendingData===true){
                                         fullWidth: true
                                     }}
                                     inputProps={{
-                                      defaultValue:mcnData.name,
+                                      defaultValue:safData.name,
                                          disabled:true
                                     }}
                                    
@@ -282,7 +282,7 @@ if(sendingData===true){
                   <Select
                     name="categ"
                     className={classes.input + " " + classes.underline}
-                    value={mcnData.categ}
+                    value={safData.categ}
                     onChange={onChange}
                   >
                     <MenuItem value={'General'}>General</MenuItem>
@@ -304,7 +304,7 @@ if(sendingData===true){
                                     onChange={onChange}
                                     inputProps={{
                                       
-                                      defaultValue:mcnData.fsalary,
+                                      defaultValue:safData.fsalary,
                                         name: 'fsalary',
                                         disabled:!edit    
                                     }}
@@ -319,7 +319,7 @@ if(sendingData===true){
                                     }}
                                     onChange={onChange}
                                     inputProps={{  
-                                      defaultValue:mcnData.msalary,                                      
+                                      defaultValue:safData.msalary,                                      
                                         name: 'msalary',
                                         disabled:!edit    
                                        }}
@@ -334,7 +334,7 @@ if(sendingData===true){
                                     }}
                                     onChange={onChange}
                                     inputProps={{  
-                                      defaultValue:mcnData.cgpa,                                      
+                                      defaultValue:safData.cgpa,                                      
                                         name: 'cgpa',
                                         type:'number',
                                         disabled:!edit    
@@ -348,17 +348,17 @@ if(sendingData===true){
                       label={<h5 style={{ color: "black" }}>Applied for loan</h5>}
                       name='loan'
                       disabled={!edit}
-                      checked={mcnData.loan}
+                      checked={safData.loan}
                       onChange={(e) => {
                         const { checked } = e.target;
                         if (checked) {
-                          setMcnData(prevData => ({
+                          setSafData(prevData => ({
                             ...prevData,
                             loan: 1
                           }))
                         }
                         else
-                          setMcnData(prevData => ({
+                          setSafData(prevData => ({
                             ...prevData,
                             loan: 0
                           }))
@@ -376,9 +376,9 @@ if(sendingData===true){
                    }}
                    multiline
                    rows={4}
-                   defaultValue={mcnData.attached}
+                   defaultValue={safData.attached}
                    variant="outlined"
-                   value={mcnData.attached}
+                   value={safData.attached}
                    onChange={onChange}
                    fullWidth={true}
                     /> 
@@ -506,7 +506,7 @@ if(sendingData===true){
                       }
                       else {
                         setOthers(false);
-                        setMcnData(prevState=>({
+                        setSafData(prevState=>({
                           ...prevState,
                           others:''
                         }))
@@ -527,7 +527,7 @@ if(sendingData===true){
                    rows={4}
                    defaultValue=""
                    variant="outlined"
-                   value={mcnData.others}
+                   value={safData.others}
                    onChange={onChange}
                    fullWidth={true}
                     /> 
