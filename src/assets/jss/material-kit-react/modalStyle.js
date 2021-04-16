@@ -81,7 +81,7 @@ const modalStyle = {
   },
   labelRoot: {
     ...defaultFont,
-    color: "#AAAAAA !important",
+    color: "#545454 !important",
     fontWeight: "400",
     fontSize: "14px",
     lineHeight: "1.42857",
@@ -122,7 +122,7 @@ const modalStyle = {
       }
     },
     label: {
-      color: "rgba(0, 0, 0, 0.26)",
+      color: "#545454",
       top:"-17px",
       fontSize: "14px",
       transition: "0.3s ease all",

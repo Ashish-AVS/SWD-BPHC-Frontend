@@ -52,7 +52,13 @@ const {uid}=JSON.parse(localStorage.getItem("data"));
 
 const token=JSON.parse(localStorage.getItem("tokens"));
 const [safData,setSafData]=React.useState({
-  fsalary:'',
+    fname:'',
+    mname:'',
+    fprof:'',
+    mprof:'',
+    fcert:'',
+    mcert:'',
+    fsalary:'',
     msalary:'',
     categ:'',
     upload:null,
@@ -67,7 +73,10 @@ const [safData,setSafData]=React.useState({
     mci:'',
     others:'',
     cgpa:'',
-    loan:''
+    loan:'',
+    phone:'',
+    bank_ac_no:''
+
 });
 const [sendingData,setSendingData]=React.useState(false)
 const [others,setOthers]=React.useState(false);
@@ -117,7 +126,14 @@ if(sendingData===true){
       fileData.append('fsalary', safData.fsalary);
       fileData.append('msalary', safData.msalary);
       fileData.append('categ', safData.categ);
-      
+      fileData.append('fname',safData.fname);
+      fileData.append('mname',safData.mname);
+      fileData.append('fcert',safData.fcert);
+      fileData.append('mcert',safData.mcert);
+      fileData.append('fprof',safData.fprof);
+      fileData.append('mprof',safData.mprof);
+      fileData.append('phone',safData.phone);
+      fileData.append('bank_ac_no',safData.bank_ac_no);       
       fileData.append('loan', safData.loan);
       fileData.append('cgpa', safData.cgpa);
       setUploading(true);
@@ -140,23 +156,32 @@ if(sendingData===true){
         return;
       }
       if(res.data.err===false){     
-      setSafData({
-        fsalary:'',
-          msalary:'',
-          categ:'',
-          upload:null,
-          fitr:'',
-          mitr:'',
-          fbs:'',
-          mbs:'',
-          pc:'',
-          f16:'',
-          tehsil:'',
-          fci:'',
-          mci:'',
-          others:'',
-          cgpa:'',
-          loan:0
+      setSafData({ 
+        fname: '',
+        mname: '',
+        fprof: '',
+        mprof: '',
+        fcert: '',
+        mcert: '',
+        fsalary: '',
+        msalary: '',
+        categ: '',
+        upload: null,
+        fitr: '',
+        mitr: '',
+        fbs: '',
+        mbs: '',
+        pc: '',
+        f16: '',
+        tehsil: '',
+        fci: '',
+        mci: '',
+        others: '',
+        cgpa: '',
+        loan: 0,
+        phone:'',
+        bank_ac_no:''
+
       })
       setUploading(false)
         setSuccess(true);
@@ -298,6 +323,70 @@ if(sendingData===true){
                   <GridItem xs={12} sm={12} md={12}>
                     <GridContainer justify="center" alignItems='center' >
                     
+                    <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Father's Name<span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      value:safData.fname,
+                                        name: 'fname',
+                                        type:'text'
+                                        
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Mother's Name <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      value:safData.mname,                                      
+                                        name: 'mname',
+                                        type:'text'    
+                                       }}
+
+                                />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Father's Occupation <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      value:safData.fprof,
+                                        name: 'fprof',
+                                        type:'text'
+                                        
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Mother's Profession <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      value:safData.mprof,                                      
+                                        name: 'mprof',
+                                        type:'text'    
+                                       }}
+
+                                />
+                      </GridItem>
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
                                     labelText={<p>Father's Income(in ₹) <span style={{color:'red'}}>*</span></p>}
@@ -330,6 +419,38 @@ if(sendingData===true){
 
                                 />
                       </GridItem>
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Father's Income Certificate<span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      value:safData.fcert,
+                                        name: 'fcert',
+                                        type:'text'
+                                        
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Mother's Income Certificate <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      value:safData.mcert,                                      
+                                        name: 'mcert',
+                                        type:'text'    
+                                       }}
+
+                                />
+                      </GridItem>
                       
                             <GridItem xs={12} sm={12} md={5}>
                   <FormControl fullWidth className={classes.formControl}>
@@ -354,6 +475,36 @@ if(sendingData===true){
                  </InputLabel>
                   <input name="g_img" type='file' style={{ marginTop: '10px' }} onChange={onDocChange}></input>
                 </GridItem>
+                <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Phone Number<span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      value:safData.phone,
+                                        name: 'phone',                                       
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText={<p>Bank Account Number<span style={{color:'red'}}>**</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      value:safData.bank_ac_no,                                      
+                                        name: 'bank_ac_no',
+                                        type:'text'    
+                                       }}
+
+                                />
+                      </GridItem>
                 <GridItem xs={12} sm={12} md={5}>
                 <CustomInput
                     labelText={<p>Current CGPA <span style={{color:'red'}}>*</span></p>}
@@ -399,8 +550,8 @@ if(sendingData===true){
                   </GridContainer>
                  </GridItem>
                  <GridItem xs={12} sm={12} md={12}>
-                <h6 style={{display:"flex",justifyContent:"center"}}><b>Submitted Documents<span style={{color:'red'}}>*</span></b></h6>
-                <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start'}}>
+                <h6 style={{display:"flex",justifyContent:"center"}}><b>All Submitted Documents<span style={{color:'red'}}>*</span></b></h6>
+                <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start',marginLeft:'40px'}}>
                   <FormControlLabel
                     control={<Checkbox color="primary" />}
                     label="Father/Guardian's ITR"
@@ -487,7 +638,7 @@ if(sendingData===true){
                 <GridItem xs={12} sm={12} md={12}>
                 <GridContainer >
                   <GridItem xs={12} sm={12} md={2}>
-                  <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start',flexDirection:'row'}}>
+                  <FormGroup aria-label="position" row style={{display:'flex',justifyContent:'flex-start',flexDirection:'row',marginLeft:'40px'}}>
                 <FormControlLabel 
                     control={<Checkbox color="primary" />}
                     label="Others"
@@ -511,7 +662,7 @@ if(sendingData===true){
                   />
                 </FormGroup>
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={8}>
+                  <GridItem xs={12} sm={12} md={8} style={{marginLeft:'40px'}}>
                   {others ?
                    <TextField
                    id="outlined-multiline-static"

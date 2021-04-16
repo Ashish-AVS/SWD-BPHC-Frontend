@@ -60,6 +60,7 @@ React.useEffect(()=>{
       setLoading(false);
       setUpdated(`${data.uid}-${remark}`);
       setOpen(false);
+      setRemark('')
       
         
        }

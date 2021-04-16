@@ -1,4 +1,5 @@
 import React from "react";
+import {saveAs} from 'file-saver';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from '@material-ui/core/Snackbar';
@@ -65,6 +66,7 @@ const useStyles = makeStyles(styles);
 export default function Scholarship() {
   const classes = useStyles();
   const token=JSON.parse(localStorage.getItem('tokens'));
+  const {uid}=JSON.parse(localStorage.getItem('data'));
   const [status,setStatus]=React.useState(0);
  
   const [updated,setUpdated]=React.useState(false);
@@ -77,7 +79,7 @@ export default function Scholarship() {
   const [openMcnDelete,setOpenMcnDelete]=React.useState(false);
   const [recievedMcnData,setRecievedMcnData]=React.useState(false);
 
-  
+  const [downloading,setDownloading]=React.useState(false)
   const [safPortalOn,setSafPortalOn]=React.useState(false);
   const [safAppln,setSafAppln]=React.useState(false);
   const [safApplnData,setSafApplnData]=React.useState({});
@@ -337,6 +339,39 @@ export default function Scholarship() {
                         Apply For SAF
                    </Button>:
                    <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
+                     <GridItem xs={12} sm ={12} md={12} style={{marginBottom:"50px"}}>
+                     <Button 
+                    round 
+                    color="info" 
+                    disabled={!safPortalOn||downloading} 
+                    onClick={async ()=>{
+                      setDownloading(true)
+                      try{
+                       const result=await fetch(`${BaseUrl}/api/saf/generate_pdf`,{
+                          headers:{Authorization: token}
+                        })
+                        if (result.status===200||result.status===201) {
+                          const res = await result.blob();   
+                          const pdfBlob=new Blob([res],{type:'application/pdf'});
+                          saveAs(pdfBlob,`SAF Application Form`);
+                          setSuccessMsg('Application downloaded successfully')  
+                          setSuccess(true); 
+                          setDownloading(false);
+                        }
+                        else{
+                          setErrMsg("Couldn't download the application")
+                          setErr(true)
+                          setDownloading(false);
+                        }
+                      }catch(err){
+                        setErrMsg("Couldn't download the application")
+                        setErr(true)
+                        setDownloading(false);
+                      }    
+                    }} >
+                        Download Application Form 
+                   </Button>
+                      </GridItem>
                      <GridItem xs={12} sm ={12} md={12} >
                     <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{safApplnData.status===-1?<Badge color="danger">Rejected</Badge>:safApplnData.status===1?<Badge color="success">Accepted</Badge>:safApplnData.status===0 && safApplnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Under Review</Badge>}
                       </GridItem>

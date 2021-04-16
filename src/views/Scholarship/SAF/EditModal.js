@@ -57,24 +57,32 @@ const classes=useStyles();
 const {uid}=JSON.parse(localStorage.getItem("data"));
 const token=JSON.parse(localStorage.getItem("tokens"));
 const [edit,setEdit]=React.useState(false);
-const [safData,setSafData]=React.useState({
-    fsalary:'',
-    msalary:'',
-    categ:'',
-    upload:null,
-    fitr:'',
-    mitr:'',
-    fbs:'',
-    mbs:'',
-    pc:'',
-    f16:'',
-    tehsil:'',
-    fci:'',
-    mci:'',
-    others:'',
-    loan:'',
-    cgpa:''
-});
+  const [safData, setSafData] = React.useState({
+    fname: '',
+    mname: '',
+    fprof: '',
+    mprof: '',
+    fcert: '',
+    mcert: '',
+    fsalary: '',
+    msalary: '',
+    categ: '',
+    upload: null,
+    fitr: '',
+    mitr: '',
+    fbs: '',
+    mbs: '',
+    pc: '',
+    f16: '',
+    tehsil: '',
+    fci: '',
+    mci: '',
+    others: '',
+    loan: '',
+    cgpa: '',
+    phone:'',
+    bank_ac_no:''
+  });
 const [sendingData,setSendingData]=React.useState(false)
 const [others,setOthers]=React.useState(false);
 const [uploadMsg,setUploadMsg]=React.useState("");
@@ -83,6 +91,14 @@ React.useEffect(()=>{
     setSafData(prevstate=>({
       ...prevstate,
       name:data.name,
+      fname:data.fname,
+      mname:data.mname,
+      fcert:data.fcert,
+      mcert:data.mcert,
+      fprof:data.fprof,
+      mprof:data.mprof,
+      phone:data.phone,
+      bank_ac_no:data.bank_ac_no,
       fsalary:data.fsalary,
       msalary:data.msalary,
       categ:data.categ,
@@ -137,6 +153,14 @@ if(sendingData===true){
       fileData.append('categ', safData.categ);
       
      // fileData.append('attached',`${safData.fitr}${safData.mitr}${safData.fbs}${safData.mbs}${safData.pc}${safData.f16}${safData.tehsil}${safData.fci}${safData.mci}${safData.others}`.slice(0,-1))
+     fileData.append('fname',safData.fname);
+     fileData.append('mname',safData.mname);
+     fileData.append('fcert',safData.fcert);
+     fileData.append('mcert',safData.mcert);
+     fileData.append('fprof',safData.fprof);
+     fileData.append('mprof',safData.mprof);
+     fileData.append('phone',safData.phone);
+     fileData.append('bank_ac_no',safData.bank_ac_no);
       fileData.append('loan', safData.loan);
       fileData.append('cgpa', safData.cgpa);
       setUploading(true);
@@ -295,6 +319,75 @@ if(sendingData===true){
                             </GridItem>
                   <GridItem xs={12} sm={12} md={12}>
                     <GridContainer >
+                      
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Father's Name<span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      defaultValue:safData.fname,
+                                        name: 'fname',
+                                        type:'text',
+                                        disabled:!edit
+                                        
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Mother's Name <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      defaultValue:safData.mname,                                      
+                                        name: 'mname',
+                                        type:'text',
+                                        disabled:!edit   
+                                       }}
+
+                                />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Father's Occupation <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      defaultValue:safData.fprof,
+                                        name: 'fprof',
+                                        type:'text',
+                                        disabled:!edit
+                                        
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Mother's Profession <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      defaultValue:safData.mprof,                                      
+                                        name: 'mprof',
+                                        type:'text',
+                                        disabled:!edit    
+                                       }}
+
+                                />
+                      </GridItem>
                       <GridItem xs={12} sm={12} md={6}>
                                 <CustomInput
                                     labelText={<p>Father's Income(in ₹) <span style={{color:'red'}}>*</span></p>}
@@ -308,7 +401,6 @@ if(sendingData===true){
                                         name: 'fsalary',
                                         disabled:!edit    
                                     }}
-
                                 />
                       </GridItem>
                       <GridItem xs={12} sm={12} md={6}>
@@ -326,7 +418,73 @@ if(sendingData===true){
 
                                 />
                       </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Father's Income Certificate<span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      defaultValue:safData.fcert,
+                                        name: 'fcert',
+                                        type:'text',
+                                        disabled:!edit
+                                        
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Mother's Income Certificate <span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      defaultValue:safData.mcert,                                      
+                                        name: 'mcert',
+                                        type:'text',
+                                        disabled:!edit    
+                                       }}
+
+                                />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Phone Number<span style={{color:'red'}}>*</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{
+                                      defaultValue:safData.phone,
+                                        name: 'phone',
+                                        disabled:!edit                                       
+                                    }}
+
+                                />
+                      </GridItem>
+                     
+                      <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText={<p>Bank Account Number<span style={{color:'red'}}>**</span></p>}
+                                    formControlProps={{
+                                        fullWidth: true
+                                    }}
+                                    onChange={onChange}
+                                    inputProps={{  
+                                      defaultValue:safData.bank_ac_no,                                      
+                                        name: 'bank_ac_no',
+                                        type:'text', 
+                                        disabled:!edit   
+                                       }}
+
+                                />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
                                 <CustomInput
                                     labelText={<p>Current CGPA <span style={{color:'red'}}>*</span></p>}
                                     formControlProps={{
@@ -342,7 +500,7 @@ if(sendingData===true){
 
                                 />
                       </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
+                      <GridItem xs={12} sm={12} md={6}>
                     <FormControlLabel
                       control={<Switch  color="primary" />}
                       label={<h5 style={{ color: "black" }}>Applied for loan</h5>}
