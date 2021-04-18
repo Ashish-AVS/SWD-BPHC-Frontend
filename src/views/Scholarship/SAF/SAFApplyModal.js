@@ -313,7 +313,7 @@ if(sendingData===true){
                     >
                       <Close className={classes.modalClose} />
                     </IconButton>
-                    <h3 className={classes.modalTitle}><strong>SAF APPLICATION</strong></h3>
+                    <h3 className={classes.modalTitle}><strong>SAF APPLICATION-2021</strong></h3>
                   </DialogTitle>
                   <DialogContent
                     id="classic-modal-slide-description"
