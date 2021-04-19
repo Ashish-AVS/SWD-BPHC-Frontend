@@ -421,7 +421,7 @@ if(sendingData===true){
                       </GridItem>
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
-                                    labelText={<p>Father's Income Certificate<span style={{color:'red'}}>*</span></p>}
+                                    labelText={<p>Name of Documents(Father) <span style={{color:'red'}}>*</span></p>}
                                     formControlProps={{
                                         fullWidth: true
                                     }}
@@ -438,7 +438,7 @@ if(sendingData===true){
                      
                       <GridItem xs={12} sm={12} md={5}>
                                 <CustomInput
-                                    labelText={<p>Mother's Income Certificate <span style={{color:'red'}}>*</span></p>}
+                                    labelText={<p>Name of Documents(Mother) <span style={{color:'red'}}>*</span></p>}
                                     formControlProps={{
                                         fullWidth: true
                                     }}
