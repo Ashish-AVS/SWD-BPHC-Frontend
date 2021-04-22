@@ -107,9 +107,9 @@ if(sendingData===true){
         let attachedFile = safData.upload;
         let attachedFileSize = attachedFile.size / (1024*1024);
         let attachedFileType = attachedFile.type;
-        if (attachedFileSize >= 15) {
+        if (attachedFileSize >= 30) {
           setErr(true);
-          setErrMsg("File size exceeded, limit is 15 MB");
+          setErrMsg("File size exceeded, limit is 30 MB");
           return;
         }
         if (!attachedFileType.includes("zip")) {
