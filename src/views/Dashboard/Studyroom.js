@@ -86,24 +86,24 @@ export default function Dashboard() {
   const classes = useStyles();
   return (
     <div>      
-      <div className={classes.note} style={{marginTop:"20px"}}>
-          <h4><b>VIRTUAL CAMPUS</b></h4>
+      <div className={classes.note} style={{marginTop:"20px",marginLeft:'20px'}}>
+          <h3><b>VIRTUAL CAMPUS</b></h3>
       </div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
-         <Card>
+         <Card >
          <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>STUDY ROOMS FOR STUDENTS ACROSS DIFFERENT BATCH</b></h4>
+              <h4 className={classes.cardTitleWhite}><b>INTERACTIVE ROOMS FOR STUDENTS</b></h4>
             </CardHeader>
              <CardBody>
              <GridContainer justify="center" alignItems="center">
                {
                  roomDetails.length>0?roomDetails.map(room=>{
                  return  (<GridItem xs={12} sm={6} md={4}>
-                  <Card>
+                  <Card style={{border:'1px solid black'}}>
                     <CardBody >
                     
-                      <div style={{display:'flex',justifyContent:'center'}}><h4><b>Study Room-{room.r_id}</b></h4></div>
+                      <div style={{display:'flex',justifyContent:'center'}}><h4><b>Room-{room.r_id}</b></h4></div>
                       <div style={{display:'flex',justifyContent:'center'}}><p><b>{room.r_name}</b></p></div>
                       <div style={{display:'flex',justifyContent:'center'}}><p>HOST- {room.r_host}</p></div>
                       
