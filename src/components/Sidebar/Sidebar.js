@@ -3,6 +3,7 @@ import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
+import "./Sidebar.css";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";

@@ -25,7 +25,7 @@ import Button from "components/CustomButtons/Button.js";
 //Auth Components
 import { useAuth } from "context/auth";
 
-
+import StudyRoom from './Studyroom.js';
 import GraceModal from "views/Modals/GraceModal";
 import ComplaintsModal from "views/Modals/ComplaintsModal";
 import MenuModal from "views/Modals/MenuModal";
@@ -173,7 +173,7 @@ export default function Dashboard() {
         
       </GridContainer>
       
-      <div className={classes.note} style={{marginTop:"20px"}}>
+      {/* <div className={classes.note} style={{marginTop:"20px"}}>
           <h4><b>CAMPUS NEWS AND NOTICES</b></h4>
       </div>
       <GridContainer>
@@ -234,7 +234,8 @@ export default function Dashboard() {
           />
         </GridItem>
      
-      </GridContainer> 
+      </GridContainer>  */}
+      <StudyRoom />
       <ComplaintsModal Modal={Modal} openModal={openModal} />
       <MenuModal Mess={Mess} openMess={openMess} messMenu={messMenu}/>    
       <GraceModal Grace={Grace} openGrace={openGrace} uid={uid} />
