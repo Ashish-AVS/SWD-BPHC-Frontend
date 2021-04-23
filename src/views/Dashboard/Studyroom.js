@@ -109,7 +109,7 @@ export default function Dashboard() {
                       
                     </CardBody>
                     <CardFooter style={{display:'flex',justifyContent:'center'}}>
-                       <Button color="info" round><a href={room.r_link} style={{textDecoration:'none',color:'white'}}>Join</a></Button>
+                       <a href={room.r_link} style={{textDecoration:'none',color:'white'}}><Button color="info" round>Join</Button></a>
                     </CardFooter>
                   </Card>
                   </GridItem>)
