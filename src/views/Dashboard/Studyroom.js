@@ -103,13 +103,13 @@ export default function Dashboard() {
                   <Card style={{border:'1px solid black'}}>
                     <CardBody >
                     
-                      <div style={{display:'flex',justifyContent:'center'}}><h4><b>Room-{room.r_id}</b></h4></div>
-                      <div style={{display:'flex',justifyContent:'center'}}><p><b>{room.r_name}</b></p></div>
-                      <div style={{display:'flex',justifyContent:'center'}}><p>HOST- {room.r_host}</p></div>
+                      <div style={{display:'flex',justifyContent:'center'}}><h4><b>{room.r_name}</b></h4></div>
+                      <div style={{display:'flex',justifyContent:'center'}}><p><b>HOST- {room.r_host}</b></p></div>
+                      {/* <div style={{display:'flex',justifyContent:'center'}}><p>HOST- {room.r_host}</p></div> */}
                       
                     </CardBody>
                     <CardFooter style={{display:'flex',justifyContent:'center'}}>
-                       <Button color="info" round><a href={room.r_link} style={{textDecoration:'none',color:'white'}}>Join Study Room</a></Button>
+                       <Button color="info" round><a href={room.r_link} style={{textDecoration:'none',color:'white'}}>Join</a></Button>
                     </CardFooter>
                   </Card>
                   </GridItem>)
