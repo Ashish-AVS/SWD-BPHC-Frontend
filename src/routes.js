@@ -14,12 +14,14 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SchoolIcon from '@material-ui/icons/School';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
+import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
+import Virtual from "views/VirtualCampus/VirtualCampus";
 import Connect from "views/Connect/Connect.js";
 import Goodies from "views/Goodies/Goodies.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
@@ -43,6 +45,13 @@ const dashboardRoutes = [
     name: "Student Profile",
     icon: Person,
     component: UserProfile,
+    layout: "/admin"
+  },
+  {
+    path: "/virtual",
+    name: "Virtual Campus",
+    icon: ImportantDevicesIcon,
+    component: Virtual,
     layout: "/admin"
   },
   {
