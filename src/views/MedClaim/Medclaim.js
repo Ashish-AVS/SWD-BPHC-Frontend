@@ -111,10 +111,13 @@ export default function Medclaim() {
 
 		<h3 style={{display:"flex",justifyContent:"center"}}><b>POLICY DETAILS OF STUDENT</b></h3>
 		<p><b>Policy Number:</b> 51-20-00561-00-00</p>
-    <p><b>Membership ID:</b> {medData.member_id}</p>
-    <p><b>Username:</b> {medData.username}</p>
+    <p><b>Corporate ID:</b> 27367</p>
+    {/* <p><b>Membership ID:</b> {medData.member_id}</p> */}
+    <p><b>UHID:</b> {medData.username}</p>
+    <p><b>User ID:</b> YOUR ID Number <i>(e.g. 2015AAPS0274H)</i></p>
     <p><b>Password:</b> {medData.password}</p> 
-    <p>For information about claiming Medical Insurance download your medical card<br/></p>
+    <p>Use the above credentials to login to the fhpl website <a href="https://www.fhpl.net/FhplLogins/Ecard/Login.aspx?Type=ecard"><b>here</b></a> and view your insurance details.</p>
+    <p>For information about claiming Medical Insurance download your medical card.</p>
       </CardBody>
       <CardFooter>
        
