@@ -228,6 +228,39 @@ export default function Scholarship() {
                       Apply For MCN
                  </Button>:
                  <GridContainer spacing={4} direction="column" justify="center" alignItems="center">
+                  <GridItem xs={12} sm ={12} md={12} style={{marginBottom:"50px"}}>
+                     <Button 
+                    round 
+                    color="primary" 
+                    disabled={!mcnPortalOn||downloading} 
+                    onClick={async ()=>{
+                      setDownloading(true)
+                      try{
+                       const result=await fetch(`${BaseUrl}/api/mcn/generate_pdf`,{
+                          headers:{Authorization: token}
+                        })
+                        if (result.status===200||result.status===201) {
+                          const res = await result.blob();   
+                          const pdfBlob=new Blob([res],{type:'application/pdf'});
+                          saveAs(pdfBlob,`MCN Application Form`);
+                          setSuccessMsg('Application downloaded successfully')  
+                          setSuccess(true); 
+                          setDownloading(false);
+                        }
+                        else{
+                          setErrMsg("Couldn't download the application")
+                          setErr(true)
+                          setDownloading(false);
+                        }
+                      }catch(err){
+                        setErrMsg("Couldn't download the application")
+                        setErr(true)
+                        setDownloading(false);
+                      }    
+                    }} >
+                        Download Application Form 
+                   </Button>
+                      </GridItem>
                    <GridItem xs={12} sm ={12} md={12} >
                   <b>Status of Application-</b>&nbsp;&nbsp;&nbsp;&nbsp;{mcnApplnData.status===-1?<Badge color="danger">Rejected</Badge>:mcnApplnData.status===1?<Badge color="success">Accepted</Badge>:mcnApplnData.status===0 && mcnApplnData.updated===0?<Badge color="info">Remarked</Badge>:<Badge color="warning">Under Review</Badge>}
                     </GridItem>
@@ -255,6 +288,7 @@ export default function Scholarship() {
                   >
                       Review/Edit Application
                  </Button>
+                
                  <Button 
                   round 
                   color="danger" 
