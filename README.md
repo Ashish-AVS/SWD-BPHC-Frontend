@@ -5,25 +5,14 @@ Within the download you'll find the following directories and files:
 
 ```
 .
-├── CHANGELOG.md
-├── ISSUE_TEMPLATE.md
-├── LICENSE.md
 ├── README.md
-├── bower.json
-├── gulpfile.js
 ├── jsconfig.json
 ├── package.json
-├── Documentation
-│   ├── assets
-│   │   ├── css
-│   │   ├── img
-│   │   │   └── faces
-│   │   └── js
-│   └── tutorial-components.html
 ├── public
 │   ├── favicon.ico
 │   ├── index.html
 │   └── manifest.json
+|+--includes
 └── src
     ├── index.js
     ├── logo.svg
