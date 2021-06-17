@@ -132,7 +132,7 @@ export default function MCN() {
   <p><strong>All decisions of the Scholarships Committee are final and binding.</strong></p>
   <p><strong>NOTE:</strong> If any of the above documents are not available, please mail the MCN committee. (<a href="mailto:mcn@hyderabad.bits-pilani.ac.in?subject=Query regarding">mcn@hyderabad.bits-pilani.ac.in</a>)</p>
   <p>**Those who have applied in the first sem don't need to do it again.</p> 
-   <p>Last date to apply- <strong>17/06/2021</strong></p> 
+   <p>Last date to apply- <strong>20/06/2021</strong></p> 
 </div>
 
 
