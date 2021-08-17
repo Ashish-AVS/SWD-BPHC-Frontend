@@ -34,7 +34,9 @@ import GoodieExport from "views/OfficialComponents/GoodiesExport/GoodiesExport";
 import Counsellor from "views/OfficialComponents/Counsellor/Counsellor";
 import Blacklist from "views/OfficialComponents/Blacklist/Blacklist";
 import Blocklist from "views/OfficialComponents/Blocklist/Blocklist";
-import DocGen from "views/OfficialComponents/DocGen/DocGen"
+import DocGen from "views/OfficialComponents/DocGen/DocGen";
+import Leave from "views/OfficialComponents/Leave/Leave";
+
 const dashboardRoutes = [
   
   {
@@ -140,8 +142,15 @@ const dashboardRoutes = [
     icon: DescriptionIcon,
     component: DocGen,
     layout: "/official"
+  },
+  {
+    path: "/leave",
+    id:"emergency_leave",
+    name: "Emergency Leave ",
+    icon: DescriptionIcon,
+    component: Leave,
+    layout: "/official"
   }
-
 
   /*
   {

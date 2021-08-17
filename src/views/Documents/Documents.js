@@ -80,7 +80,7 @@ export default function Documents() {
           if (result.status===201) {
             const res = await result.blob();   
             const pdfBlob=new Blob([res],{type:'application/pdf'});
-            saveAs(pdfBlob,`${uid}-${docKey}`);
+            saveAs(pdfBlob,`${docKey}`);
             setSendingData(false);
             setDocKey('');
             setLoading(false);  

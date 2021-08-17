@@ -38,7 +38,7 @@ export default function DocItem({docTitle,docKey}) {
           if(result.status===200||result.status===201){  
           
             const pdfBlob=new Blob([res],{type:'application/pdf'});
-          saveAs(pdfBlob,`${uid}-${docKey}`);
+          saveAs(pdfBlob,`${docKey}`);
           setLoading(false);          
           }
          

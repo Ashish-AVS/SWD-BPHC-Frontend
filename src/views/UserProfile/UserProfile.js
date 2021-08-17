@@ -234,6 +234,7 @@ export default function UserProfile() {
               dp: profile.dp,
               hostel:profile.hostel,
               room: profile.room || 'NA',
+              dist:profile.dist,
               state: profile.state,
               pin_code: profile.pin_code,
               time:profile.time,
@@ -609,6 +610,20 @@ export default function UserProfile() {
         inputProps={{
           defaultValue:profile.city,
           name:"city"
+        }}
+        onChange={onChange}
+      />
+    </GridItem>
+    <GridItem xs={12} sm={12} md={6}>
+      <CustomInput
+        labelText="District"
+        id="city"
+        formControlProps={{
+          fullWidth: true
+        }}
+        inputProps={{
+          defaultValue:profile.dist,
+          name:"dist"
         }}
         onChange={onChange}
       />

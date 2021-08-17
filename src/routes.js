@@ -47,13 +47,13 @@ const dashboardRoutes = [
     component: UserProfile,
     layout: "/admin"
   },
-  {
-    path: "/virtual",
-    name: "Virtual Campus",
-    icon: ImportantDevicesIcon,
-    component: Virtual,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/virtual",
+  //   name: "Virtual Campus",
+  //   icon: ImportantDevicesIcon,
+  //   component: Virtual,
+  //   layout: "/admin"
+  // },
   {
     path: "/connect",
     name: "Connect",
