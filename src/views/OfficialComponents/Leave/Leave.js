@@ -1,5 +1,5 @@
 import React from "react";
-import MaterialTable from "material-table";
+// import MaterialTable from "material-table";
 import Datetime from "react-datetime";
 import { Redirect } from "react-router-dom";
 // @material-ui/core components
@@ -28,11 +28,11 @@ import { useAuth } from "context/auth";
 import { BaseUrl } from "variables/BaseUrl";
 import { primaryColor, defaultFont } from "assets/jss/material-kit-react.js";
 const styles = {
-  typo: {
-    paddingLeft: "25%",
-    marginBottom: "40px",
-    position: "relative",
-  },
+  // typo: {
+  //   paddingLeft: "25%",
+  //   marginBottom: "40px",
+  //   position: "relative",
+  // },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     bottom: "10px",
@@ -125,69 +125,32 @@ const useStyles = makeStyles(styles);
 export default function Leave() {
   const classes = useStyles();
   const { onLogin } = useAuth();
-
   const [isError, setIsError] = React.useState(false);
+  const [msg, setMsg] = React.useState("");
+
   // const { uid } = JSON.parse(localStorage.getItem("data"));
-  const uid = "f20202298";
-  const token = JSON.parse(localStorage.getItem("tokens"));
-  const [data, setData] = React.useState([]);
+  const token=JSON.parse(localStorage.getItem("officialtokens"));
   const [loading, setLoading] = React.useState(false);
   const [reqSent, setReqSent] = React.useState(false);
   const [sendingData, setSendingData] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [cancelId, setCancelId] = React.useState(null);
   const [isUpdated, setIsUpdated] = React.useState(null);
-  const [errorMsg, setErrorMsg] = React.useState("");
-  const [outData, setOutData] = React.useState({
+  const [data, setData] = React.useState({
     from: "",
     to: "",
-    uid: "",
-    location: "",
+    uid: ""
   });
+
+  /**  DATE FUNCTION - To prevent showing dates before today  **/
   var yesterday = Datetime.moment().subtract(1, "day");
   var validfrom = function (current) {
     return current.isAfter(yesterday);
   };
 
-  React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/outstation/`, {
-          headers: { Authorization: token },
-        });
-        const res = await result.json();
-        if (res.err === false) {
-          setData(
-            res.data.map((info, index) => {
-              let badge = null;
-              if (info.approved === -1) {
-                badge = <Badge color="danger">Rejected</Badge>;
-              } else if (info.approved === 0) {
-                badge = <Badge color="warning">Pending</Badge>;
-              } else if (info.approved === 1) {
-                badge = <Badge color="success">Approved</Badge>;
-              }
-              return {
-                sno: index + 1,
-                outstation_id: info.outstation_id,
-                location: info.location,
-                from: info.from,
-                to: info.to,
-                duration: `${info.duration} Days`,
-                approved: badge,
-                status: info.approved,
-              };
-            })
-          );
-        } else if (res.err === true && result.status === 401) {
-          logout();
-        }
-      };
-      fetchData();
-    } catch (err) {
-      console.log(err);
-    }
-  }, [uid, token, reqSent, isUpdated]);
+  /* ********** */
+
+
   React.useEffect(() => {
     if (sendingData === true) {
       setLoading(true);
@@ -196,48 +159,39 @@ export default function Leave() {
 
       try {
         const fetchData = async () => {
-          const result = await fetch(`${BaseUrl}/api/outstation/?`, {
+          const result = await fetch(`${BaseUrl}/`, {
             method: "post",
             headers: {
               "Content-Type": "application/json",
-              Authorization: token,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              // uid: uid,
-              token: token,
-              from: outData.from,
-              to: outData.to,
-              uid: outData.uid,
-              location: outData.location,
-            }),
+              from: data.from,
+              to: data.to,
+              uid: data.uid
+            })
           });
           const res = await result.json();
           if (res.err === false) {
-            setSendingData(false);
-            setOutData({
+            setData({
               from: "",
               to: "",
-              uid: "",
-              location: "",
+              uid: ""
             });
-            setReqSent(true);
-
-            setLoading(false);
           } else if (res.err === true && result.status === 401) {
             logout();
           } else if (res.err === true && result.status === 422) {
-            setErrorMsg("Empty Fields Detected");
+            setMsg("Empty Fields Detected");
             setIsError(true);
-            setSendingData(false);
-            setLoading(false);
           } else if (res.err === true) {
-            setErrorMsg(res.msg);
+            setMsg(res.msg);
             setIsError(true);
-            setSendingData(false);
-            setLoading(false);
           }
+          setLoading(false);
+
         };
         fetchData();
+        setSendingData(false);
       } catch (err) {
         console.log(err);
       }
@@ -246,37 +200,39 @@ export default function Leave() {
     sendingData,
     // uid,
     token,
-    outData.from,
-    outData.to,
-    outData.uid,
-    outData.location,
+    data.from,
+    data.to,
+    data.uid,
+    data.location,
   ]);
 
   const logout = () => {
-    localStorage.removeItem("tokens");
+    localStorage.removeItem("officialtokens");
     localStorage.removeItem("data");
     onLogin(false);
-    return <Redirect exact to="/login-page" />;
+    return <Redirect exact to="/official-login" />;
   };
 
   function onChange(e) {
     const { name, value } = e.target;
-    setOutData((prevState) => ({
+    setData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   }
   return (
     <div>
-      <div className={classes.typo} style={{ marginTop: "-50px" }}>
-        <h2>
-          <strong>STUDENT WELFARE DIVISION</strong>
-        </h2>
-      </div>
+      <GridContainer justify="center" alignItems="center">
+        <GridItem >
+            <h2>
+              <strong>STUDENT WELFARE DIVISION</strong>
+            </h2>
+        </GridItem>
+      </GridContainer>
       <Card>
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
-            <b>ONLINE OUTSTATION</b>
+            <b>EMERGENCY LEAVE </b>
           </h4>
         </CardHeader>
         <CardBody>
@@ -301,7 +257,7 @@ export default function Leave() {
                 message={
                   <span>
                     <b>ERROR:</b>
-                    {errorMsg}
+                    {msg}
                   </span>
                 }
                 close
@@ -325,7 +281,7 @@ export default function Leave() {
                 inputProps={{
                   multiline: true,
                   name: "uid",
-                  value: outData.uid,
+                  value: data.uid,
                 }}
                 onChange={onChange}
               />
@@ -338,7 +294,7 @@ export default function Leave() {
                   timeFormat={false}
                   className={classes.input + " " + classes.underline}
                   isValidDate={validfrom}
-                  value={outData.from}
+                  value={data.from}
                   onChange={(e) => {
                     const date = new Date(`${e}`);
                     const { Date1, Month, Year } = {
@@ -348,23 +304,23 @@ export default function Leave() {
                     };
                     if (Month > 9) {
                       if (Date1 < 10) {
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           from: `${Year}-${Month}-0${Date1}`,
                         }));
                       } else
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           from: `${Year}-${Month}-${Date1}`,
                         }));
                     } else {
                       if (Date1 < 10)
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           from: `${Year}-0${Month}-0${Date1}`,
                         }));
                       else
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           from: `${Year}-0${Month}-${Date1}`,
                         }));
@@ -383,7 +339,7 @@ export default function Leave() {
                 }}
                 inputProps={{
                   name: "location",
-                  value: outData.location,
+                  value: data.location,
                 }}
               />
             </GridItem>
@@ -395,7 +351,7 @@ export default function Leave() {
                   timeFormat={false}
                   className={classes.input + " " + classes.underline}
                   isValidDate={validfrom}
-                  value={outData.to}
+                  value={data.to}
                   onChange={(e) => {
                     const date = new Date(`${e}`);
                     const { Date1, Month, Year } = {
@@ -405,23 +361,23 @@ export default function Leave() {
                     };
                     if (Month > 9) {
                       if (Date1 < 10) {
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           to: `${Year}-${Month}-0${Date1}`,
                         }));
                       } else
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           to: `${Year}-${Month}-${Date1}`,
                         }));
                     } else {
                       if (Date1 < 10)
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           to: `${Year}-0${Month}-0${Date1}`,
                         }));
                       else
-                        setOutData((prevState) => ({
+                        setData((prevState) => ({
                           ...prevState,
                           to: `${Year}-0${Month}-${Date1}`,
                         }));
@@ -452,61 +408,10 @@ export default function Leave() {
                 </GridItem>
               </GridContainer>
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={10}>
-              <p>
-                <strong>Note:</strong>
-                <br />
-                1.You can apply for online outstation from 7 days of your Travel
-                (not before that).
-                <br />
-                2.Incase to know the reason of rejection or for quick approval
-                please contact your respective hostel warden.
-                <br />
-                3.Outstation request can be cancelled only if the status is{" "}
-                <Badge color="warning">Pending</Badge>
-              </p>
-            </GridItem> */}
           </GridContainer>
         </CardBody>
-        <CancelOutstation
-          open={open}
-          setOpen={setOpen}
-          cancelId={cancelId}
-          setIsUpdated={setIsUpdated}
-        />
       </Card>
-      {/* <MaterialTable
-        title="PREVIOUSLY APPLIED OUTSTATIONS"
-        columns={[
-          { title: "S No.", field: "sno" },
-          { title: "Travelling To", field: "location" },
-          { title: "From Date", field: "from" },
-          { title: "To Date", field: "to" },
-          { title: "Duration", field: "duration" },
-          { title: "Approval Status", field: "approved" },
-        ]}
-        data={data}
-        options={{
-          search: false,
-          pageSize: 10,
-          emptyRowsWhenPaging: false,
-          actionsColumnIndex: -1,
-        }}
-        actions={[
-          (rowData) => ({
-            icon: () => (
-              <Button disabled={rowData.status !== 0} color="info">
-                Cancel
-              </Button>
-            ),
-            disabled: rowData.status !== 0,
-            onClick: (event, row) => {
-              setCancelId(row.outstation_id);
-              setOpen(true);
-            },
-          }),
-        ]}
-      /> */}
+      
     </div>
   );
 }
