@@ -179,7 +179,6 @@ export default function Leave() {
     );
   }, [selectedToDate, selectedFromDate]);
 
-  
   React.useEffect(() => {
     if (sendingData === true) {
       setLoading(true);
@@ -192,7 +191,7 @@ export default function Leave() {
             method: "post",
             headers: {
               "Content-Type": "application/json",
-              Authorization:`Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               uid: stdID.current.value,
@@ -209,9 +208,9 @@ export default function Leave() {
           const res = await result.json();
           if (res.err === false) {
             setSendingData(false);
-            stdID.current.value = ""
-            setSelectedFromDate(new Date())
-            setSelectedToDate(new Date())
+            stdID.current.value = "";
+            setSelectedFromDate(new Date());
+            setSelectedToDate(new Date());
             setReqSent(true);
 
             setLoading(false);
@@ -305,45 +304,35 @@ export default function Leave() {
               <Clearfix />
             </div>
           ) : null}
-          {/* <h3 style={{ display: "flex", justifyContent: "center" }}>
-            <b>APPLY FOR OUTSTATION</b>
-          </h3> */}
-          <GridContainer justify="center" alignItems="center">
-            <GridItem xs={12} sm={12} md={5}>
-              <TextField
-                id="outlined-basic"
-                label="UID"
-                variant="outlined"
-                inputRef={stdID}
-                // value={stdID}
-                // onChange={(e) => {
-                //   setStdID(e.target.value);
-                // }}
-              />
-              {/* <CustomInput
-                labelText="UID"
-                // helperText="Enter the ID in the format f20XXYYYY"
-                formControlProps={{
-                  fullWidth: true,
-                }}
-                inputProps={{
-                  multiline: true,
-                  name: "uid",
-                  value: outData.uid,
-                }}
-                onChange={onChange}
-                variant="outlined"
-              /> */}
+          <GridContainer justifyContent="flex-end">
+            <GridItem xs={12} sm={12} md={5} lg={4}>
+              <div style={{ margin: "55px 25px" }}>
+                <TextField
+                  size="small"
+                  fullWidth
+                  id="outlined-basic"
+                  label="UID"
+                  // variant="outlined"
+                  inputRef={stdID}
+                />
+                <span style={{ marginTop: "6px" }}>Ex: f20191435</span>
+              </div>
             </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
+            <GridItem
+              xs={12}
+              sm={12}
+              md={5}
+              lg={4}
+              style={{ marginTop: "46px" }}
+            >
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel className={classes.label}>FROM-DATE</InputLabel>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
-                    margin="normal"
+                    // margin="normal"
                     id="date-picker-dialog"
-                    // label="Date picker dialog"
                     format="dd/MM/yyyy"
+                    variant="inline"
                     value={selectedFromDate}
                     onChange={handleDateChangeFrom}
                     KeyboardButtonProps={{
@@ -351,68 +340,22 @@ export default function Leave() {
                     }}
                   />
                 </MuiPickersUtilsProvider>
-                {/* <Datetime
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                  className={classes.input + " " + classes.underline}
-                  isValidDate={validfrom}
-                  value={outData.from}
-                  onChange={(e) => {
-                    const date = new Date(`${e}`);
-                    const { Date1, Month, Year } = {
-                      Date1: date.getDate(),
-                      Month: date.getMonth() + 1,
-                      Year: date.getFullYear(),
-                    };
-                    if (Month > 9) {
-                      if (Date1 < 10) {
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-${Month}-0${Date1}`,
-                        }));
-                      } else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-${Month}-${Date1}`,
-                        }));
-                    } else {
-                      if (Date1 < 10)
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-0${Month}-0${Date1}`,
-                        }));
-                      else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-0${Month}-${Date1}`,
-                        }));
-                    }
-                  }}
-                /> */}
               </FormControl>
             </GridItem>
-
-            {/* <GridItem xs={12} sm={12} md={5}>
-              <CustomInput
-                labelText="Location of Travel"
-                onChange={onChange}
-                formControlProps={{
-                  fullWidth: true,
-                }}
-                inputProps={{
-                  name: "location",
-                  value: outData.location,
-                }}
-              />
-            </GridItem> */}
-            <GridItem xs={12} sm={12} md={5}>
+            <GridItem
+              xs={12}
+              sm={12}
+              md={5}
+              lg={4}
+              style={{ marginTop: "30px" }}
+            >
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel className={classes.label}>TO-DATE</InputLabel>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     margin="normal"
+                    variant="inline"
                     id="date-picker-dialog"
-                    // label="Date picker dialog"
                     format="dd/MM/yyyy"
                     value={selectedToDate}
                     onChange={handleDateChangeTo}
@@ -421,102 +364,53 @@ export default function Leave() {
                     }}
                   />
                 </MuiPickersUtilsProvider>
-                {/* <Datetime
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                  className={classes.input + " " + classes.underline}
-                  isValidDate={validfrom}
-                  value={outData.to}
-                  onChange={(e) => {
-                    const date = new Date(`${e}`);
-                    const { Date1, Month, Year } = {
-                      Date1: date.getDate(),
-                      Month: date.getMonth() + 1,
-                      Year: date.getFullYear(),
-                    };
-                    if (Month > 9) {
-                      if (Date1 < 10) {
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-${Month}-0${Date1}`,
-                        }));
-                      } else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-${Month}-${Date1}`,
-                        }));
-                    } else {
-                      if (Date1 < 10)
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-0${Month}-0${Date1}`,
-                        }));
-                      else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-0${Month}-${Date1}`,
-                        }));
-                    }
-                  }}
-                /> */}
               </FormControl>
             </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
-              <GridContainer
-                direction="row"
-                justify="center"
-                alignItems="center"
-              >
-                <GridItem>
-                  <Button
-                    color="success"
-                    disabled={loading}
-                    onClick={() => {
-                      setSendingData(true);
-                    }}
-                  >
-                    Submit
-                  </Button>
-                  {loading ? (
-                    <CircularProgress size={24} color="primary" />
-                  ) : null}
-                </GridItem>
-              </GridContainer>
-            </GridItem>
-            {/* <GridItem xs={12} sm={12} md={10}>
-              <p>
-                <strong>Note:</strong>
-                <br />
-                1.You can apply for online outstation from 7 days of your Travel
-                (not before that).
-                <br />
-                2.Incase to know the reason of rejection or for quick approval
-                please contact your respective hostel warden.
-                <br />
-                3.Outstation request can be cancelled only if the status is{" "}
-                <Badge color="warning">Pending</Badge>
-              </p>
-            </GridItem> */}
           </GridContainer>
-          <GridContainer justify="center" alignItems="center">
-            <GridItem xs={12} sm={12} md={5}>
-              <h4>
-                <b>Download CSV</b>
-              </h4>
-              <h6>
-                Click on the button to download the .csv file of leaves for the
-                current month
-              </h6>
+
+          <GridContainer
+            // direction="row"
+            // alignItems="center"
+            justify="flex-end"
+          >
+            <GridItem style={{ marginRight: "14px" }}>
               <Button
                 color="success"
                 disabled={loading}
-                // onClick={() => {
-                //   setSendingData(true);
-                // }}
+                onClick={() => {
+                  setSendingData(true);
+                }}
               >
                 Submit
               </Button>
+              {loading ? <CircularProgress size={24} color="primary" /> : null}
             </GridItem>
+          </GridContainer>
+
+          <GridContainer
+          // justify="center"
+          // alignItems="center"
+          >
+            <GridItem
+              xs={12}
+              sm={12}
+              md={5}
+              lg={12}
+              style={{ marginLeft: "27px" }}
+            >
+              <h3>
+                <b>Download CSV</b>
+              </h3>
+              <h4>
+                Click on the button to download the .csv file of leaves for the
+                current month
+              </h4>
+            </GridItem>
+          </GridContainer>
+          <GridContainer justify="flex-end" xs={12} sm={12} md={5} lg={12}>
+            <Button color="success" disabled={loading}>
+              Submit
+            </Button>
           </GridContainer>
         </CardBody>
         <CancelOutstation
@@ -526,38 +420,6 @@ export default function Leave() {
           setIsUpdated={setIsUpdated}
         />
       </Card>
-      {/* <MaterialTable
-        title="PREVIOUSLY APPLIED OUTSTATIONS"
-        columns={[
-          { title: "S No.", field: "sno" },
-          { title: "Travelling To", field: "location" },
-          { title: "From Date", field: "from" },
-          { title: "To Date", field: "to" },
-          { title: "Duration", field: "duration" },
-          { title: "Approval Status", field: "approved" },
-        ]}
-        data={data}
-        options={{
-          search: false,
-          pageSize: 10,
-          emptyRowsWhenPaging: false,
-          actionsColumnIndex: -1,
-        }}
-        actions={[
-          (rowData) => ({
-            icon: () => (
-              <Button disabled={rowData.status !== 0} color="info">
-                Cancel
-              </Button>
-            ),
-            disabled: rowData.status !== 0,
-            onClick: (event, row) => {
-              setCancelId(row.outstation_id);
-              setOpen(true);
-            },
-          }),
-        ]}
-      /> */}
     </div>
   );
 }
