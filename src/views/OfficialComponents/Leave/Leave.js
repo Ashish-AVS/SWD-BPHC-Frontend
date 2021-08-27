@@ -1,5 +1,5 @@
 import React from "react";
-// import MaterialTable from "material-table";
+import MaterialTable from "material-table";
 import Datetime from "react-datetime";
 import { Redirect } from "react-router-dom";
 // @material-ui/core components
@@ -21,6 +21,13 @@ import Badge from "components/Badge/Badge.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
 import CancelOutstation from "./CancelOutstation";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import "date-fns";
+import TextField from "@material-ui/core/TextField";
 
 //Auth Components
 import { useAuth } from "context/auth";
@@ -28,11 +35,11 @@ import { useAuth } from "context/auth";
 import { BaseUrl } from "variables/BaseUrl";
 import { primaryColor, defaultFont } from "assets/jss/material-kit-react.js";
 const styles = {
-  // typo: {
-  //   paddingLeft: "25%",
-  //   marginBottom: "40px",
-  //   position: "relative",
-  // },
+  typo: {
+    paddingLeft: "25%",
+    marginBottom: "40px",
+    position: "relative",
+  },
   note: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     bottom: "10px",
@@ -123,34 +130,94 @@ const styles = {
 const useStyles = makeStyles(styles);
 
 export default function Leave() {
+  const [selectedToDate, setSelectedToDate] = React.useState(new Date());
+  const [selectedFromDate, setSelectedFromDate] = React.useState(new Date());
+
+  const handleDateChangeTo = (date) => {
+    setSelectedToDate(date);
+  };
+  const handleDateChangeFrom = (date) => {
+    setSelectedFromDate(date);
+  };
   const classes = useStyles();
   const { onLogin } = useAuth();
-  const [isError, setIsError] = React.useState(false);
-  const [msg, setMsg] = React.useState("");
 
+  const [isError, setIsError] = React.useState(false);
   // const { uid } = JSON.parse(localStorage.getItem("data"));
-  const token=JSON.parse(localStorage.getItem("officialtokens"));
+  const uid = "f20202298";
+  const [stdID, setStdID] = React.useState(""); // store student's user ID, f20XXYYYY
+  const token = JSON.parse(localStorage.getItem("tokens"));
+  const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [reqSent, setReqSent] = React.useState(false);
   const [sendingData, setSendingData] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [cancelId, setCancelId] = React.useState(null);
   const [isUpdated, setIsUpdated] = React.useState(null);
-  const [data, setData] = React.useState({
+  const [errorMsg, setErrorMsg] = React.useState("");
+  const [outData, setOutData] = React.useState({
     from: "",
     to: "",
-    uid: ""
+    uid: "",
   });
-
-  /**  DATE FUNCTION - To prevent showing dates before today  **/
   var yesterday = Datetime.moment().subtract(1, "day");
   var validfrom = function (current) {
     return current.isAfter(yesterday);
   };
 
-  /* ********** */
+  React.useEffect(() => {
+    console.log(
+      `FROM: ${selectedFromDate.getFullYear()}-${
+        selectedFromDate.getMonth() + 1
+      }-${selectedFromDate.getDate()}`
+    );
 
+    console.log(
+      `TO: ${selectedToDate.getFullYear()}-${
+        selectedToDate.getMonth() + 1
+      }-${selectedToDate.getDate()}`
+    );
+  }, [selectedToDate, selectedFromDate]);
 
+  React.useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const result = await fetch(`${BaseUrl}/api/outstation/`, {
+          headers: { Authorization: token },
+        });
+        const res = await result.json();
+        if (res.err === false) {
+          setData(
+            res.data.map((info, index) => {
+              let badge = null;
+              if (info.approved === -1) {
+                badge = <Badge color="danger">Rejected</Badge>;
+              } else if (info.approved === 0) {
+                badge = <Badge color="warning">Pending</Badge>;
+              } else if (info.approved === 1) {
+                badge = <Badge color="success">Approved</Badge>;
+              }
+              return {
+                sno: index + 1,
+                outstation_id: info.outstation_id,
+                location: info.location,
+                from: info.from,
+                to: info.to,
+                duration: `${info.duration} Days`,
+                approved: badge,
+                status: info.approved,
+              };
+            })
+          );
+        } else if (res.err === true && result.status === 401) {
+          logout();
+        }
+      };
+      fetchData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [uid, token, reqSent, isUpdated]);
   React.useEffect(() => {
     if (sendingData === true) {
       setLoading(true);
@@ -159,39 +226,51 @@ export default function Leave() {
 
       try {
         const fetchData = async () => {
-          const result = await fetch(`${BaseUrl}/`, {
+          const result = await fetch(`${BaseUrl}/api/o/emergency-leave`, {
             method: "post",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
+              Authorization: token,
             },
             body: JSON.stringify({
-              from: data.from,
-              to: data.to,
-              uid: data.uid
-            })
+              uid: stdID,
+              token: token,
+              from: `${selectedFromDate.getFullYear()}-${
+                selectedFromDate.getMonth() + 1
+              }-${selectedFromDate.getDate()}`,
+              to: `${selectedToDate.getFullYear()}-${
+                selectedToDate.getMonth() + 1
+              }-${selectedToDate.getDate()}`,
+              // uid: outData.uid,
+            }),
           });
           const res = await result.json();
           if (res.err === false) {
-            setData({
+            setSendingData(false);
+            setOutData({
               from: "",
               to: "",
-              uid: ""
+              uid: "",
+              // location: "",
             });
+            setReqSent(true);
+
+            setLoading(false);
           } else if (res.err === true && result.status === 401) {
             logout();
           } else if (res.err === true && result.status === 422) {
-            setMsg("Empty Fields Detected");
+            setErrorMsg("Empty Fields Detected");
             setIsError(true);
+            setSendingData(false);
+            setLoading(false);
           } else if (res.err === true) {
-            setMsg(res.msg);
+            setErrorMsg(res.msg);
             setIsError(true);
+            setSendingData(false);
+            setLoading(false);
           }
-          setLoading(false);
-
         };
         fetchData();
-        setSendingData(false);
       } catch (err) {
         console.log(err);
       }
@@ -200,39 +279,39 @@ export default function Leave() {
     sendingData,
     // uid,
     token,
-    data.from,
-    data.to,
-    data.uid,
-    data.location,
+    stdID,
+    selectedFromDate,
+    selectedToDate,
+    //outData.from,
+    //outData.to,
+    //outData.uid,
   ]);
 
   const logout = () => {
-    localStorage.removeItem("officialtokens");
+    localStorage.removeItem("tokens");
     localStorage.removeItem("data");
     onLogin(false);
-    return <Redirect exact to="/official-login" />;
+    return <Redirect exact to="/login-page" />;
   };
 
   function onChange(e) {
     const { name, value } = e.target;
-    setData((prevState) => ({
+    setOutData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   }
   return (
     <div>
-      <GridContainer justify="center" alignItems="center">
-        <GridItem >
-            <h2>
-              <strong>STUDENT WELFARE DIVISION</strong>
-            </h2>
-        </GridItem>
-      </GridContainer>
+      <div className={classes.typo} style={{ marginTop: "-50px" }}>
+        <h2>
+          <strong>BITS PILANI HYDERABAD CAMPUS</strong>
+        </h2>
+      </div>
       <Card>
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
-            <b>EMERGENCY LEAVE </b>
+            <b>EMERGENCY LEAVE PORTAL</b>
           </h4>
         </CardHeader>
         <CardBody>
@@ -241,7 +320,7 @@ export default function Leave() {
               <SnackbarContent
                 message={
                   <span>
-                    <b>OUTSTATION REQUEST SENT SUCCESSFULLY</b>
+                    <b>Leave added</b>
                   </span>
                 }
                 close
@@ -257,7 +336,7 @@ export default function Leave() {
                 message={
                   <span>
                     <b>ERROR:</b>
-                    {msg}
+                    {errorMsg}
                   </span>
                 }
                 close
@@ -267,12 +346,21 @@ export default function Leave() {
               <Clearfix />
             </div>
           ) : null}
-          <h3 style={{ display: "flex", justifyContent: "center" }}>
+          {/* <h3 style={{ display: "flex", justifyContent: "center" }}>
             <b>APPLY FOR OUTSTATION</b>
-          </h3>
+          </h3> */}
           <GridContainer justify="center" alignItems="center">
             <GridItem xs={12} sm={12} md={5}>
-              <CustomInput
+              <TextField
+                id="outlined-basic"
+                label="UID"
+                variant="outlined"
+                value={stdID}
+                onChange={(e) => {
+                  setStdID(e.target.value);
+                }}
+              />
+              {/* <CustomInput
                 labelText="UID"
                 // helperText="Enter the ID in the format f20XXYYYY"
                 formControlProps={{
@@ -281,20 +369,34 @@ export default function Leave() {
                 inputProps={{
                   multiline: true,
                   name: "uid",
-                  value: data.uid,
+                  value: outData.uid,
                 }}
                 onChange={onChange}
-              />
+                variant="outlined"
+              /> */}
             </GridItem>
             <GridItem xs={12} sm={12} md={5}>
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel className={classes.label}>FROM-DATE</InputLabel>
-                <Datetime
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    margin="normal"
+                    id="date-picker-dialog"
+                    // label="Date picker dialog"
+                    format="dd/MM/yyyy"
+                    value={selectedFromDate}
+                    onChange={handleDateChangeFrom}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+                {/* <Datetime
                   dateFormat="DD-MM-YYYY"
                   timeFormat={false}
                   className={classes.input + " " + classes.underline}
                   isValidDate={validfrom}
-                  value={data.from}
+                  value={outData.from}
                   onChange={(e) => {
                     const date = new Date(`${e}`);
                     const { Date1, Month, Year } = {
@@ -304,33 +406,33 @@ export default function Leave() {
                     };
                     if (Month > 9) {
                       if (Date1 < 10) {
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           from: `${Year}-${Month}-0${Date1}`,
                         }));
                       } else
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           from: `${Year}-${Month}-${Date1}`,
                         }));
                     } else {
                       if (Date1 < 10)
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           from: `${Year}-0${Month}-0${Date1}`,
                         }));
                       else
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           from: `${Year}-0${Month}-${Date1}`,
                         }));
                     }
                   }}
-                />
+                /> */}
               </FormControl>
             </GridItem>
 
-            <GridItem xs={12} sm={12} md={5}>
+            {/* <GridItem xs={12} sm={12} md={5}>
               <CustomInput
                 labelText="Location of Travel"
                 onChange={onChange}
@@ -339,19 +441,32 @@ export default function Leave() {
                 }}
                 inputProps={{
                   name: "location",
-                  value: data.location,
+                  value: outData.location,
                 }}
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem xs={12} sm={12} md={5}>
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel className={classes.label}>TO-DATE</InputLabel>
-                <Datetime
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    margin="normal"
+                    id="date-picker-dialog"
+                    // label="Date picker dialog"
+                    format="dd/MM/yyyy"
+                    value={selectedToDate}
+                    onChange={handleDateChangeTo}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+                {/* <Datetime
                   dateFormat="DD-MM-YYYY"
                   timeFormat={false}
                   className={classes.input + " " + classes.underline}
                   isValidDate={validfrom}
-                  value={data.to}
+                  value={outData.to}
                   onChange={(e) => {
                     const date = new Date(`${e}`);
                     const { Date1, Month, Year } = {
@@ -361,29 +476,29 @@ export default function Leave() {
                     };
                     if (Month > 9) {
                       if (Date1 < 10) {
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           to: `${Year}-${Month}-0${Date1}`,
                         }));
                       } else
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           to: `${Year}-${Month}-${Date1}`,
                         }));
                     } else {
                       if (Date1 < 10)
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           to: `${Year}-0${Month}-0${Date1}`,
                         }));
                       else
-                        setData((prevState) => ({
+                        setOutData((prevState) => ({
                           ...prevState,
                           to: `${Year}-0${Month}-${Date1}`,
                         }));
                     }
                   }}
-                />
+                /> */}
               </FormControl>
             </GridItem>
             <GridItem xs={12} sm={12} md={5}>
@@ -408,10 +523,81 @@ export default function Leave() {
                 </GridItem>
               </GridContainer>
             </GridItem>
+            {/* <GridItem xs={12} sm={12} md={10}>
+              <p>
+                <strong>Note:</strong>
+                <br />
+                1.You can apply for online outstation from 7 days of your Travel
+                (not before that).
+                <br />
+                2.Incase to know the reason of rejection or for quick approval
+                please contact your respective hostel warden.
+                <br />
+                3.Outstation request can be cancelled only if the status is{" "}
+                <Badge color="warning">Pending</Badge>
+              </p>
+            </GridItem> */}
+          </GridContainer>
+          <GridContainer justify="center" alignItems="center">
+            <GridItem xs={12} sm={12} md={5}>
+              <h4>
+                <b>Download CSV</b>
+              </h4>
+              <h6>
+                Click on the button to download the .csv file of leaves for the
+                current month
+              </h6>
+              <Button
+                color="success"
+                disabled={loading}
+                // onClick={() => {
+                //   setSendingData(true);
+                // }}
+              >
+                Submit
+              </Button>
+            </GridItem>
           </GridContainer>
         </CardBody>
+        <CancelOutstation
+          open={open}
+          setOpen={setOpen}
+          cancelId={cancelId}
+          setIsUpdated={setIsUpdated}
+        />
       </Card>
-      
+      {/* <MaterialTable
+        title="PREVIOUSLY APPLIED OUTSTATIONS"
+        columns={[
+          { title: "S No.", field: "sno" },
+          { title: "Travelling To", field: "location" },
+          { title: "From Date", field: "from" },
+          { title: "To Date", field: "to" },
+          { title: "Duration", field: "duration" },
+          { title: "Approval Status", field: "approved" },
+        ]}
+        data={data}
+        options={{
+          search: false,
+          pageSize: 10,
+          emptyRowsWhenPaging: false,
+          actionsColumnIndex: -1,
+        }}
+        actions={[
+          (rowData) => ({
+            icon: () => (
+              <Button disabled={rowData.status !== 0} color="info">
+                Cancel
+              </Button>
+            ),
+            disabled: rowData.status !== 0,
+            onClick: (event, row) => {
+              setCancelId(row.outstation_id);
+              setOpen(true);
+            },
+          }),
+        ]}
+      /> */}
     </div>
   );
 }
