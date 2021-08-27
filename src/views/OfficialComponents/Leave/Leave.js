@@ -145,7 +145,7 @@ export default function Leave() {
   const [isError, setIsError] = React.useState(false);
   // const { uid } = JSON.parse(localStorage.getItem("data"));
   const uid = "f20202298";
-  const [stdID, setStdID] = React.useState(""); // store student's user ID, f20XXYYYY
+  const stdID = React.useRef(); // store student's user ID, f20XXYYYY
   const token = JSON.parse(localStorage.getItem("officialtokens"));
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -179,45 +179,7 @@ export default function Leave() {
     );
   }, [selectedToDate, selectedFromDate]);
 
-  React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/outstation/`, {
-          headers: { Authorization:`Bearer ${token}` },
-        });
-        const res = await result.json();
-        if (res.err === false) {
-          setData(
-            res.data.map((info, index) => {
-              let badge = null;
-              if (info.approved === -1) {
-                badge = <Badge color="danger">Rejected</Badge>;
-              } else if (info.approved === 0) {
-                badge = <Badge color="warning">Pending</Badge>;
-              } else if (info.approved === 1) {
-                badge = <Badge color="success">Approved</Badge>;
-              }
-              return {
-                sno: index + 1,
-                outstation_id: info.outstation_id,
-                location: info.location,
-                from: info.from,
-                to: info.to,
-                duration: `${info.duration} Days`,
-                approved: badge,
-                status: info.approved,
-              };
-            })
-          );
-        } else if (res.err === true && result.status === 401) {
-          logout();
-        }
-      };
-      fetchData();
-    } catch (err) {
-      console.log(err);
-    }
-  }, [uid, token, reqSent, isUpdated]);
+  
   React.useEffect(() => {
     if (sendingData === true) {
       setLoading(true);
@@ -233,7 +195,7 @@ export default function Leave() {
               Authorization:`Bearer ${token}`
             },
             body: JSON.stringify({
-              uid: stdID,
+              uid: stdID.current.value,
               token: token,
               from: `${selectedFromDate.getFullYear()}-${
                 selectedFromDate.getMonth() + 1
@@ -247,12 +209,9 @@ export default function Leave() {
           const res = await result.json();
           if (res.err === false) {
             setSendingData(false);
-            setOutData({
-              from: "",
-              to: "",
-              uid: "",
-              // location: "",
-            });
+            stdID.current.value = ""
+            setSelectedFromDate(new Date())
+            setSelectedToDate(new Date())
             setReqSent(true);
 
             setLoading(false);
@@ -355,10 +314,11 @@ export default function Leave() {
                 id="outlined-basic"
                 label="UID"
                 variant="outlined"
-                value={stdID}
-                onChange={(e) => {
-                  setStdID(e.target.value);
-                }}
+                inputRef={stdID}
+                // value={stdID}
+                // onChange={(e) => {
+                //   setStdID(e.target.value);
+                // }}
               />
               {/* <CustomInput
                 labelText="UID"
