@@ -146,7 +146,7 @@ export default function Leave() {
   // const { uid } = JSON.parse(localStorage.getItem("data"));
   const uid = "f20202298";
   const [stdID, setStdID] = React.useState(""); // store student's user ID, f20XXYYYY
-  const token = JSON.parse(localStorage.getItem("tokens"));
+  const token = JSON.parse(localStorage.getItem("officialtokens"));
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [reqSent, setReqSent] = React.useState(false);
@@ -183,7 +183,7 @@ export default function Leave() {
     try {
       const fetchData = async () => {
         const result = await fetch(`${BaseUrl}/api/outstation/`, {
-          headers: { Authorization: token },
+          headers: { Authorization:`Bearer ${token}` },
         });
         const res = await result.json();
         if (res.err === false) {
@@ -230,7 +230,7 @@ export default function Leave() {
             method: "post",
             headers: {
               "Content-Type": "application/json",
-              Authorization: token,
+              Authorization:`Bearer ${token}`
             },
             body: JSON.stringify({
               uid: stdID,
