@@ -112,13 +112,6 @@ const dashboardRoutes = [
     component: Outstation,
     layout: "/admin"
   },
-  // {
-  //   path: "/cab-sharing",
-  //   name: "Cab Sharing",
-  //   icon:LocalTaxiIcon,
-  //   component: Cab,
-  //   layout: "/admin"
-  // },
   {
     path: "/know-your-acad",
     name: "Know Your Acad.",

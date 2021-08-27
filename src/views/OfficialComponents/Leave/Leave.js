@@ -10,7 +10,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -20,7 +19,6 @@ import Button from "components/CustomButtons/Button.js";
 import Badge from "components/Badge/Badge.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Clearfix from "components/Clearfix/Clearfix.js";
-import CancelOutstation from "./CancelOutstation";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -146,7 +144,7 @@ export default function Leave() {
   // const { uid } = JSON.parse(localStorage.getItem("data"));
   const uid = "f20202298";
   const [stdID, setStdID] = React.useState(""); // store student's user ID, f20XXYYYY
-  const token = JSON.parse(localStorage.getItem("tokens"));
+  const token = JSON.parse(localStorage.getItem("officialtokens"));
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [reqSent, setReqSent] = React.useState(false);
@@ -180,45 +178,6 @@ export default function Leave() {
   }, [selectedToDate, selectedFromDate]);
 
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/outstation/`, {
-          headers: { Authorization: token },
-        });
-        const res = await result.json();
-        if (res.err === false) {
-          setData(
-            res.data.map((info, index) => {
-              let badge = null;
-              if (info.approved === -1) {
-                badge = <Badge color="danger">Rejected</Badge>;
-              } else if (info.approved === 0) {
-                badge = <Badge color="warning">Pending</Badge>;
-              } else if (info.approved === 1) {
-                badge = <Badge color="success">Approved</Badge>;
-              }
-              return {
-                sno: index + 1,
-                outstation_id: info.outstation_id,
-                location: info.location,
-                from: info.from,
-                to: info.to,
-                duration: `${info.duration} Days`,
-                approved: badge,
-                status: info.approved,
-              };
-            })
-          );
-        } else if (res.err === true && result.status === 401) {
-          logout();
-        }
-      };
-      fetchData();
-    } catch (err) {
-      console.log(err);
-    }
-  }, [uid, token, reqSent, isUpdated]);
-  React.useEffect(() => {
     if (sendingData === true) {
       setLoading(true);
       setReqSent(false);
@@ -230,11 +189,10 @@ export default function Leave() {
             method: "post",
             headers: {
               "Content-Type": "application/json",
-              Authorization: token,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               uid: stdID,
-              token: token,
               from: `${selectedFromDate.getFullYear()}-${
                 selectedFromDate.getMonth() + 1
               }-${selectedFromDate.getDate()}`,
@@ -277,21 +235,17 @@ export default function Leave() {
     }
   }, [
     sendingData,
-    // uid,
     token,
     stdID,
     selectedFromDate,
     selectedToDate,
-    //outData.from,
-    //outData.to,
-    //outData.uid,
   ]);
 
   const logout = () => {
-    localStorage.removeItem("tokens");
-    localStorage.removeItem("data");
+    localStorage.removeItem("officialtokens");
+    // localStorage.removeItem("data");
     onLogin(false);
-    return <Redirect exact to="/login-page" />;
+    return <Redirect exact to="/official-login" />;
   };
 
   function onChange(e) {
@@ -346,9 +300,6 @@ export default function Leave() {
               <Clearfix />
             </div>
           ) : null}
-          {/* <h3 style={{ display: "flex", justifyContent: "center" }}>
-            <b>APPLY FOR OUTSTATION</b>
-          </h3> */}
           <GridContainer justify="center" alignItems="center">
             <GridItem xs={12} sm={12} md={5}>
               <TextField
@@ -360,20 +311,6 @@ export default function Leave() {
                   setStdID(e.target.value);
                 }}
               />
-              {/* <CustomInput
-                labelText="UID"
-                // helperText="Enter the ID in the format f20XXYYYY"
-                formControlProps={{
-                  fullWidth: true,
-                }}
-                inputProps={{
-                  multiline: true,
-                  name: "uid",
-                  value: outData.uid,
-                }}
-                onChange={onChange}
-                variant="outlined"
-              /> */}
             </GridItem>
             <GridItem xs={12} sm={12} md={5}>
               <FormControl fullWidth className={classes.formControl}>
@@ -523,20 +460,6 @@ export default function Leave() {
                 </GridItem>
               </GridContainer>
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={10}>
-              <p>
-                <strong>Note:</strong>
-                <br />
-                1.You can apply for online outstation from 7 days of your Travel
-                (not before that).
-                <br />
-                2.Incase to know the reason of rejection or for quick approval
-                please contact your respective hostel warden.
-                <br />
-                3.Outstation request can be cancelled only if the status is{" "}
-                <Badge color="warning">Pending</Badge>
-              </p>
-            </GridItem> */}
           </GridContainer>
           <GridContainer justify="center" alignItems="center">
             <GridItem xs={12} sm={12} md={5}>
@@ -559,45 +482,7 @@ export default function Leave() {
             </GridItem>
           </GridContainer>
         </CardBody>
-        <CancelOutstation
-          open={open}
-          setOpen={setOpen}
-          cancelId={cancelId}
-          setIsUpdated={setIsUpdated}
-        />
       </Card>
-      {/* <MaterialTable
-        title="PREVIOUSLY APPLIED OUTSTATIONS"
-        columns={[
-          { title: "S No.", field: "sno" },
-          { title: "Travelling To", field: "location" },
-          { title: "From Date", field: "from" },
-          { title: "To Date", field: "to" },
-          { title: "Duration", field: "duration" },
-          { title: "Approval Status", field: "approved" },
-        ]}
-        data={data}
-        options={{
-          search: false,
-          pageSize: 10,
-          emptyRowsWhenPaging: false,
-          actionsColumnIndex: -1,
-        }}
-        actions={[
-          (rowData) => ({
-            icon: () => (
-              <Button disabled={rowData.status !== 0} color="info">
-                Cancel
-              </Button>
-            ),
-            disabled: rowData.status !== 0,
-            onClick: (event, row) => {
-              setCancelId(row.outstation_id);
-              setOpen(true);
-            },
-          }),
-        ]}
-      /> */}
     </div>
   );
 }
