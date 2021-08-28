@@ -94,7 +94,7 @@ const styles = {
     },
   },
   formControl: {
-    margin: "0 0 17px 0",
+    margin: "0 0 5px 0",
     paddingTop: "27px",
     position: "relative",
     "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
@@ -143,7 +143,7 @@ export default function Leave() {
   const [isError, setIsError] = React.useState(false);
   // const { uid } = JSON.parse(localStorage.getItem("data"));
   const uid = "f20202298";
-  const [stdID, setStdID] = React.useState(""); // store student's user ID, f20XXYYYY
+  const stdID = React.useRef(); // store student's user ID, f20XXYYYY
   const token = JSON.parse(localStorage.getItem("officialtokens"));
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -192,7 +192,8 @@ export default function Leave() {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              uid: stdID,
+              uid: stdID.current.value,
+              token: token,
               from: `${selectedFromDate.getFullYear()}-${
                 selectedFromDate.getMonth() + 1
               }-${selectedFromDate.getDate()}`,
@@ -205,12 +206,9 @@ export default function Leave() {
           const res = await result.json();
           if (res.err === false) {
             setSendingData(false);
-            setOutData({
-              from: "",
-              to: "",
-              uid: "",
-              // location: "",
-            });
+            stdID.current.value = "";
+            setSelectedFromDate(new Date());
+            setSelectedToDate(new Date());
             setReqSent(true);
 
             setLoading(false);
@@ -274,7 +272,7 @@ export default function Leave() {
               <SnackbarContent
                 message={
                   <span>
-                    <b>Leave added</b>
+                    <b>SUCCESS: Leave added</b>
                   </span>
                 }
                 close
@@ -289,7 +287,7 @@ export default function Leave() {
               <SnackbarContent
                 message={
                   <span>
-                    <b>ERROR:</b>
+                    <b>ERROR: </b>
                     {errorMsg}
                   </span>
                 }
@@ -300,27 +298,33 @@ export default function Leave() {
               <Clearfix />
             </div>
           ) : null}
-          <GridContainer justify="center" alignItems="center">
-            <GridItem xs={12} sm={12} md={5}>
-              <TextField
-                id="outlined-basic"
-                label="UID"
-                variant="outlined"
-                value={stdID}
-                onChange={(e) => {
-                  setStdID(e.target.value);
-                }}
-              />
+          <GridContainer justifyContent="flex-start" alignItems="flex-start">
+            <GridItem xs={12} sm={12} md={5} lg={4}>
+              <FormControl fullWidth className={classes.formControl}>
+              <InputLabel className={classes.label}>STUDENT UID</InputLabel>
+                <TextField
+                  style={{marginTop:'2.2px'}}
+                  size="small"
+                  fullWidth
+                  id="outlined-basic"
+                  inputRef={stdID}
+                  helperText="Ex: f20191435"
+                />
+              </FormControl>
             </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
+            <GridItem
+              xs={12}
+              sm={12}
+              md={5}
+              lg={4}
+            >
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel className={classes.label}>FROM-DATE</InputLabel>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
-                    margin="normal"
                     id="date-picker-dialog"
-                    // label="Date picker dialog"
                     format="dd/MM/yyyy"
+                    variant="inline"
                     value={selectedFromDate}
                     onChange={handleDateChangeFrom}
                     KeyboardButtonProps={{
@@ -328,68 +332,15 @@ export default function Leave() {
                     }}
                   />
                 </MuiPickersUtilsProvider>
-                {/* <Datetime
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                  className={classes.input + " " + classes.underline}
-                  isValidDate={validfrom}
-                  value={outData.from}
-                  onChange={(e) => {
-                    const date = new Date(`${e}`);
-                    const { Date1, Month, Year } = {
-                      Date1: date.getDate(),
-                      Month: date.getMonth() + 1,
-                      Year: date.getFullYear(),
-                    };
-                    if (Month > 9) {
-                      if (Date1 < 10) {
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-${Month}-0${Date1}`,
-                        }));
-                      } else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-${Month}-${Date1}`,
-                        }));
-                    } else {
-                      if (Date1 < 10)
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-0${Month}-0${Date1}`,
-                        }));
-                      else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-0${Month}-${Date1}`,
-                        }));
-                    }
-                  }}
-                /> */}
               </FormControl>
             </GridItem>
-
-            {/* <GridItem xs={12} sm={12} md={5}>
-              <CustomInput
-                labelText="Location of Travel"
-                onChange={onChange}
-                formControlProps={{
-                  fullWidth: true,
-                }}
-                inputProps={{
-                  name: "location",
-                  value: outData.location,
-                }}
-              />
-            </GridItem> */}
-            <GridItem xs={12} sm={12} md={5}>
+            <GridItem xs={12} sm={12}  md={5}  lg={4} >
               <FormControl fullWidth className={classes.formControl}>
                 <InputLabel className={classes.label}>TO-DATE</InputLabel>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
-                    margin="normal"
+                    variant="inline"
                     id="date-picker-dialog"
-                    // label="Date picker dialog"
                     format="dd/MM/yyyy"
                     value={selectedToDate}
                     onChange={handleDateChangeTo}
@@ -398,88 +349,53 @@ export default function Leave() {
                     }}
                   />
                 </MuiPickersUtilsProvider>
-                {/* <Datetime
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                  className={classes.input + " " + classes.underline}
-                  isValidDate={validfrom}
-                  value={outData.to}
-                  onChange={(e) => {
-                    const date = new Date(`${e}`);
-                    const { Date1, Month, Year } = {
-                      Date1: date.getDate(),
-                      Month: date.getMonth() + 1,
-                      Year: date.getFullYear(),
-                    };
-                    if (Month > 9) {
-                      if (Date1 < 10) {
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-${Month}-0${Date1}`,
-                        }));
-                      } else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-${Month}-${Date1}`,
-                        }));
-                    } else {
-                      if (Date1 < 10)
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-0${Month}-0${Date1}`,
-                        }));
-                      else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-0${Month}-${Date1}`,
-                        }));
-                    }
-                  }}
-                /> */}
               </FormControl>
             </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
-              <GridContainer
-                direction="row"
-                justify="center"
-                alignItems="center"
-              >
-                <GridItem>
-                  <Button
-                    color="success"
-                    disabled={loading}
-                    onClick={() => {
-                      setSendingData(true);
-                    }}
-                  >
-                    Submit
-                  </Button>
-                  {loading ? (
-                    <CircularProgress size={24} color="primary" />
-                  ) : null}
-                </GridItem>
-              </GridContainer>
-            </GridItem>
           </GridContainer>
-          <GridContainer justify="center" alignItems="center">
-            <GridItem xs={12} sm={12} md={5}>
-              <h4>
-                <b>Download CSV</b>
-              </h4>
-              <h6>
-                Click on the button to download the .csv file of leaves for the
-                current month
-              </h6>
+
+          <GridContainer
+            // direction="row"
+            // alignItems="center"
+            justify="flex-end"
+          >
+            <GridItem style={{ marginRight: "14px" }}>
               <Button
                 color="success"
                 disabled={loading}
-                // onClick={() => {
-                //   setSendingData(true);
-                // }}
+                onClick={() => {
+                  setSendingData(true);
+                }}
               >
                 Submit
               </Button>
+              {loading ? <CircularProgress size={24} color="primary" /> : null}
             </GridItem>
+          </GridContainer>
+
+          <GridContainer
+          // justify="center"
+          // alignItems="center"
+          >
+            <GridItem
+              xs={12}
+              sm={12}
+              md={5}
+              lg={12}
+              style={{ marginLeft: "27px" }}
+            >
+              <h3>
+                <b>Download CSV</b>
+              </h3>
+              <h4>
+                Click on the button to download the .csv file of leaves for the
+                current month
+              </h4>
+            </GridItem>
+          </GridContainer>
+          <GridContainer justify="flex-end" xs={12} sm={12} md={5} lg={12}>
+            <Button color="success" disabled={loading}>
+              Download
+            </Button>
           </GridContainer>
         </CardBody>
       </Card>
