@@ -1,6 +1,6 @@
 import React from "react";
-import MaterialTable from "material-table";
-import Datetime from "react-datetime";
+import {saveAs} from 'file-saver';
+
 import { Redirect } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,12 +13,7 @@ import GridContainer from "components/Grid/GridContainer.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Check from "@material-ui/icons/Check";
-//import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
-import Badge from "components/Badge/Badge.js";
-import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-import Clearfix from "components/Clearfix/Clearfix.js";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
@@ -26,7 +21,8 @@ import {
 } from "@material-ui/pickers";
 import "date-fns";
 import TextField from "@material-ui/core/TextField";
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 //Auth Components
 import { useAuth } from "context/auth";
 
@@ -125,6 +121,11 @@ const styles = {
   },
 };
 
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const useStyles = makeStyles(styles);
 
 export default function Leave() {
@@ -138,30 +139,18 @@ export default function Leave() {
     setSelectedFromDate(date);
   };
   const classes = useStyles();
-  const { onLogin } = useAuth();
+  const { onOfficialLogin } = useAuth();
 
   const [isError, setIsError] = React.useState(false);
-  // const { uid } = JSON.parse(localStorage.getItem("data"));
-  const uid = "f20202298";
+  const [errorMsg, setErrorMsg] = React.useState("");
+  
+  const [isSuccess, setIsSuccess] = React.useState(false);
+  const [successMsg, setSuccessMsg] = React.useState("");
+
   const stdID = React.useRef(); // store student's user ID, f20XXYYYY
   const token = JSON.parse(localStorage.getItem("officialtokens"));
-  const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [reqSent, setReqSent] = React.useState(false);
   const [sendingData, setSendingData] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [cancelId, setCancelId] = React.useState(null);
-  const [isUpdated, setIsUpdated] = React.useState(null);
-  const [errorMsg, setErrorMsg] = React.useState("");
-  const [outData, setOutData] = React.useState({
-    from: "",
-    to: "",
-    uid: "",
-  });
-  var yesterday = Datetime.moment().subtract(1, "day");
-  var validfrom = function (current) {
-    return current.isAfter(yesterday);
-  };
 
   React.useEffect(() => {
     console.log(
@@ -180,7 +169,6 @@ export default function Leave() {
   React.useEffect(() => {
     if (sendingData === true) {
       setLoading(true);
-      setReqSent(false);
       setIsError(false);
 
       try {
@@ -200,17 +188,16 @@ export default function Leave() {
               to: `${selectedToDate.getFullYear()}-${
                 selectedToDate.getMonth() + 1
               }-${selectedToDate.getDate()}`,
-              // uid: outData.uid,
             }),
           });
           const res = await result.json();
           if (res.err === false) {
+            setSuccessMsg("Operation Successful")
+            setIsSuccess(true)
             setSendingData(false);
             stdID.current.value = "";
             setSelectedFromDate(new Date());
             setSelectedToDate(new Date());
-            setReqSent(true);
-
             setLoading(false);
           } else if (res.err === true && result.status === 401) {
             logout();
@@ -239,20 +226,36 @@ export default function Leave() {
     selectedToDate,
   ]);
 
+
+  const exportCsv = async (e) => {
+    e.preventDefault();
+    const result = await fetch(`${BaseUrl}/api/o/emergency-leave/report`, {
+      headers: {  Authorization: `Bearer ${token}` ,Accept: "text/csv"},
+    })
+    const date =new Date();
+    const res = await result.text();
+    if(result.status===201||result.status===200||result.status===304){
+        const csvBlob=new Blob([res],{type:'text/csv'});
+        saveAs(csvBlob,`LeaveData-${date.toLocaleDateString()}.csv`);
+        setSuccessMsg("Download Successful")
+        setIsSuccess(true)
+      }
+      else {
+        setIsError(true);
+        setErrorMsg('Error in Downloading!');
+    }
+
+  }
+
+
+
   const logout = () => {
     localStorage.removeItem("officialtokens");
     // localStorage.removeItem("data");
-    onLogin(false);
+    onOfficialLogin(false);
     return <Redirect exact to="/official-login" />;
   };
 
-  function onChange(e) {
-    const { name, value } = e.target;
-    setOutData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
   return (
     <div>
       <div className={classes.typo} style={{ marginTop: "-50px" }}>
@@ -267,37 +270,6 @@ export default function Leave() {
           </h4>
         </CardHeader>
         <CardBody>
-          {reqSent ? (
-            <div>
-              <SnackbarContent
-                message={
-                  <span>
-                    <b>SUCCESS: Leave added</b>
-                  </span>
-                }
-                close
-                color="success"
-                icon={Check}
-              />
-              <Clearfix />
-            </div>
-          ) : null}
-          {isError ? (
-            <div>
-              <SnackbarContent
-                message={
-                  <span>
-                    <b>ERROR: </b>
-                    {errorMsg}
-                  </span>
-                }
-                close
-                color="danger"
-                icon="info_outline"
-              />
-              <Clearfix />
-            </div>
-          ) : null}
           <GridContainer justifyContent="flex-start" alignItems="flex-start">
             <GridItem xs={12} sm={12} md={5} lg={4}>
               <FormControl fullWidth className={classes.formControl}>
@@ -326,6 +298,7 @@ export default function Leave() {
                     format="dd/MM/yyyy"
                     variant="inline"
                     value={selectedFromDate}
+                    disablePast
                     onChange={handleDateChangeFrom}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -342,6 +315,7 @@ export default function Leave() {
                     variant="inline"
                     id="date-picker-dialog"
                     format="dd/MM/yyyy"
+                    disablePast
                     value={selectedToDate}
                     onChange={handleDateChangeTo}
                     KeyboardButtonProps={{
@@ -393,12 +367,35 @@ export default function Leave() {
             </GridItem>
           </GridContainer>
           <GridContainer justify="flex-end" xs={12} sm={12} md={5} lg={12}>
-            <Button color="success" disabled={loading}>
+            <Button color="success" disabled={loading} onClick={exportCsv}>
               Download
             </Button>
           </GridContainer>
         </CardBody>
       </Card>
+
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={isSuccess}
+        autoHideDuration={5000}
+        onClose={() => { setIsSuccess(false) }}>
+        <Alert
+          onClose={() => { setIsSuccess(false) }}
+          severity="success">
+          {successMsg}
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={isError}
+        autoHideDuration={5000}
+        onClose={() => { setIsError(false) }}>
+        <Alert
+          onClose={() => { setIsError(false) }}
+          severity="error">
+          {errorMsg}
+                  </Alert>
+      </Snackbar>
     </div>
   );
 }

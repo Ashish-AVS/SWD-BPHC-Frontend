@@ -181,6 +181,7 @@ export default function GoodieExport() {
     } 
   
   },[])
+
   const sendGoodieData = async (g_id,g_name) => {
 
     const result = await fetch(`${BaseUrl}/api/o/goodies/export?g_id=${g_id}`, {
@@ -198,39 +199,6 @@ export default function GoodieExport() {
     }
 
   }
-
- /* React.useEffect(()=>{
-   if(messUpdate===true){
-    try{
-      const sendData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/messmenu`,{
-            method:"post",
-            headers:{'Content-Type':"application/json",
-            Authorization:`Bearer ${token}`},
-            body:JSON.stringify({
-              messno:1,
-              menu:JSON.stringify(messMenuData)
-            })
-           })
-         const res = await result.json();
-        if(result.status===200||result.status===201){
-          console.log("hi");
-          setMenuUpdated(true);
-          setMessUpdate(false);
-        }
-      
-    }
-      sendData();
-      
-    }
-    catch(err){
-      console.log(err);
-      
-    } 
-  }
-  },[messUpdate,token,messMenuData])
-  
-  */
  const logout=()=>{
   localStorage.removeItem("officialtokens");
   onOfficialLogin(false);  
