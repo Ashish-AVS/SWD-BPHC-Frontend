@@ -6,14 +6,11 @@ export  function AuthContextProvider(props){
   const [authTokens, setAuthTokens] = useState(existingTokens);
   const existingOfficialTokens = JSON.parse(localStorage.getItem("officialtokens"));
   const [officialAuthTokens, setOfficialAuthTokens] = useState(existingOfficialTokens);
-  //const [uid, setUid] = useState();
   const onOfficialLogin=(data)=>{
     setOfficialAuthTokens(data);
     };
   const onLogin=(data)=>{
-    //console.log("pehle YAAhan");
     setAuthTokens(data);
-    //console.log("phiri YAAhan");
     };
   
  return <AuthContext.Provider value={{authTokens,onLogin:onLogin,officialAuthTokens,onOfficialLogin:onOfficialLogin}} {...props}/>;

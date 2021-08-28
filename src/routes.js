@@ -14,14 +14,14 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SchoolIcon from '@material-ui/icons/School';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
-import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
+import LocalTaxiIcon from '@material-ui/icons/LocalTaxi';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import Virtual from "views/VirtualCampus/VirtualCampus";
+// import Virtual from "views/VirtualCampus/VirtualCampus";
 import Connect from "views/Connect/Connect.js";
 import Goodies from "views/Goodies/Goodies.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
@@ -32,6 +32,8 @@ import Medclaim from "views/MedClaim/Medclaim.js";
 import Scholarship from "views/Scholarship/Scholarship.js";
 import Outstation from "views/Outstation/Outstation";
 import Kya from "views/KYA/KYA.js";
+import Cab from "views/Cab/Cab";
+
 const dashboardRoutes = [
   {
     path: "/dashboard",
@@ -116,44 +118,7 @@ const dashboardRoutes = [
     icon: MenuBookIcon,
     component: Kya,
     layout: "/admin"
-  }
-  /*
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: LibraryBooks,
-    component: Typography,
-    layout: "/admin"
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: BubbleChart,
-    component: Icons,
-    layout: "/admin"
-  }
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: LocationOn,
-    component: Maps,
-    layout: "/admin"
-  }
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: Notifications,
-    component: NotificationsPage,
-    layout: "/admin"
-  },
-  {
-    path: "/rtl-page",
-    name: "RTL Support",
-    icon: Language,
-    component: RTLPage,
-    layout: "/rtl"
-  }*/
- 
+  } 
 ];
 
 export default dashboardRoutes;
