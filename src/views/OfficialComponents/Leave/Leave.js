@@ -147,69 +147,56 @@ export default function Leave() {
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [successMsg, setSuccessMsg] = React.useState("");
 
-  const stdID = React.useRef(); // store student's user ID, f20XXYYYY
+  const arrUidRef = React.useRef();
+  const deptUidRef = React.useRef(); 
   const token = JSON.parse(localStorage.getItem("officialtokens"));
   const [loading, setLoading] = React.useState(false);
-  const [sendingData, setSendingData] = React.useState(false);
-
+  const [sendingArrData, setSendingArrData] = React.useState(false);
+  const [sendingDeptData, setSendingDeptData] = React.useState(false);
+ 
+  // Arrival Request
   React.useEffect(() => {
-    console.log(
-      `FROM: ${selectedFromDate.getFullYear()}-${
-        selectedFromDate.getMonth() + 1
-      }-${selectedFromDate.getDate()}`
-    );
-
-    console.log(
-      `TO: ${selectedToDate.getFullYear()}-${
-        selectedToDate.getMonth() + 1
-      }-${selectedToDate.getDate()}`
-    );
-  }, [selectedToDate, selectedFromDate]);
-
-  React.useEffect(() => {
-    if (sendingData === true) {
+    if (sendingArrData === true) {
       setLoading(true);
       setIsError(false);
 
       try {
         const fetchData = async () => {
-          const result = await fetch(`${BaseUrl}/api/o/emergency-leave`, {
+          const result = await fetch(`${BaseUrl}/api/o/emergency-leave/arrival`, {
             method: "post",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              uid: stdID.current.value,
+              uid: arrUidRef.current.value,
               token: token,
               from: `${selectedFromDate.getFullYear()}-${
                 selectedFromDate.getMonth() + 1
               }-${selectedFromDate.getDate()}`,
-              to: `${selectedToDate.getFullYear()}-${
-                selectedToDate.getMonth() + 1
-              }-${selectedToDate.getDate()}`,
             }),
           });
           const res = await result.json();
           if (res.err === false) {
             setSuccessMsg("Operation Successful")
             setIsSuccess(true)
-            setSendingData(false);
-            stdID.current.value = "";
+            setSendingArrData(false);
+            arrUidRef.current.value = "";
             setSelectedFromDate(new Date());
-            setSelectedToDate(new Date());
+            // setSelectedToDate(new Date());
             setLoading(false);
           } else if (res.err === true && result.status === 401) {
+            setErrorMsg("Authentication failed. Login again and retry");
             logout();
           } else if (res.err === true && result.status === 422) {
-            setErrorMsg("Empty Fields Detected");
+            setErrorMsg("Empty Fields Detected in the request");
             setIsError(true);
-            setSendingData(false);
+            setSendingArrData(false);
             setLoading(false);
           } else if (res.err === true) {
             setErrorMsg(res.msg);
             setIsError(true);
-            setSendingData(false);
+            setSendingArrData(false);
             setLoading(false);
           }
         };
@@ -219,11 +206,63 @@ export default function Leave() {
       }
     }
   }, [
-    sendingData,
-    token,
-    stdID,
-    selectedFromDate,
-    selectedToDate,
+    sendingArrData
+  ]);
+
+
+  // Departure Request
+  React.useEffect(() => {
+    if (sendingDeptData === true) {
+      setLoading(true);
+      setIsError(false);
+
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/o/emergency-leave/leave`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              uid: deptUidRef.current.value,
+              token: token,
+              to: `${selectedToDate.getFullYear()}-${
+                selectedToDate.getMonth() + 1
+              }-${selectedToDate.getDate()}`,
+            }),
+          });
+          const res = await result.json();
+          if (res.err === false) {
+            setSuccessMsg("Operation Successful")
+            setIsSuccess(true)
+            setSendingDeptData(false);
+            deptUidRef.current.value = "";
+            // setSelectedFromDate(new Date());
+            setSelectedToDate(new Date());
+            setLoading(false);
+          } else if (res.err === true && result.status === 401) {
+            setErrorMsg("Authentication failed. Login again and retry");
+            logout();
+          } else if (res.err === true && result.status === 422) {
+            setErrorMsg("Empty Fields Detected in the request");
+            setIsError(true);
+            setSendingDeptData(false);
+            setLoading(false);
+          } else if (res.err === true) {
+            setErrorMsg(res.msg);
+            setIsError(true);
+            setSendingDeptData(false);
+            setLoading(false);
+          }
+        };
+        fetchData();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [
+    sendingDeptData
   ]);
 
 
@@ -270,35 +309,35 @@ export default function Leave() {
           </h4>
         </CardHeader>
         <CardBody>
-          <GridContainer justifyContent="flex-start" alignItems="flex-start">
-            <GridItem xs={12} sm={12} md={5} lg={4}>
+        <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={4}  >
+             <h2><b>STUDENT ARRIVAL</b></h2> 
+            </GridItem>
+        </GridContainer>
+          <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={4} lg={4} >
               <FormControl fullWidth className={classes.formControl}>
               <InputLabel className={classes.label}>STUDENT UID</InputLabel>
                 <TextField
-                  style={{marginTop:'2.2px'}}
+                  style={{marginTop:'3px'}}
                   size="small"
                   fullWidth
                   id="outlined-basic"
-                  inputRef={stdID}
+                  inputRef={arrUidRef}
                   helperText="Ex: f20191435"
                 />
               </FormControl>
             </GridItem>
-            <GridItem
-              xs={12}
-              sm={12}
-              md={5}
-              lg={4}
-            >
+            <GridItem xs={12} sm={12}  md={4} lg={4} >
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel className={classes.label}>FROM-DATE</InputLabel>
+                <InputLabel className={classes.label}>ARRIVAL-DATE</InputLabel>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
                     id="date-picker-dialog"
                     format="dd/MM/yyyy"
                     variant="inline"
                     value={selectedFromDate}
-                    disablePast
+                    disableFuture
                     onChange={handleDateChangeFrom}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -307,16 +346,54 @@ export default function Leave() {
                 </MuiPickersUtilsProvider>
               </FormControl>
             </GridItem>
-            <GridItem xs={12} sm={12}  md={5}  lg={4} >
+            <GridItem xs={12}   sm={12}    md={2}   lg={2}>
+              <Button
+                color="success"
+                disabled={loading}
+                onClick={() => {
+                  setSendingArrData(true);
+                }}
+              >
+                Submit
+              </Button>
+              {sendingArrData && loading ? <CircularProgress size={24} color="primary" /> : null}
+            </GridItem>
+            
+          </GridContainer>
+          <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={5}  >
+             <h2><b>STUDENT DEPARTURE</b></h2> 
+            </GridItem>
+        </GridContainer>
+          <GridContainer justify="center">
+            <GridItem xs={12} sm={12} md={4} lg={4}>
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel className={classes.label}>TO-DATE</InputLabel>
+              <InputLabel className={classes.label}>STUDENT UID</InputLabel>
+                <TextField
+                  style={{marginTop:'3px'}}
+                  size="small"
+                  fullWidth
+                  id="outlined-basic"
+                  inputRef={deptUidRef}
+                  helperText="Ex: f20191435"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+            >
+              <FormControl fullWidth className={classes.formControl}>
+                <InputLabel className={classes.label}>DEPARTURE-DATE</InputLabel>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   <KeyboardDatePicker
-                    variant="inline"
                     id="date-picker-dialog"
                     format="dd/MM/yyyy"
-                    disablePast
+                    variant="inline"
                     value={selectedToDate}
+                    disablePast
                     onChange={handleDateChangeTo}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
@@ -325,27 +402,20 @@ export default function Leave() {
                 </MuiPickersUtilsProvider>
               </FormControl>
             </GridItem>
-          </GridContainer>
-
-          <GridContainer
-            // direction="row"
-            // alignItems="center"
-            justify="flex-end"
-          >
-            <GridItem style={{ marginRight: "14px" }}>
+            <GridItem xs={12}   sm={12}    md={2}   lg={2}>
               <Button
                 color="success"
                 disabled={loading}
                 onClick={() => {
-                  setSendingData(true);
+                  setSendingDeptData(true);
                 }}
               >
                 Submit
               </Button>
-              {loading ? <CircularProgress size={24} color="primary" /> : null}
+              {sendingDeptData &&loading ? <CircularProgress size={24} color="primary" /> : null}
             </GridItem>
+            
           </GridContainer>
-
           <GridContainer
           // justify="center"
           // alignItems="center"
@@ -354,22 +424,24 @@ export default function Leave() {
               xs={12}
               sm={12}
               md={5}
-              lg={12}
-              style={{ marginLeft: "27px" }}
+              lg={11}
+              style={{ marginLeft: "27px"}}
             >
               <h3>
                 <b>Download CSV</b>
               </h3>
               <h4>
-                Click on the button to download the .csv file of leaves for the
-                current month
+                Click on the button to download the .csv file of student present on the campus
               </h4>
             </GridItem>
-          </GridContainer>
-          <GridContainer justify="flex-end" xs={12} sm={12} md={5} lg={12}>
+            <GridItem xs={12} sm={12} md={2} style={{ marginLeft: "27px"}} >
             <Button color="success" disabled={loading} onClick={exportCsv}>
               Download
             </Button>
+            </GridItem>
+          </GridContainer>
+          <GridContainer justify="flex-end" xs={12} sm={12} md={5} lg={12}>
+            
           </GridContainer>
         </CardBody>
       </Card>
