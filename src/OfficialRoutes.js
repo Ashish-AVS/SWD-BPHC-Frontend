@@ -146,7 +146,7 @@ const dashboardRoutes = [
   {
     path: "/leave",
     id:"emergency-leave",
-    name: "Emergency Leave ",
+    name: "On Campus",
     icon: DescriptionIcon,
     component: Leave,
     layout: "/official"

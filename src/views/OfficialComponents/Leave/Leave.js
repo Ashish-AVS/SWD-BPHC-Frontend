@@ -305,13 +305,13 @@ export default function Leave() {
       <Card>
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
-            <b>EMERGENCY LEAVE PORTAL</b>
+            <b>STUDENT MANAGEMENT PORTAL</b>
           </h4>
         </CardHeader>
         <CardBody>
         <GridContainer justify="center" >
             <GridItem xs={12} sm={12} md={4}  >
-             <h2><b>STUDENT ARRIVAL</b></h2> 
+             <h3><b>STUDENT ARRIVAL</b></h3> 
             </GridItem>
         </GridContainer>
           <GridContainer justify="center" >
@@ -361,8 +361,8 @@ export default function Leave() {
             
           </GridContainer>
           <GridContainer justify="center" >
-            <GridItem xs={12} sm={12} md={5}  >
-             <h2><b>STUDENT DEPARTURE</b></h2> 
+            <GridItem xs={12} sm={12} md={4}  >
+             <h3 style={{marginLeft:'-22px'}}><b>STUDENT DEPARTURE</b></h3> 
             </GridItem>
         </GridContainer>
           <GridContainer justify="center">
