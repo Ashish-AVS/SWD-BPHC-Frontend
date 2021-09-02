@@ -14,6 +14,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SchoolIcon from '@material-ui/icons/School';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LocalPlay from '@material-ui/icons/LocalPlay';
+import GradeIcon from '@material-ui/icons/Grade';
 import LocalTaxiIcon from '@material-ui/icons/LocalTaxi';
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
@@ -21,7 +22,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-// import Virtual from "views/VirtualCampus/VirtualCampus";
+import Awards from "views/Awards/Awards";
 import Connect from "views/Connect/Connect.js";
 import Goodies from "views/Goodies/Goodies.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
@@ -32,7 +33,7 @@ import Medclaim from "views/MedClaim/Medclaim.js";
 import Scholarship from "views/Scholarship/Scholarship.js";
 import Outstation from "views/Outstation/Outstation";
 import Kya from "views/KYA/KYA.js";
-import Cab from "views/Cab/Cab";
+// import Cab from "views/Cab/Cab";
 
 const dashboardRoutes = [
   {
@@ -118,7 +119,15 @@ const dashboardRoutes = [
     icon: MenuBookIcon,
     component: Kya,
     layout: "/admin"
-  } 
+  },
+  ,
+  {
+    path: "/awards",
+    name: "Achievements",
+    icon: GradeIcon,
+    component: Awards,
+    layout: "/admin"
+  }  
 ];
 
 export default dashboardRoutes;

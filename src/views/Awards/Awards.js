@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -11,7 +11,11 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+// import { TextField } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
+import { is } from "@babel/types";
+import { name } from "file-loader";
 
 
 const styles = {
@@ -43,73 +47,130 @@ const useStyles = makeStyles(styles);
 
 export default function Awards() {
   const classes = useStyles();
+  const [isSuccess,setisSuccess]=useState(false);
+  const [isError,setIsError]=useState(false);
+  const [errMsg,setErrMsg]=useState("");
+
+  const [awardData,setAwardData]=useState({
+    name:"",
+    field:"",
+    insti:"",
+    date:"",
+    desc:"",
+    link:""
+  })
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  function onChange(e){
+    const { name, value } = e.target;
+    setAwardData(prevState=>({
+         ...prevState,
+         [name]: value
+     }));
+     
+ }
+
+ function submitData(e){
+  
+  e.preventDefault();
+  if(awardData.name==="" ||awardData.field==="" ||awardData.insti===""){
+    setErrMsg("Empty fields detected");
+    setIsError(true);
+  }
+  else{
+    setisSuccess(true);
+    setAwardData(prevState=>({
+      ...prevState,
+      name: "",
+      date: "",
+      desc: "",
+      field: "",
+      link: "",
+      insti: "",
+  }));
+  }
+
+   
+}
+   
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
       <GridContainer justify="center" alignItems="center">
-        <GridItem xs={12} sm={12} md={7}>
+        <GridItem xs={12} sm={12} md={11}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}><b>AWARDS AND ACHIEVEMENTS</b></h4>
-              
             </CardHeader>
             <CardBody>
-            <h5 style={{display:"flex",justifyContent:"center"}}><b>MENTION YOUR ACHIEVEMENTS</b></h5>
+            <h3 style={{display:"flex",justifyContent:"center"}}><b>MENTION YOUR ACHIEVEMENTS</b></h3>
               <GridContainer >
-                
-                <GridItem xs={12} sm={12} md={5}>
-                  
+               
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Name"
-                    id="name"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={5}>
-                  <CustomInput
-                    labelText="ID"
-                    id="myid"
-                    
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-                <GridItem xs={12} sm={12} md={10}>
-                  <CustomInput
-                    labelText="Achievements/Awards"
+                    labelText="Name of the Achievement *"
                     id="award"
                     helperText="i.e Gold medal in BoSM"
                     formControlProps={{
                       fullWidth: true
                     }}
+                    // value={awardData.name}
+                    inputProps={{
+                      name:'name',value:awardData.name
+                    }}
+                    onChange={onChange}
+
                   />                  
                 </GridItem>
-                
-                <GridItem xs={12} sm={12} md={5}>
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Field of Achievement"
-                    id="foAchievement"
+                    labelText="Field of Achievement *"
+                    id="ach"
                     helperText="i.e Academics, Sports, Arts etc"
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      name:'field',value:awardData.field
+                    }}
+                    onChange={onChange}
+
                   />                  
-                </GridItem>
-                <GridItem xs={12} sm={12} md={5}>
+                </GridItem>                
+                <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Awarding Institute"
+                    labelText="Awarding Institute *"
                     id="awardIns"
                     helperText="Name of the Institution"
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      name:'insti',value:awardData.insti
+                    }}
+                    onChange={onChange}
+
                   />                  
                 </GridItem>
+                <GridItem xs={12} sm={12} md={8}>
+                  <CustomInput
+                    labelText="Description about the achievement"
+                    id="Desc"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      name:'desc',value:awardData.desc
+                    }}
+                    onChange={onChange}
+
+                  />
+                </GridItem>
+                  <GridItem xs={12} sm={12} md={1}></GridItem>                 
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Date"
@@ -117,42 +178,59 @@ export default function Awards() {
                     formControlProps={{
                       fullWidth: true
                     }}
+                    inputProps={{
+                      name:'date',value:awardData.date
+                    }}
+                    onChange={onChange}
+
                   />                  
                 </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
-                    labelText="Link"
+                    labelText="Link (if any)"
                     id="link"
                     formControlProps={{
                       fullWidth: true
                     }}
-                  />                  
-                </GridItem>
-                <GridItem xs={12} sm={12} md={8}>
-                  <CustomInput
-                    labelText="Description"
-                    id="Desc"
-                    formControlProps={{
-                      fullWidth: true
+                    inputProps={{
+                      name:'link',value:awardData.link
                     }}
+                    onChange={onChange}
+
                   />                  
                 </GridItem>
               </GridContainer>              
             </CardBody>
-            <CardFooter>
-                <GridContainer >
-                    <GridItem>
-              <Button color="success">Submit</Button>
-                  </GridItem>
-                  <GridItem>
-              <Button color="danger">Discard</Button>
-                  </GridItem>
-                </GridContainer>
+            <CardFooter style={{display:'flex', justifyContent:'center'}}>
+              <Button color="primary" round onClick={submitData}>Submit</Button>
             </CardFooter>
           </Card>
         </GridItem>
         
       </GridContainer>
+
+      <Snackbar
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        open={isSuccess}
+        autoHideDuration={5000}
+        onClose={() => { setisSuccess(false) }}>
+        <Alert
+          onClose={() => { setisSuccess(false) }}
+          severity="success">
+          Successfully Submitted
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        open={isError}
+        autoHideDuration={5000}
+        onClose={() => { setIsError(false) }}>
+        <Alert
+          onClose={() => { setIsError(false) }}
+          severity="error">
+          {errMsg} 
+                  </Alert>
+      </Snackbar>
     </div>
   );
 }
