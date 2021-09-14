@@ -21,6 +21,8 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import ComplaintsModal from "views/Modals/ComplaintsModal";
 import BusModal from "views/Modals/BusModal.js";
+import AntiRaggingModal from "views/Modals/AntiRaggingModal";
+
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
 import Button from "components/CustomButtons/Button.js";
@@ -37,7 +39,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 Transition.displayName = "Transition";
 export default function HeaderLinks(props) {
   const [busModal, setBusModal] = React.useState(false);
-  const [complaintsModal, setComplaintsModal] = React.useState(false);
+  const [raggingModal, setRaggingModal] = React.useState(false);
+  const [complaintsModal,setComplaintsModal]=React.useState(false);
   const classes = useStyles();
   return (
     <List className={classes.list}>
@@ -67,6 +70,17 @@ export default function HeaderLinks(props) {
       </ListItem>
       <BusModal Modal={busModal} openModal={setBusModal}/>
       <ComplaintsModal Modal={complaintsModal} openModal={setComplaintsModal}/>
+      <AntiRaggingModal Modal={raggingModal} openModal={setRaggingModal}/>
+      <ListItem className={classes.listItem}>
+        <Button
+          // href="/FAQs"
+          color="transparent"
+          onClick={() => setRaggingModal(true)}
+          className={classes.navLink}
+        >
+          Anti Ragging
+        </Button>
+      </ListItem>
       <ListItem className={classes.listItem}>
         <Button
           href="/FAQs"
@@ -74,7 +88,7 @@ export default function HeaderLinks(props) {
          
           className={classes.navLink}
         >
-          <BookIcon className={classes.icons} /> FAQs
+          FAQs
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
