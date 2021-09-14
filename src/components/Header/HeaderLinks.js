@@ -21,7 +21,6 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
 import ComplaintsModal from "views/Modals/ComplaintsModal";
 import BusModal from "views/Modals/BusModal.js";
-import AntiRaggingModal from "views/Modals/AntiRaggingModal";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
@@ -70,15 +69,14 @@ export default function HeaderLinks(props) {
       </ListItem>
       <BusModal Modal={busModal} openModal={setBusModal}/>
       <ComplaintsModal Modal={complaintsModal} openModal={setComplaintsModal}/>
-      <AntiRaggingModal Modal={raggingModal} openModal={setRaggingModal}/>
+      {/* <AntiRaggingModal Modal={raggingModal} openModal={setRaggingModal}/> */}
       <ListItem className={classes.listItem}>
         <Button
-          // href="/FAQs"
+          href="/anti-ragging"
           color="transparent"
-          onClick={() => setRaggingModal(true)}
           className={classes.navLink}
         >
-          Anti Ragging
+          Anti-Ragging
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>

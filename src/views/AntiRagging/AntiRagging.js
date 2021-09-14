@@ -1,65 +1,64 @@
+
 import React from "react";
-// @material-ui/core components
+import {Link} from "react-router-dom";
+import classNames from "classnames";
+import Autolinker from 'react-autolinker';
+// @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Close from "@material-ui/icons/Close";
-import IconButton from "@material-ui/core/IconButton";
 
-
-//Core Components
+// core components
+import GridItem from "components/Grid/GridItem.js";
+import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button.js";
+import Card from "components/Card/Card";
+import CardHeader from "components/Card/CardHeader";
+import CardBody from "components/Card/CardBody";
 
-import styles from "assets/jss/material-kit-react/modalStyle";
-import { Link } from "react-router-dom";
+//import Danger from "components/Typography/Danger.js";
+import Footer from "components/Footer/Footer.js";
+import Img from 'assets/img/bitslogo.png'
+import {BaseUrl} from "variables/BaseUrl";
+
+
+import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
+
 Transition.displayName = "Transition";
+export default function AntiRagging() {  
+  const classes = useStyles();
+  const imageClasses = classNames(
+    classes.imgFluid1
+  );
 
 
-export default function ComplaintsModal({Modal,openModal}){
-const classes=useStyles();
-
-    return(
-        <Dialog
-        classes={{
-          root: classes.center,
-          paper: classes.modal
-        }}
-        open={Modal}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={() => openModal(false)}
-        aria-labelledby="classic-modal-slide-title"
-        aria-describedby="classic-modal-slide-description"
-      >
-        <DialogTitle
-          id="classic-modal-slide-title"
-          disableTypography
-          className={classes.modalHeader}
-        >
-          <IconButton
-            className={classes.modalCloseButton}
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={() => openModal(false)}
-          >
-            <Close className={classes.modalClose} />
-          </IconButton>
-          <h3 className={classes.modalTitle}><strong>Anti Ragging</strong></h3>
-        </DialogTitle>
-        <DialogContent
-          id="classic-modal-slide-description"
-          className={classes.modalBody}
-        >
-         <h4>
+  return (
+    <div>
+      <GridContainer justify="center" alignItems="center">
+      <GridItem xs={6} sm={6} md={3}>
+      <Link to="/">
+      <img  src={Img} alt="..." className={imageClasses}  />
+      </Link>
+      </GridItem>
+      <GridItem xs={6} sm={6} md={7}>
+          <h2><strong>STUDENT WELFARE DIVISION</strong></h2>    
+      </GridItem>
+      
+      </GridContainer>
+     
+      <GridContainer direction="column" justify="center" alignItems="center">
+       
+        <GridItem xs={12} sm={12} md={10}>
+        <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}><b>ANTI-RAGGING @ BPHC</b></h4>
+            </CardHeader>
+            <CardBody>
+            <h4>
          The Institute has formulated strict anti-ragging guidelines, and all students are required to sign an undertaking to abide by these guidelines. If found violating these guidelines, students are liable to disciplinary action, including expulsion from the Institute and possible legal action as per the directive from the Honourable Supreme Court of India.
 The Institute has formed a committee and anti-ragging squads at the hostel and institute level to combat raging. The students can also communicate directly with the Associate Dean, Students Welfare, through the Institute website.
          
@@ -80,19 +79,14 @@ The Institute has formed a committee and anti-ragging squads at the hostel and i
                The link to access the portal is given below<br />
              </div> */}
           </div>
-        </DialogContent>
-        <DialogActions className={classes.modalFooter}>
-         
-          <Button
-            round
-            onClick={() => openModal(false)}
-            color="danger"
-            solid="true"
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-               
-    );
+            </CardBody>
+          </Card>      
+  </GridItem>
+  
+      </GridContainer> 
+     <Footer />
+      
+    </div>
+  );
 }
+
