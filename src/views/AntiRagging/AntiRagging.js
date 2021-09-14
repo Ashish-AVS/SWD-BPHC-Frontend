@@ -69,7 +69,7 @@ The Institute has formed a committee and anti-ragging squads at the hostel and i
              <Link to="/anti-ragging/2_Institute_Level_Squad.pdf" target="_blank" > <li>Institute Level Squad</li></Link>
              <Link to="/anti-ragging/3_Institute_Level_Cell.pdf" target="_blank" >  <li>Institute Level Cell</li></Link>
              <Link to="/anti-ragging/4_Online_Registration_of_Anti-Ragging_Declaration_Form.pdf" target="_blank" >  <li>Online Registration Anti Ragging Declaration</li></Link>
-             <Link to="/anti-ragging/Hyd_Campus_SWD_Anti_Ragging_Poster" target="_blank" > <li>Campus Anti-Ragging Poster</li></Link>
+             <Link to="/anti-ragging/Hyd_Campus_SWD_Anti_Ragging_Poster.pdf" target="_blank" > <li>Campus Anti-Ragging Poster</li></Link>
              <Link to="/anti-ragging/RaghvanReport.pdf" target="_blank" >  <li>Raghvan Report</li></Link>
              <Link to="/anti-ragging/SupremeCourtOrder.pdf" target="_blank" >  <li>Supreme Court Order</li></Link>
              <Link to="/anti-ragging/UGCRegulation.pdf" target="_blank" >  <li>UGC Regulation</li></Link>
