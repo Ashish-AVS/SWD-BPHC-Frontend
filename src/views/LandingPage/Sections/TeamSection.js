@@ -46,7 +46,7 @@ export default function TeamSection() {
               </h4>
               <CardBody>
                 <p className={classes.description}>
-                  E-Mail: <a href='mail to=kannan@hyderabad.bits-pilani.ac.in?sub=query'>kannan@hyderabad.bits-pilani.ac.in</a><br/>Phone No.: 040 66303820
+                  E-Mail: <a href='mail to=kannan@hyderabad.bits-pilani.ac.in?sub=query'>kannan@hyderabad.bits-pilani.ac.in</a><br/>Phone No.: 040 66303526
                 </p>
               </CardBody>
               <CardFooter className={classes.justifyCenter}>
