@@ -1,7 +1,7 @@
 const imagesStyles = {
   imgFluid: {
     width: "250px",
-    height: "200px"
+    // height: "200px"
   },
   imgFluid1: {
     width: "170px",

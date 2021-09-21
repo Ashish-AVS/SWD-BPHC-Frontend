@@ -16,7 +16,7 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import styles from "assets/jss/material-kit-react/views/landingPageSections/teamStyle.js";
 
-import sirImg from "assets/img/faces/sandip_sir-min.jpg";
+import sirImg from "assets/img/faces/kannan_sir-min.jpg";
 //import team2 from "assets/img/faces/christian.jpg";
 //import team3 from "assets/img/faces/kendall.jpg";
 
@@ -36,17 +36,17 @@ export default function TeamSection() {
         <GridContainer direction="row" justify="center" alignItems="center" >
           <GridItem xs={12} sm={12} md={4}>
             <Card plain>
-              <GridItem xs={12} sm={12} md={12} className={classes.itemGrid} >
+              <GridItem xs={12} sm={12} md={12} >
                 <img  src={sirImg} alt="..." className={imageClasses}  />
               </GridItem>
               <h4 className={classes.cardTitle}>
-                Prof. Sandip S. Deshmukh
+                Prof. Kannan Ramaswamy 
                 <br />
                 <small className={classes.smallTitle}>Associate Dean</small>
               </h4>
               <CardBody>
                 <p className={classes.description}>
-                  E-Mail: <a href='mail to=ssd@hyderabad.bits-pilani.ac.in?sub=query'>ssd@hyderabad.bits-pilani.ac.in</a><br/>Phone No.: 040 66303820
+                  E-Mail: <a href='mail to=kannan@hyderabad.bits-pilani.ac.in?sub=query'>kannan@hyderabad.bits-pilani.ac.in</a><br/>Phone No.: 040 66303820
                 </p>
               </CardBody>
               <CardFooter className={classes.justifyCenter}>
