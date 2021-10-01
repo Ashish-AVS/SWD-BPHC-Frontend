@@ -292,7 +292,7 @@ export default function UserProfile() {
 
   async function  onImgChange(e){
     const file=e.target.files[0];
-    if(file.size>1000000){
+    if(file.size>2000000){
       setFileSizeError(true);
     }
     else if(file!==undefined){
@@ -955,7 +955,7 @@ export default function UserProfile() {
   { profile.uploadImage===1?
          <GridItem style={{marginBottom:'50px'}}>
            <h4><b>IMAGE FOR ID CARD</b>(One Time Only)</h4>
-             <p >Hello ,{profile.name}<br/> Kindly upload your passport size picture below in .jpg/.jpeg format only (Maximum size-<b> 1MB</b>)</p>
+             <p >Hello ,{profile.name}<br/> Kindly upload your passport size picture below in .jpg/.jpeg format only (Maximum size-<b> 2MB</b>)</p>
              <input name="p_img" type='file' accept="image/jpeg" style={{marginTop:'10px'}} onChange={onImgChange}></input>                           
             {fileSizeError?<p style={{color:'red'}}>*File size limit exceeded</p>:null}
           </GridItem>:null}
