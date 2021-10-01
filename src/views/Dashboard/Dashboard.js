@@ -128,7 +128,7 @@ export default function Dashboard() {
                 </Button>
               </div>
               <div className={classes.stats}>
-                <Button round color="primary" disabled={messNo===undefined} onClick={()=>{openGrace(true)}}>
+                <Button round color="primary" disabled onClick={()=>{openGrace(true)}}>
                   Grace
                 </Button>
               </div>
