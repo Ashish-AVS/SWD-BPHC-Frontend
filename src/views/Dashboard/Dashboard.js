@@ -117,7 +117,7 @@ export default function Dashboard() {
                 <Restaurant/>
               </CardIcon>
               <p className={classes.cardCategory}>Current Mess</p>
-              {messNo!==undefined?<h3 className={classes.cardTitle}>
+              {messNo!==undefined ||messNo!==0?<h3 className={classes.cardTitle}>
                 MESS {messNo}
               </h3>:<h3 className={classes.cardTitle}>N/A</h3>}
             </CardHeader>
