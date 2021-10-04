@@ -99,13 +99,13 @@ const dashboardRoutes = [
     component: Medclaim,
     layout: "/admin"
   },
-  {
-    path: "/counsellor",
-    name: "Counsellor",
-    icon: EmojiPeopleIcon,
-    component: Counsellor,
-    layout: "/admin"
-  },
+  // {
+  //   path: "/counsellor",
+  //   name: "Counsellor",
+  //   icon: EmojiPeopleIcon,
+  //   component: Counsellor,
+  //   layout: "/admin"
+  // },
   {
     path: "/outstation",
     name: "Outstation",

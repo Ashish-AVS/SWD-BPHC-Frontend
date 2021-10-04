@@ -1,7 +1,7 @@
 {
-  "name": "material-kit-react",
-  "version": "1.9.0",
-  "description": "Material Kit React. Coded by Creative Tim",
+  "name": "swd-bits-hydrabad",
+  "version": "2.0.0",
+  "description": "SWD BITS, Hyderabad Frontend. Coded by SWD Nucleus",
   "private": true,
   "main": "src/index.js",
   "dependencies": {
