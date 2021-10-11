@@ -393,7 +393,7 @@ export default function Leave() {
                     format="dd/MM/yyyy"
                     variant="inline"
                     value={selectedToDate}
-                    disablePast
+                    // disablePast
                     onChange={handleDateChangeTo}
                     KeyboardButtonProps={{
                       "aria-label": "change date",
