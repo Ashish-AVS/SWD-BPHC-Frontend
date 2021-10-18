@@ -116,8 +116,8 @@ export default function Medclaim() {
     <p><b>UHID:</b> {medData.username}</p>
     <p><b>User ID:</b> YOUR ID Number <i>(e.g. 2015AAPS0274H)</i></p>
     <p><b>Password:</b> {medData.password}</p> 
-    <p>Use the above credentials to login to the fhpl website <a href="https://www.fhpl.net/FhplLogins/Ecard/Login.aspx?Type=ecard"><b>here</b></a> and view your insurance details.</p>
-    <p>For information about claiming Medical Insurance download your medical card.</p>
+    {/* <p>Use the above credentials to login to the fhpl website <a href="https://www.fhpl.net/FhplLogins/Ecard/Login.aspx?Type=ecard"><b>here</b></a> and view your insurance details.</p>
+    <p>For information about claiming Medical Insurance download your medical card.</p> */}
       </CardBody>
       <CardFooter>
        
