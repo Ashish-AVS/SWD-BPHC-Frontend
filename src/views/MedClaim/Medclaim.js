@@ -9,6 +9,8 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
 import {BaseUrl} from "variables/BaseUrl";
+import GridItem from "components/Grid/GridItem";
+import GridContainer from "components/Grid/GridContainer";
 
 const styles = {
   typo: {
@@ -93,29 +95,58 @@ export default function Medclaim() {
       </CardHeader>
       <CardBody>
       <h3 style={{display:"flex",justifyContent:"center"}}><b>POLICY DETAILS OF INSTITUTE</b></h3>
-      <p><b>Policy Number:</b>51-20-00561-00-00<br/>
+      <p><b>Policy Number:</b> 81-21-00436-00-00<br/>
 		<b>Insured Name:</b> M/s Birla Institute of Technology and Science Pilani Hyd<br/>
-		<b>Period of Insurance:</b> From 00:01 Hrs of 03/09/2020 To Midnight 23:59 Hrs of 02/09/2021<br/><br/>
+		<b>Period of Insurance:</b> From 00:01 Hrs of 03/09/2021 To Midnight 23:59 Hrs of 02/09/2022<br/><br/>
 
 		<b>Name:</b> Raju Kumar, ADITYA BIRLA INSURANCE BROKERS LTD<br/>
 		<b>Email:</b> <a href="mailto:raju.r.kumar@adityabirlacapital.com">raju.r.kumar@adityabirlacapital.com</a><br/>
 		<b>Mobile Number:</b>+91 8510006711<br/><br/></p>
-		<b><p>For Group Mediclaim Policy Ready Reckoner of BITS Pilani Hyderabad Campus for AY 2020 - 21 :</p></b><Button disabled round color="primary">Click Here</Button><br/><br/>
-		<p><b>For Policy related assistance:</b> Contact Mr. Prasant Inturi on 9010202837 or Visit SWD office</p>
-		<b><p>For more details:</p></b><Button disabled round color="primary">Click Here</Button><br/>
+		{/* <b><p>For Group Mediclaim Policy Ready Reckoner of BITS Pilani Hyderabad Campus for AY 2020 - 21 :</p></b><Button disabled round color="primary">Click Here</Button><br/><br/> */}
+		<h4><b>For Policy Related Assistance:</b></h4>
+          <GridContainer justify="flex-start">
+            <GridItem xs={12} sm={5} md={5}>
+              <p>Mail at <b><a href="mailto:swd-enquiry@hyderabad.bits-pilani.ac.in?subject=Query Regarding Medical Insurance Policy">swd-enquiry@hyderabad.bits-pilani.ac.in</a></b><br />
+                or Contact Mr. Prasanth Inturi at <b>9010202837</b> <br />
+                or Visit SWD office (C-224)</p>
+              <p><b>For more details:</b>&nbsp;&nbsp;&nbsp;
+              <a target="_blank" href={`${BaseUrl}/public_storage/medical_insurance/insurance_instructions.pdf`} style={{ textDecoration: 'none', color: 'white' }}>
+                <Button round color="primary">Click Here</Button>
+              </a></p>
+            </GridItem>
+            <GridItem xs={12} sm={1} md={1}>
+              <b>OR</b>
+            </GridItem>
+            <GridItem xs={12} sm={5} md={5}>
+            <p>Please feel free to write to them at <b><a href="mailto:crcm@rakshatpa.com?subject=Query Regarding Medical Insurance Policy">crcm@rakshatpa.com</a></b></p>
+            <div style={{lineHeight:'10px'}}>
+            <p>Faridabad :<b>0129-4289999,1800-180-1444</b></p>
+            <p>Mumbai :<b>022-67876666,1800-220-456</b></p>
+            <p>Bangalore :<b>080-42839999, 1800-425-8910</b></p>
+            <p>Special Assistance number:<b>18001801555</b></p>
+            </div>
+
+            <p><b>Network Hospitals List:</b>&nbsp;&nbsp;&nbsp;
+              <a target="_blank" href="https://www.rakshatpa.com/WebPortal/Login/search_PPN" style={{ textDecoration: 'none', color: 'white' }}>
+                <Button round color="primary">Click Here</Button>
+              </a></p>
+            </GridItem>
+          </GridContainer>
+     
+    {/* <br/>
 		<center><p><b>OR</b></p></center>
-		<p>Please feel free to write to them on <b><a href="mailto:care@libertyvideocon.com?subject=Query Regarding Medical Insurance Policy">care@libertyvideocon.com</a></b></p>
+		<p>Please feel free to write to them on <b><a href="mailto:crcm@rakshatpa.com?subject=Query Regarding Medical Insurance Policy">crcm@rakshatpa.com</a></b></p>
 		<center><p><b>OR</b></p></center>
-		<p>Call the Toll Free number <b>1800 266 5844</b> (between 8:00 am to 8:00 pm, 7 days of the week) for help.<br/> For Claim related assistance: Please feel free to write to them on Email ID or call the Toll Free number</p><br/>
+		<p>Call the Toll Free number <b>1800 266 5844</b> (between 8:00 am to 8:00 pm, 7 days of the week) for help.<br/> For Claim related assistance: Please feel free to write to them on Email ID or call the Toll Free number</p><br/> */}
 
 
 		<h3 style={{display:"flex",justifyContent:"center"}}><b>POLICY DETAILS OF STUDENT</b></h3>
-		<p><b>Policy Number:</b> 51-20-00561-00-00</p>
+		{/* <p><b>Policy Number:</b> 51-20-00561-00-00</p>
     <p><b>Corporate ID:</b> 27367</p>
-    {/* <p><b>Membership ID:</b> {medData.member_id}</p> */}
+    <p><b>Membership ID:</b> {medData.member_id}</p>
     <p><b>UHID:</b> {medData.username}</p>
     <p><b>User ID:</b> YOUR ID Number <i>(e.g. 2015AAPS0274H)</i></p>
-    <p><b>Password:</b> {medData.password}</p> 
+    <p><b>Password:</b> {medData.password}</p>  */}
     {/* <p>Use the above credentials to login to the fhpl website <a href="https://www.fhpl.net/FhplLogins/Ecard/Login.aspx?Type=ecard"><b>here</b></a> and view your insurance details.</p>
     <p>For information about claiming Medical Insurance download your medical card.</p> */}
       </CardBody>
