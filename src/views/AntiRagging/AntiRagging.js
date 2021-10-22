@@ -1,8 +1,8 @@
 
 import React from "react";
-import {Link} from "react-router-dom";
+// import {a} from "react-router-dom";
 import classNames from "classnames";
-import Autolinker from 'react-autolinker';
+// import Autoaer from 'react-autoaer';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Slide from "@material-ui/core/Slide";
@@ -40,9 +40,9 @@ export default function AntiRagging() {
     <div>
       <GridContainer justify="center" alignItems="center">
       <GridItem xs={6} sm={6} md={3}>
-      <Link to="/">
+      <a to="/">
       <img  src={Img} alt="..." className={imageClasses}  />
-      </Link>
+      </a>
       </GridItem>
       <GridItem xs={6} sm={6} md={7}>
           <h2><strong>STUDENT WELFARE DIVISION</strong></h2>    
@@ -65,18 +65,18 @@ The Institute has formed a committee and anti-ragging squads at the hostel and i
           </h4>
           <div>
              <ol>
-             <Link to="/anti-ragging/1_2021-22_Anti-ragging_Committee_14-9-2021.pdf" target="_blank" > <li>Institute Anti-ragging Committee</li></Link>
-             <Link to="/anti-ragging/2_Institute_Level_Squad.pdf" target="_blank" > <li>Institute Level Squad</li></Link>
-             <Link to="/anti-ragging/3_Institute_Level_Cell.pdf" target="_blank" >  <li>Institute Level Cell</li></Link>
-             <Link to="/anti-ragging/4_Online_Registration_of_Anti-Ragging_Declaration_Form.pdf" target="_blank" >  <li>Online Registration Anti Ragging Declaration</li></Link>
-             <Link to="/anti-ragging/Hyd_Campus_SWD_Anti_Ragging_Poster.pdf" target="_blank" > <li>Campus Anti-Ragging Poster</li></Link>
-             <Link to="/anti-ragging/RaghvanReport.pdf" target="_blank" >  <li>Raghvan Report</li></Link>
-             <Link to="/anti-ragging/SupremeCourtOrder.pdf" target="_blank" >  <li>Supreme Court Order</li></Link>
-             <Link to="/anti-ragging/UGCRegulation.pdf" target="_blank" >  <li>UGC Regulation</li></Link>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/arc.pdf`} target="_blank" > <li>Institute Anti-ragging Committee</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/2_Institute_Level_Squad.pdf`} target="_blank" > <li>Institute Level Squad</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/3_Institute_Level_Cell.pdf`} target="_blank" >  <li>Institute Level Cell</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/4_Online_Registration_of_Anti-Ragging_Declaration_Form.pdf`} target="_blank" >  <li>Online Registration Anti Ragging Declaration</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/Hyd_Campus_SWD_Anti_Ragging_Poster.pdf`} target="_blank" > <li>Campus Anti-Ragging Poster</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/RaghvanReport.pdf`} target="_blank" >  <li>Raghvan Report</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/SupremeCourtOrder.pdf`} target="_blank" >  <li>Supreme Court Order</li></a>
+             <a href={`${BaseUrl}/public_storage/anti-ragging/UGCRegulation.pdf`} target="_blank" >  <li>UGC Regulation</li></a>
              </ol> 
              {/* The respective help-desk incharge and user will receive email notification after a request is submitted.<br />
              <div align="center">
-               The link to access the portal is given below<br />
+               The a to access the portal is given below<br />
              </div> */}
           </div>
             </CardBody>
