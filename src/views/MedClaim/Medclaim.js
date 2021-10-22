@@ -99,9 +99,9 @@ export default function Medclaim() {
 		<b>Insured Name:</b> M/s Birla Institute of Technology and Science Pilani Hyd<br/>
 		<b>Period of Insurance:</b> From 00:01 Hrs of 03/09/2021 To Midnight 23:59 Hrs of 02/09/2022<br/><br/>
 
-		<b>Name:</b> Raju Kumar, ADITYA BIRLA INSURANCE BROKERS LTD<br/>
-		<b>Email:</b> <a href="mailto:raju.r.kumar@adityabirlacapital.com">raju.r.kumar@adityabirlacapital.com</a><br/>
-		<b>Mobile Number:</b>+91 8510006711<br/><br/></p>
+		<b>Name:</b> Ashok Singh, ADITYA BIRLA INSURANCE BROKERS LTD<br/>
+		<b>Email:</b> <a href="mailto:ashok.singh12@adityabirlacapital.com">ashok.singh12@adityabirlacapital.com</a><br/>
+		<b>Mobile Number:</b>+91 7840038777<br/><br/></p>
 		{/* <b><p>For Group Mediclaim Policy Ready Reckoner of BITS Pilani Hyderabad Campus for AY 2020 - 21 :</p></b><Button disabled round color="primary">Click Here</Button><br/><br/> */}
 		<h4><b>For Policy Related Assistance:</b></h4>
           <GridContainer justify="flex-start">
