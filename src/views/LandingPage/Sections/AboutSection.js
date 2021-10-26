@@ -39,9 +39,9 @@ export default function AboutSection() {
  Our division cares for every student and shall always look into their needs that may arise from time to time.
   </p>
    
-   <h3 style={{fontFamily:"Product Sans"}}>Other Responsibilities Include</h3>
+   <h3 className={classes.title}>Other Responsibilities Include</h3>
    
-   <div >
+   <div className={classes.description} >
      <div >
      <ul>
        <li>Collection Of Fees</li>

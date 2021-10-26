@@ -15,6 +15,7 @@ import Drawer from "@material-ui/core/Drawer";
 import Menu from "@material-ui/icons/Menu";
 // core components
 import styles from "assets/jss/material-kit-react/components/headerStyle.js";
+import Img from 'assets/img/bitslogo.png'
 
 const useStyles = makeStyles(styles);
 
@@ -53,14 +54,14 @@ export default function Header(props) {
         .classList.remove(classes[changeColorOnScroll.color]);
     }
   };
-  const { color, rightLinks, leftLinks, brand, fixed, absolute } = props;
+  const { color, rightLinks, leftLinks, brand, fixed, absolute,brands} = props;
   const appBarClasses = classNames({
     [classes.appBar]: true,
     [classes[color]]: color,
     [classes.absolute]: absolute,
     [classes.fixed]: fixed
   });
-  const brandComponent = <Button className={classes.title}>{brand}</Button>;
+  const brandComponent = <Button className={classes.title}><img  src={Img} alt="..." width="40px" height="40px" style={{marginRight:'10px'}}/><Hidden smDown implementation="css">{brand}</Hidden><Hidden mdUp implementation="css">{brands}</Hidden></Button>;
   return (
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>

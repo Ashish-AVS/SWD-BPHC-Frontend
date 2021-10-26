@@ -35,6 +35,8 @@ export default function LandingPage(props) {
         color="dark"
         routes={dashboardRoutes}
         brand="Student Welfare Division"
+        // leftLinks={}
+        brands="SWD"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{

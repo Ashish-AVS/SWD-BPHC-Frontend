@@ -64,6 +64,7 @@ export default function CustomInput(props) {
       {labelText !== undefined ? (
         <InputLabel
           className={classes.labelRoot + " " + labelClasses}
+          style={{fontWeight:'400'}}
           htmlFor={id}
           {...labelProps}
         >
@@ -78,7 +79,9 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
-        
+        inputProps={{
+          
+        }}
         onChange={onChange}
         {...inputProps}
       />

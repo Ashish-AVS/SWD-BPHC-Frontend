@@ -1,6 +1,6 @@
 import React from "react";
-import MaterialTable from "material-table";
-import Datetime from "react-datetime";
+import {saveAs} from 'file-saver';
+
 import { Redirect } from "react-router-dom";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,18 +10,19 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import CustomInput from "components/CustomInput/CustomInput.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import Check from "@material-ui/icons/Check";
-//import CardFooter from "components/Card/CardFooter.js";
 import Button from "components/CustomButtons/Button.js";
-import Badge from "components/Badge/Badge.js";
-import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-import Clearfix from "components/Clearfix/Clearfix.js";
-import CancelOutstation from "./CancelOutstation";
-
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import "date-fns";
+import TextField from "@material-ui/core/TextField";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 //Auth Components
 import { useAuth } from "context/auth";
 
@@ -89,7 +90,7 @@ const styles = {
     },
   },
   formControl: {
-    margin: "0 0 17px 0",
+    margin: "0 0 5px 0",
     paddingTop: "27px",
     position: "relative",
     "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
@@ -120,120 +121,82 @@ const styles = {
   },
 };
 
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const useStyles = makeStyles(styles);
 
 export default function Leave() {
+  const [selectedToDate, setSelectedToDate] = React.useState(new Date());
+  const [selectedFromDate, setSelectedFromDate] = React.useState(new Date());
+
+  const handleDateChangeTo = (date) => {
+    setSelectedToDate(date);
+  };
+  const handleDateChangeFrom = (date) => {
+    setSelectedFromDate(date);
+  };
   const classes = useStyles();
-  const { onLogin } = useAuth();
+  const { onOfficialLogin } = useAuth();
 
   const [isError, setIsError] = React.useState(false);
-  // const { uid } = JSON.parse(localStorage.getItem("data"));
-  const uid = "f20202298";
-  const token = JSON.parse(localStorage.getItem("tokens"));
-  const [data, setData] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [reqSent, setReqSent] = React.useState(false);
-  const [sendingData, setSendingData] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [cancelId, setCancelId] = React.useState(null);
-  const [isUpdated, setIsUpdated] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState("");
-  const [outData, setOutData] = React.useState({
-    from: "",
-    to: "",
-    uid: "",
-    location: "",
-  });
-  var yesterday = Datetime.moment().subtract(1, "day");
-  var validfrom = function (current) {
-    return current.isAfter(yesterday);
-  };
+  
+  const [isSuccess, setIsSuccess] = React.useState(false);
+  const [successMsg, setSuccessMsg] = React.useState("");
 
+  const arrUidRef = React.useRef();
+  const deptUidRef = React.useRef(); 
+  const token = JSON.parse(localStorage.getItem("officialtokens"));
+  const [loading, setLoading] = React.useState(false);
+  const [sendingArrData, setSendingArrData] = React.useState(false);
+  const [sendingDeptData, setSendingDeptData] = React.useState(false);
+ 
+  // Arrival Request
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/outstation/`, {
-          headers: { Authorization: token },
-        });
-        const res = await result.json();
-        if (res.err === false) {
-          setData(
-            res.data.map((info, index) => {
-              let badge = null;
-              if (info.approved === -1) {
-                badge = <Badge color="danger">Rejected</Badge>;
-              } else if (info.approved === 0) {
-                badge = <Badge color="warning">Pending</Badge>;
-              } else if (info.approved === 1) {
-                badge = <Badge color="success">Approved</Badge>;
-              }
-              return {
-                sno: index + 1,
-                outstation_id: info.outstation_id,
-                location: info.location,
-                from: info.from,
-                to: info.to,
-                duration: `${info.duration} Days`,
-                approved: badge,
-                status: info.approved,
-              };
-            })
-          );
-        } else if (res.err === true && result.status === 401) {
-          logout();
-        }
-      };
-      fetchData();
-    } catch (err) {
-      console.log(err);
-    }
-  }, [uid, token, reqSent, isUpdated]);
-  React.useEffect(() => {
-    if (sendingData === true) {
+    if (sendingArrData === true) {
       setLoading(true);
-      setReqSent(false);
       setIsError(false);
 
       try {
         const fetchData = async () => {
-          const result = await fetch(`${BaseUrl}/api/outstation/?`, {
+          const result = await fetch(`${BaseUrl}/api/o/emergency-leave/arrival`, {
             method: "post",
             headers: {
               "Content-Type": "application/json",
-              Authorization: token,
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              // uid: uid,
+              uid: arrUidRef.current.value,
               token: token,
-              from: outData.from,
-              to: outData.to,
-              uid: outData.uid,
-              location: outData.location,
+              from: `${selectedFromDate.getFullYear()}-${
+                selectedFromDate.getMonth() + 1
+              }-${selectedFromDate.getDate()}`,
             }),
           });
           const res = await result.json();
           if (res.err === false) {
-            setSendingData(false);
-            setOutData({
-              from: "",
-              to: "",
-              uid: "",
-              location: "",
-            });
-            setReqSent(true);
-
+            setSuccessMsg("Operation Successful")
+            setIsSuccess(true)
+            setSendingArrData(false);
+            arrUidRef.current.value = "";
+            setSelectedFromDate(new Date());
+            // setSelectedToDate(new Date());
             setLoading(false);
           } else if (res.err === true && result.status === 401) {
+            setErrorMsg("Authentication failed. Login again and retry");
             logout();
           } else if (res.err === true && result.status === 422) {
-            setErrorMsg("Empty Fields Detected");
+            setErrorMsg("Empty Fields Detected in the request");
             setIsError(true);
-            setSendingData(false);
+            setSendingArrData(false);
             setLoading(false);
           } else if (res.err === true) {
             setErrorMsg(res.msg);
             setIsError(true);
-            setSendingData(false);
+            setSendingArrData(false);
             setLoading(false);
           }
         };
@@ -243,270 +206,268 @@ export default function Leave() {
       }
     }
   }, [
-    sendingData,
-    // uid,
-    token,
-    outData.from,
-    outData.to,
-    outData.uid,
-    outData.location,
+    sendingArrData
   ]);
 
+
+  // Departure Request
+  React.useEffect(() => {
+    if (sendingDeptData === true) {
+      setLoading(true);
+      setIsError(false);
+
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/o/emergency-leave/leave`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              uid: deptUidRef.current.value,
+              token: token,
+              to: `${selectedToDate.getFullYear()}-${
+                selectedToDate.getMonth() + 1
+              }-${selectedToDate.getDate()}`,
+            }),
+          });
+          const res = await result.json();
+          if (res.err === false) {
+            setSuccessMsg("Operation Successful")
+            setIsSuccess(true)
+            setSendingDeptData(false);
+            deptUidRef.current.value = "";
+            // setSelectedFromDate(new Date());
+            setSelectedToDate(new Date());
+            setLoading(false);
+          } else if (res.err === true && result.status === 401) {
+            setErrorMsg("Authentication failed. Login again and retry");
+            logout();
+          } else if (res.err === true && result.status === 422) {
+            setErrorMsg("Empty Fields Detected in the request");
+            setIsError(true);
+            setSendingDeptData(false);
+            setLoading(false);
+          } else if (res.err === true) {
+            setErrorMsg(res.msg);
+            setIsError(true);
+            setSendingDeptData(false);
+            setLoading(false);
+          }
+        };
+        fetchData();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [
+    sendingDeptData
+  ]);
+
+
+  const exportCsv = async (e) => {
+    e.preventDefault();
+    const result = await fetch(`${BaseUrl}/api/o/emergency-leave/report`, {
+      headers: {  Authorization: `Bearer ${token}` ,Accept: "text/csv"},
+    })
+    const date =new Date();
+    const res = await result.text();
+    if(result.status===201||result.status===200||result.status===304){
+        const csvBlob=new Blob([res],{type:'text/csv'});
+        saveAs(csvBlob,`LeaveData-${date.toLocaleDateString()}.csv`);
+        setSuccessMsg("Download Successful")
+        setIsSuccess(true)
+      }
+      else {
+        setIsError(true);
+        setErrorMsg('Error in Downloading!');
+    }
+
+  }
+
+
+
   const logout = () => {
-    localStorage.removeItem("tokens");
-    localStorage.removeItem("data");
-    onLogin(false);
-    return <Redirect exact to="/login-page" />;
+    localStorage.removeItem("officialtokens");
+    // localStorage.removeItem("data");
+    onOfficialLogin(false);
+    return <Redirect exact to="/official-login" />;
   };
 
-  function onChange(e) {
-    const { name, value } = e.target;
-    setOutData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  }
   return (
     <div>
       <div className={classes.typo} style={{ marginTop: "-50px" }}>
         <h2>
-          <strong>STUDENT WELFARE DIVISION</strong>
+          <strong>BITS PILANI HYDERABAD CAMPUS</strong>
         </h2>
       </div>
       <Card>
         <CardHeader color="primary">
           <h4 className={classes.cardTitleWhite}>
-            <b>ONLINE OUTSTATION</b>
+            <b>STUDENT MANAGEMENT PORTAL</b>
           </h4>
         </CardHeader>
         <CardBody>
-          {reqSent ? (
-            <div>
-              <SnackbarContent
-                message={
-                  <span>
-                    <b>OUTSTATION REQUEST SENT SUCCESSFULLY</b>
-                  </span>
-                }
-                close
-                color="success"
-                icon={Check}
-              />
-              <Clearfix />
-            </div>
-          ) : null}
-          {isError ? (
-            <div>
-              <SnackbarContent
-                message={
-                  <span>
-                    <b>ERROR:</b>
-                    {errorMsg}
-                  </span>
-                }
-                close
-                color="danger"
-                icon="info_outline"
-              />
-              <Clearfix />
-            </div>
-          ) : null}
-          <h3 style={{ display: "flex", justifyContent: "center" }}>
-            <b>APPLY FOR OUTSTATION</b>
-          </h3>
-          <GridContainer justify="center" alignItems="center">
-            <GridItem xs={12} sm={12} md={5}>
-              <CustomInput
-                labelText="UID"
-                // helperText="Enter the ID in the format f20XXYYYY"
-                formControlProps={{
-                  fullWidth: true,
-                }}
-                inputProps={{
-                  multiline: true,
-                  name: "uid",
-                  value: outData.uid,
-                }}
-                onChange={onChange}
-              />
+        <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={4}  >
+             <h3><b>STUDENT ARRIVAL</b></h3> 
             </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
+        </GridContainer>
+          <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={4} lg={4} >
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel className={classes.label}>FROM-DATE</InputLabel>
-                <Datetime
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                  className={classes.input + " " + classes.underline}
-                  isValidDate={validfrom}
-                  value={outData.from}
-                  onChange={(e) => {
-                    const date = new Date(`${e}`);
-                    const { Date1, Month, Year } = {
-                      Date1: date.getDate(),
-                      Month: date.getMonth() + 1,
-                      Year: date.getFullYear(),
-                    };
-                    if (Month > 9) {
-                      if (Date1 < 10) {
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-${Month}-0${Date1}`,
-                        }));
-                      } else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-${Month}-${Date1}`,
-                        }));
-                    } else {
-                      if (Date1 < 10)
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-0${Month}-0${Date1}`,
-                        }));
-                      else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          from: `${Year}-0${Month}-${Date1}`,
-                        }));
-                    }
-                  }}
+              <InputLabel className={classes.label}>STUDENT UID</InputLabel>
+                <TextField
+                  style={{marginTop:'3px'}}
+                  size="small"
+                  fullWidth
+                  id="outlined-basic"
+                  inputRef={arrUidRef}
+                  helperText="Ex: f20191435"
                 />
               </FormControl>
             </GridItem>
-
-            <GridItem xs={12} sm={12} md={5}>
-              <CustomInput
-                labelText="Location of Travel"
-                onChange={onChange}
-                formControlProps={{
-                  fullWidth: true,
-                }}
-                inputProps={{
-                  name: "location",
-                  value: outData.location,
-                }}
-              />
-            </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
+            <GridItem xs={12} sm={12}  md={4} lg={4} >
               <FormControl fullWidth className={classes.formControl}>
-                <InputLabel className={classes.label}>TO-DATE</InputLabel>
-                <Datetime
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                  className={classes.input + " " + classes.underline}
-                  isValidDate={validfrom}
-                  value={outData.to}
-                  onChange={(e) => {
-                    const date = new Date(`${e}`);
-                    const { Date1, Month, Year } = {
-                      Date1: date.getDate(),
-                      Month: date.getMonth() + 1,
-                      Year: date.getFullYear(),
-                    };
-                    if (Month > 9) {
-                      if (Date1 < 10) {
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-${Month}-0${Date1}`,
-                        }));
-                      } else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-${Month}-${Date1}`,
-                        }));
-                    } else {
-                      if (Date1 < 10)
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-0${Month}-0${Date1}`,
-                        }));
-                      else
-                        setOutData((prevState) => ({
-                          ...prevState,
-                          to: `${Year}-0${Month}-${Date1}`,
-                        }));
-                    }
-                  }}
-                />
-              </FormControl>
-            </GridItem>
-            <GridItem xs={12} sm={12} md={5}>
-              <GridContainer
-                direction="row"
-                justify="center"
-                alignItems="center"
-              >
-                <GridItem>
-                  <Button
-                    color="success"
-                    disabled={loading}
-                    onClick={() => {
-                      setSendingData(true);
+                <InputLabel className={classes.label}>ARRIVAL-DATE</InputLabel>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    id="date-picker-dialog"
+                    format="dd/MM/yyyy"
+                    variant="inline"
+                    value={selectedFromDate}
+                    disableFuture
+                    onChange={handleDateChangeFrom}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
                     }}
-                  >
-                    Submit
-                  </Button>
-                  {loading ? (
-                    <CircularProgress size={24} color="primary" />
-                  ) : null}
-                </GridItem>
-              </GridContainer>
+                  />
+                </MuiPickersUtilsProvider>
+              </FormControl>
             </GridItem>
-            {/* <GridItem xs={12} sm={12} md={10}>
-              <p>
-                <strong>Note:</strong>
-                <br />
-                1.You can apply for online outstation from 7 days of your Travel
-                (not before that).
-                <br />
-                2.Incase to know the reason of rejection or for quick approval
-                please contact your respective hostel warden.
-                <br />
-                3.Outstation request can be cancelled only if the status is{" "}
-                <Badge color="warning">Pending</Badge>
-              </p>
-            </GridItem> */}
+            <GridItem xs={12}   sm={12}    md={2}   lg={2}>
+              <Button
+                color="success"
+                disabled={loading}
+                onClick={() => {
+                  setSendingArrData(true);
+                }}
+              >
+                Submit
+              </Button>
+              {sendingArrData && loading ? <CircularProgress size={24} color="primary" /> : null}
+            </GridItem>
+            
+          </GridContainer>
+          <GridContainer justify="center" >
+            <GridItem xs={12} sm={12} md={4}  >
+             <h3 style={{marginLeft:'-22px'}}><b>STUDENT DEPARTURE</b></h3> 
+            </GridItem>
+        </GridContainer>
+          <GridContainer justify="center">
+            <GridItem xs={12} sm={12} md={4} lg={4}>
+              <FormControl fullWidth className={classes.formControl}>
+              <InputLabel className={classes.label}>STUDENT UID</InputLabel>
+                <TextField
+                  style={{marginTop:'3px'}}
+                  size="small"
+                  fullWidth
+                  id="outlined-basic"
+                  inputRef={deptUidRef}
+                  helperText="Ex: f20191435"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem
+              xs={12}
+              sm={12}
+              md={4}
+              lg={4}
+            >
+              <FormControl fullWidth className={classes.formControl}>
+                <InputLabel className={classes.label}>DEPARTURE-DATE</InputLabel>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardDatePicker
+                    id="date-picker-dialog"
+                    format="dd/MM/yyyy"
+                    variant="inline"
+                    value={selectedToDate}
+                    // disablePast
+                    onChange={handleDateChangeTo}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+              </FormControl>
+            </GridItem>
+            <GridItem xs={12}   sm={12}    md={2}   lg={2}>
+              <Button
+                color="success"
+                disabled={loading}
+                onClick={() => {
+                  setSendingDeptData(true);
+                }}
+              >
+                Submit
+              </Button>
+              {sendingDeptData &&loading ? <CircularProgress size={24} color="primary" /> : null}
+            </GridItem>
+            
+          </GridContainer>
+          <GridContainer
+          // justify="center"
+          // alignItems="center"
+          >
+            <GridItem
+              xs={12}
+              sm={12}
+              md={5}
+              lg={11}
+              style={{ marginLeft: "27px"}}
+            >
+              <h3>
+                <b>Download CSV</b>
+              </h3>
+              <h4>
+                Click on the button to download the .csv file of student present on the campus
+              </h4>
+            </GridItem>
+            <GridItem xs={12} sm={12} md={2} style={{ marginLeft: "27px"}} >
+            <Button color="success" disabled={loading} onClick={exportCsv}>
+              Download
+            </Button>
+            </GridItem>
+          </GridContainer>
+          <GridContainer justify="flex-end" xs={12} sm={12} md={5} lg={12}>
+            
           </GridContainer>
         </CardBody>
-        <CancelOutstation
-          open={open}
-          setOpen={setOpen}
-          cancelId={cancelId}
-          setIsUpdated={setIsUpdated}
-        />
       </Card>
-      {/* <MaterialTable
-        title="PREVIOUSLY APPLIED OUTSTATIONS"
-        columns={[
-          { title: "S No.", field: "sno" },
-          { title: "Travelling To", field: "location" },
-          { title: "From Date", field: "from" },
-          { title: "To Date", field: "to" },
-          { title: "Duration", field: "duration" },
-          { title: "Approval Status", field: "approved" },
-        ]}
-        data={data}
-        options={{
-          search: false,
-          pageSize: 10,
-          emptyRowsWhenPaging: false,
-          actionsColumnIndex: -1,
-        }}
-        actions={[
-          (rowData) => ({
-            icon: () => (
-              <Button disabled={rowData.status !== 0} color="info">
-                Cancel
-              </Button>
-            ),
-            disabled: rowData.status !== 0,
-            onClick: (event, row) => {
-              setCancelId(row.outstation_id);
-              setOpen(true);
-            },
-          }),
-        ]}
-      /> */}
+
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={isSuccess}
+        autoHideDuration={5000}
+        onClose={() => { setIsSuccess(false) }}>
+        <Alert
+          onClose={() => { setIsSuccess(false) }}
+          severity="success">
+          {successMsg}
+                  </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+        open={isError}
+        autoHideDuration={5000}
+        onClose={() => { setIsError(false) }}>
+        <Alert
+          onClose={() => { setIsError(false) }}
+          severity="error">
+          {errorMsg}
+                  </Alert>
+      </Snackbar>
     </div>
   );
 }
