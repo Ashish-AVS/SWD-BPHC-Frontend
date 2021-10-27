@@ -214,6 +214,7 @@ const removeTimer=()=>{
         
        >
          <MenuItem value={'swd'}>SWD</MenuItem>
+         <MenuItem value={'dean_swd'}>ASSOCIATE DEAN, SWD</MenuItem>
          <MenuItem value={'chief_warden'}>CHIEF WARDEN</MenuItem>
          <MenuItem value={'mess1'}>MESS 1</MenuItem>
          <MenuItem value={'mess2'}>MESS 2</MenuItem>
@@ -230,10 +231,6 @@ const removeTimer=()=>{
          <MenuItem value={'r'}>RAM BHAWAN</MenuItem>
          <MenuItem value={'isac'}>ISAC COMMITTEE</MenuItem>
          <MenuItem value={'smc'}>SMC</MenuItem>
-         
-
-     
-     
       </Select>
      </FormControl>
                     <CustomInput
