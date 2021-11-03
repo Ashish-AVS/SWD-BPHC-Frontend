@@ -7,7 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-//import CircularProgress from '@material-ui/core/CircularProgress';
+
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -17,6 +17,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import AlertComponent from "components/Alert/Alert";
 
 // Child Components
 import ChangePasswordModal from './ChangePassword';
@@ -439,50 +440,30 @@ export default function UserProfile() {
           </GridContainer>
         </GridItem>
       </GridContainer>
-      <Snackbar
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-        open={profileUpdated}
-        autoHideDuration={5000}
-        onClose={() => { setProfileUpdated(false) }}>
-        <Alert
-          onClose={() => { setProfileUpdated(false) }}
-          severity="success">
-          Profile Updated Successfully
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-        open={emptyError}
-        autoHideDuration={5000}
-        onClose={() => { setEmptyError(false) }}>
-        <Alert
-          onClose={() => { setEmptyError(false) }}
-          severity="error">
-          Empty fields detected!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-        open={isSessionError}
-        autoHideDuration={5000}
-        onClose={() => { setIsSessionError(false) }}>
-        <Alert
-          onClose={() => { setIsSessionError(false) }}
-          severity="error">
-          Session Expired! Logging Out
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-        open={isError}
-        autoHideDuration={5000}
-        onClose={() => { setIsError(false) }}>
-        <Alert
-          onClose={() => { setIsError(false) }}
-          severity="error">
-          An error occured, check details again.
-        </Alert>
-      </Snackbar>
+      <AlertComponent 
+         type="success"
+         isOpen={profileUpdated}
+         msg={"Profile Updated Successfully"}
+         handleClose={() => { setProfileUpdated(false)}}
+      />
+      <AlertComponent 
+         type="error"
+         isOpen={emptyError}
+         msg={"Empty Fields Detected !"}
+         handleClose={() => { setEmptyError(false) }}
+      />
+      <AlertComponent 
+         type="error"
+         isOpen={isSessionError}
+         msg={"Session Expired! Logging Out"}
+         handleClose={() => { setIsSessionError(false) }}
+      />
+      <AlertComponent 
+         type="error"
+         isOpen={isError}
+         msg={"An error occured, check details again."}
+         handleClose={() => { setIsError(false) }}
+      />
       <ChangePasswordModal open={open} setOpen={setOpen} />
     </div>
   );

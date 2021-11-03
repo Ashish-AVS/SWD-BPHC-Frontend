@@ -3,8 +3,6 @@ import {Redirect} from "react-router-dom";
 import {saveAs} from 'file-saver';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -18,9 +16,11 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import AlertComponent from "components/Alert/Alert";
 
 //Auth Components
 import { useAuth } from "context/auth";
+
 // Created Components
 import {BaseUrl} from "variables/BaseUrl";
 
@@ -29,9 +29,7 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 
 const useStyles = makeStyles(styles);
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+
 
 export default function Documents() {
   const classes = useStyles();
@@ -148,56 +146,41 @@ export default function Documents() {
                     {doc.map((item,index)=>{
                         return <MenuItem key={index} value={item.key}>{item.name}</MenuItem>
                     })}
-                     
                   </Select>
                </FormControl>
               </GridItem>                              
                 <GridItem xs={12} sm={12} md={4}>
-                    <Button color="success" round disabled={loading} onClick={()=>{
+                  <Button 
+                    color="success" 
+                    round 
+                    disabled={loading} 
+                    onClick={()=>{
                       setSendingData(true)
                       }}>
-                      Download
-                    </Button>
-                  
+                    Download
+                  </Button>
                 </GridItem>
-                
               </GridContainer> 
-              
             </CardBody>
           </Card>
         </GridItem>
-       
       </GridContainer>
-      <Snackbar
-           anchorOrigin={{horizontal:'center',vertical:'bottom'}}
-            open={success}
-            autoHideDuration={4000}
-            onClose={()=>{
-              setSuccess(false)
-            }}>
-            <Alert
-              onClose={()=>{
-                setSuccess(false)
-              }}
-              severity="success">
-              File Download completed
-        </Alert>
-          </Snackbar>
-          <Snackbar
-           anchorOrigin={{horizontal:'center',vertical:'bottom'}}
-            open={err}
-            autoHideDuration={4000}
-            onClose={()=>{
-              setErr(false)
-            }}>
-            <Alert
-              onClose={()=>{
-                setErr(false)
-              }}
-              severity="error">
-              {errMsg}
-        </Alert>
-          </Snackbar>
+      <AlertComponent
+        type="success"
+        isOpen={success}
+        handleClose={()=>{
+            setSuccess(false)
+        }}
+        msg={"File Download completed"}
+      />
+      <AlertComponent
+        type="error"
+        isOpen={err}
+        handleClose={()=>{
+            setErr(false)
+        }}
+        msg={errMsg}
+      />
     </div>
   );
 }
