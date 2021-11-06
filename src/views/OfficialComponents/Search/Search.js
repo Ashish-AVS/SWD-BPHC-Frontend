@@ -283,7 +283,6 @@ export default function Search() {
                 it is not compulsory and its default value is NIL.  
                </p>
               <GridContainer spacing={4} >
-                
                 <GridItem xs={12} sm={12} md={5}>   
                 <FormControl fullWidth className={classes.formControl}>
                   <InputLabel className={classes.labelRoot}>Criteria-1</InputLabel>
@@ -549,7 +548,7 @@ export default function Search() {
                  // components={{
                    // Actions:'MTableActions'
                   //}}
-                  />:null} 
+                  />:null}
         </GridItem>
         <GridItem xs={12} sm={12} md={12} style={{display:'flex',justifyContent:'center'}} >
         <Button color="success" round onClick={()=>{setSendingData1(true)}}>

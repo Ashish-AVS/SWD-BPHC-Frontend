@@ -19,6 +19,7 @@ import EventNoteIcon from '@material-ui/icons/EventNote';
 import BlockIcon from '@material-ui/icons/Block';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
+// import FoodBankIcon from '@material-ui/icons/FoodBank';
 
 // core components/views for Official layout
 
@@ -36,6 +37,7 @@ import Blacklist from "views/OfficialComponents/Blacklist/Blacklist";
 import Blocklist from "views/OfficialComponents/Blocklist/Blocklist";
 import DocGen from "views/OfficialComponents/DocGen/DocGen";
 import Leave from "views/OfficialComponents/Leave/Leave";
+import MessLog from 'views/OfficialComponents/MessLog/MessLog';
 
 const dashboardRoutes = [
   
@@ -149,6 +151,14 @@ const dashboardRoutes = [
     name: "On Campus",
     icon: DescriptionIcon,
     component: Leave,
+    layout: "/official"
+  },
+  {
+    path: '/messlog',
+    id: 'messlog',
+    name: 'Mess Log',
+    icon: DescriptionIcon,
+    component: MessLog,
     layout: "/official"
   }
 
