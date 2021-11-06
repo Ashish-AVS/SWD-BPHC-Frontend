@@ -172,16 +172,6 @@ export default function MessLog() {
         setSendingData(true);
       }
     });
-    let u = '';
-    document.addEventListener("keydown", (e) => {
-      
-      if(e.keyCode == 16 || e.keyCode == 17) {
-        e.preventDefault();
-      } else {
-        alert(String.fromCharCode(e.keyCode));
-        u += e.key;
-      }
-    });
   });
 
   return (
@@ -274,14 +264,15 @@ export default function MessLog() {
           </Card>
         </GridItem>
       </GridContainer>
-      {/* <BarcodeReader
+      <BarcodeReader
         onError={(err) => {
           alert('Error');
         }}
         onScan={(data) => {
-          alert('Success');
+          setUid(data);
+          setSendingData(true);
         }} 
-      /> */}
+      />
     </div>
   );
 }
