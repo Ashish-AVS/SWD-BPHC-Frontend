@@ -151,8 +151,8 @@ export default function MessLog() {
       }
       setMsg(res.data.msg);
     } catch (e) {
-      console.log(e);
-      alert("error");
+      setSuccess(0);
+      setMsg('Error processing this uid');
     }
     setUid('');
     setSendingData(false);
@@ -266,7 +266,8 @@ export default function MessLog() {
       </GridContainer>
       <BarcodeReader
         onError={(err) => {
-          alert('Error');
+          setSuccess(0);
+          setMsg('Error reading this barcode');
         }}
         onScan={(data) => {
           setUid(data);
