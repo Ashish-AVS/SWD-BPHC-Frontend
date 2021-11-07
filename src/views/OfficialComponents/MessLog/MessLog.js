@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import BarcodeReader from 'react-barcode-reader';
+import ReactHtmlParser from 'react-html-parser';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -149,7 +150,7 @@ export default function MessLog() {
       } else {
         setSuccess(1);
       }
-      setMsg(res.data.msg);
+      setMsg(`${res.data.msg} <br/> ${res.data.data.userName}, ${uid}`);
     } catch (e) {
       setSuccess(0);
       setMsg('Error processing this uid');
@@ -256,7 +257,7 @@ export default function MessLog() {
                     {success === 1 && <img src={tickImage} height={120} />}
                     {success === 0 && <img src={crossImage} height={120} />}
                     <br />
-                    <h3>{msg}</h3>
+                    <h3>{ReactHtmlParser(msg)}</h3>
                   </center>
                 </GridItem>
               </GridContainer>
