@@ -5,9 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 import CircularProgress from '@material-ui/core/CircularProgress';
-// @material-ui/icons
-//import Email from "@material-ui/icons/Email";
-//import People from "@material-ui/icons/People";
 
 // core components
 import InputLabel from "@material-ui/core/InputLabel";

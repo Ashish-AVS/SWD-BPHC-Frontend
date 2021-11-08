@@ -19,6 +19,7 @@ import EventNoteIcon from '@material-ui/icons/EventNote';
 import BlockIcon from '@material-ui/icons/Block';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
+import HowToRegIcon from '@material-ui/icons/HowToReg';
 // import FoodBankIcon from '@material-ui/icons/FoodBank';
 
 // core components/views for Official layout
@@ -38,6 +39,7 @@ import Blocklist from "views/OfficialComponents/Blocklist/Blocklist";
 import DocGen from "views/OfficialComponents/DocGen/DocGen";
 import Leave from "views/OfficialComponents/Leave/Leave";
 import MessLog from 'views/OfficialComponents/MessLog/MessLog';
+import MessReg from 'views/OfficialComponents/MessReg/MessReg';
 
 const dashboardRoutes = [
   
@@ -159,6 +161,14 @@ const dashboardRoutes = [
     name: 'Mess Log',
     icon: DescriptionIcon,
     component: MessLog,
+    layout: "/official"
+  },
+  {
+    path: '/messreg',
+    id: 'messreg',
+    name: 'Mess Registration',
+    icon: HowToRegIcon,
+    component: MessReg,
     layout: "/official"
   }
 
