@@ -136,7 +136,6 @@ export default function MessLog() {
     }
     let data = {
       uid: u,
-      meal_type: mealType,
     };
     let headers = {
       Authorization: `Bearer ${token}`,
@@ -150,13 +149,30 @@ export default function MessLog() {
       } else {
         setSuccess(1);
       }
+      setMealType(res.data.data.meal_type);
       setMsg(`${res.data.msg} <br/> ${res.data.data.userName}, ${uid}`);
     } catch (e) {
       setSuccess(0);
       setMsg('Error processing this uid');
     }
     setUid('');
-    setSendingData(false);
+    setTimeout(() => {
+      setSendingData(false);
+    } , 1000);
+  };
+
+  let getMealType = async () => {
+    let headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    try {
+      let res = await axios.get(`${BaseUrl}/api/o/messlog/getMeal`, {
+        headers: headers,
+      });
+      setMealType(res.data.meal_type);
+    } catch (e) {
+      setMealType(1);
+    }   
   };
 
   React.useEffect(() => {
@@ -164,6 +180,10 @@ export default function MessLog() {
       sendData();
     }
   }, [sendingData]);
+
+  React.useEffect(() => {
+    getMealType();
+  }, []);
 
   React.useEffect(() => {
     var userInput = document.getElementById("uid");
@@ -271,8 +291,10 @@ export default function MessLog() {
           setMsg('Error reading this barcode');
         }}
         onScan={(data) => {
-          setUid(data);
-          setSendingData(true);
+          if (!sendingData) {
+            setUid(data);
+            setSendingData(true);
+          }
         }} 
       />
     </div>
