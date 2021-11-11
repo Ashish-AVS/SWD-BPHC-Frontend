@@ -124,7 +124,7 @@ export default function MessLog() {
   const logout = () => {
     localStorage.removeItem("officialtokens");
     onOfficialLogin(false);
-    return <Redirect exact to="/" />;
+    return <Redirect exact to="/official-login" />;
   };
 
   const sendData = async () => {
@@ -152,6 +152,9 @@ export default function MessLog() {
       setMealType(res.data.data.meal_type);
       setMsg(`${res.data.msg} <br/> ${res.data.data.userName}, ${uid}`);
     } catch (e) {
+      if (e.response.status === 401) {
+        return logout();
+      }
       setSuccess(0);
       setMsg('Error processing this uid');
     }
