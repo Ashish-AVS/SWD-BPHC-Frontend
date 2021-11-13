@@ -228,7 +228,7 @@ export default function MessLog() {
                     <Select
                       name="meal_type"
                       className={classes.input + " " + classes.underline}
-                      defaultValue={"breakfast"}
+                      defaultValue={0}
                       value={mealType}
                       onChange={(e) => {
                         setMealType(e.target.value);

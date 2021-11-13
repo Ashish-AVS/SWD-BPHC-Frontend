@@ -131,7 +131,6 @@ export default function LoginPage(props) {
               removeTimer()
             }
             else if (result.response.status === 401||result.response.status === 400||result.response.status === 404||result.response.status === 500) {
-//console.log(result.response)
               setLoggingIn(false);
               setIsError(true);
               setErrorMsg(result.response.data.msg);
@@ -157,7 +156,6 @@ export default function LoginPage(props) {
  },[isLoggingIn,uid,pwd,onLogin]);
 
  useEffect(()=>{
- 
    if(isLoggedIn===true){
     localStorage.setItem("tokens",JSON.stringify(authTokens)); 
     localStorage.setItem("data",JSON.stringify(data));
@@ -201,7 +199,7 @@ const removeTimer=()=>{
         data.name=result.data.data.name;
         data.id=result.data.data.id;
         data.isComplete=result.data.data.isComplete;
-        data.uid=uid;
+        data.uid=result.data.data.uid;
         setLoggedIn(true);
       } 
     }).catch((result) => {
