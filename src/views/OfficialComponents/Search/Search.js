@@ -135,6 +135,7 @@ export default function Search() {
   const [success, setSuccess] = React.useState(false);
   const [err,setErr]=React.useState(false);
   const [errMsg,setErrMsg]=React.useState('');
+  const [batch, setBatch] = React.useState(null);
   var today = Datetime.moment();
   var valid = function( current ){
     return current.isBefore( today );
@@ -238,9 +239,12 @@ export default function Search() {
       setRecievedData(false);
       try{
         const SendData=async ()=>{
-          const result =await fetch(`${BaseUrl}/api/o/search/export`,{
+          const result =await fetch(`${BaseUrl}/api/o/search/export/${batch ? batch : "0"}`,{
             headers:{Authorization:`Bearer ${token}`,
-            Accept: "text/csv"}
+            Accept: "text/csv"},
+            // body: {
+            //   batch: batch ? batch : ""
+            // }
           })
           const res= await result.text();
           if(result.status===201||result.status===200||result.status===304){
@@ -551,9 +555,29 @@ export default function Search() {
                   />:null}
         </GridItem>
         <GridItem xs={12} sm={12} md={12} style={{display:'flex',justifyContent:'center'}} >
-        <Button color="success" round onClick={()=>{setSendingData1(true)}}>
-                      Download DB
-                    </Button>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Batch</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              // value={age}
+              label="Batch"
+              // onChange={handleChange}
+              value={batch}
+              onChange={(e) => {
+                setBatch(e.target.value);
+              }}
+            >
+              <MenuItem value={2021}>2021</MenuItem>
+              <MenuItem value={2020}>2020</MenuItem>
+              <MenuItem value={2019}>2019</MenuItem>
+              <MenuItem value={2018}>2018</MenuItem>
+              <MenuItem value={2017}>2017</MenuItem>
+            </Select>
+          </FormControl>
+          <Button color="success" round onClick={()=>{setSendingData1(true)}}>
+            Download DB
+          </Button>
         </GridItem>
       </GridContainer>
       {/* {recievedDetailsData?
