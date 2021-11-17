@@ -1,6 +1,5 @@
 import React from "react";
 import Datetime from "react-datetime";
-import MaterialTable from "material-table";
 import {saveAs} from 'file-saver';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,8 +17,9 @@ import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-import SearchDetails from "./SearchDetails";
+
+import SearchResult from "./SearchResult";
+import DatabaseExport from "./DatabaseExport";
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import {
@@ -135,6 +135,7 @@ export default function Search() {
   const [success, setSuccess] = React.useState(false);
   const [err,setErr]=React.useState(false);
   const [errMsg,setErrMsg]=React.useState('');
+  const [batch, setBatch] = React.useState(null);
   var today = Datetime.moment();
   var valid = function( current ){
     return current.isBefore( today );
@@ -171,6 +172,7 @@ export default function Search() {
          value_2:''
      }));
   }
+
   React.useEffect(()=>{
   if(sendingData===true){
     setRecievedData(false);
@@ -195,12 +197,10 @@ export default function Search() {
           setSendingData(false);
           setData(res.data);
           setRecievedData(true);
-          console.log(res.data)
         }
        
       }
       sendData();
-      
     }
     catch(err){
       console.log(err);
@@ -233,36 +233,8 @@ export default function Search() {
       } 
     }
   },[detailsReq,uid,token])
-  React.useEffect(()=>{
-    if(sendingData1===true){
-      setRecievedData(false);
-      try{
-        const SendData=async ()=>{
-          const result =await fetch(`${BaseUrl}/api/o/search/export`,{
-            headers:{Authorization:`Bearer ${token}`,
-            Accept: "text/csv"}
-          })
-          const res= await result.text();
-          if(result.status===201||result.status===200||result.status===304){
-            const csvBlob=new Blob([res],{type:'text/csv'});
-            saveAs(csvBlob,`Database.csv`);
-            setSuccess(true);
-          }
-          else {
-            setErr(true);
-            setErrMsg('Error in Downloading!');
-          }
-          }
-        SendData();
-        setSendingData1(false);
-        
-        
-      }
-      catch(err){
-        console.log(err);
-      } 
-    } 
-    })
+
+
   return (
     <div>
       <div className={classes.typo} style={{marginTop:"-50px"}}>
@@ -282,7 +254,7 @@ export default function Search() {
                 is "Name" which you can change by chosing the one from the available list list. If required you can use the second criteria but
                 it is not compulsory and its default value is NIL.  
                </p>
-              <GridContainer spacing={4} >
+              <GridContainer spacing={4} justify="center" alignItems="center" >
                 <GridItem xs={12} sm={12} md={5}>   
                 <FormControl fullWidth className={classes.formControl}>
                   <InputLabel className={classes.labelRoot}>Criteria-1</InputLabel>
@@ -490,7 +462,7 @@ export default function Search() {
                 }}
                />}
                 </GridItem>
-                <GridItem xs={12} sm={12} md={10}>
+                <GridItem xs={12} sm={12} md={12}>
                 <GridContainer direction="row"  justify="center"  alignItems="center" >
                   <GridItem>
                     <Button color="success" onClick={()=>{setSendingData(true)}}>
@@ -518,68 +490,15 @@ export default function Search() {
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={10}>
-        {recievedData?
-                <MaterialTable
-                  title="Student List"
-                  columns={[
-                    {title:"User ID",field:"uid"},
-                    {title:"Name",field:"name"},
-                    {title:"ID",field:"id"},
-                    {title:"Phone",field:"phone"}]}
-                  data={data}
-                  options={{
-                    search:false,
-                    pageSize:20,
-                    emptyRowsWhenPaging:false
-                  }}
-                  actions={[
-                    {                 
-                      icon:()=><VisibilityIcon/>,
-                      tooltip:'Open',
-                      onClick:(event,row)=>{
-                    console.log(row.uid);
-                    setUid(row.uid);
-                    setDetailsReq(true);
-
-                    
-                      }
-                   }
-                  ]}
-                 // components={{
-                   // Actions:'MTableActions'
-                  //}}
-                  />:null}
+          { recievedData ? 
+           <SearchResult data={data} setUid={setUid} setDetailsReq={setDetailsReq} /> 
+              : null
+          }
         </GridItem>
-        <GridItem xs={12} sm={12} md={12} style={{display:'flex',justifyContent:'center'}} >
-        <Button color="success" round onClick={()=>{setSendingData1(true)}}>
-                      Download DB
-                    </Button>
+        <GridItem xs={12} sm={12} md={10} >
+          <DatabaseExport />
         </GridItem>
       </GridContainer>
-      {/* {recievedDetailsData?
-      <SearchDetails open={open} setOpen={setOpen} data={detailsData} setRecievedDetailsData={setRecievedDetailsData} />:null} */}
-   <Snackbar
-           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
-            open={success}
-            autoHideDuration={4000}
-            onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              severity="success">
-              Task Completed SuccessFully
-        </Alert>
-          </Snackbar>
-          <Snackbar
-           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
-            open={err}
-            autoHideDuration={4000}
-            onClose={()=>{setErr(false)}}>
-            <Alert
-              onClose={()=>{setErr(false)}}
-              severity="error">
-              {errMsg}
-        </Alert>
-          </Snackbar>
     </div>
   );
 }
