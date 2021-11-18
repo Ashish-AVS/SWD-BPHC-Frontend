@@ -60,22 +60,22 @@ export default function MCN() {
                   <h3 style={{textTransform:'uppercase', display: "flex", justifyContent: "center" }}><strong>Documents to be Submitted</strong></h3>
 
                   <div>
-  <p>The following documents for the FINANCIAL YEAR 2019-20 (ASSESSMENT YEAR 2020-21) should be submitted: -</p>
+  <p>The following documents for the FINANCIAL YEAR 2020-21 (ASSESSMENT YEAR 2021-22) should be submitted: -</p>
   <p><strong>If parents/guardians are:</strong></p>
   <ul>
     <li><strong>Salaried employee/ Business</strong></li>
   </ul>
   <ol>
-    <li>ITR V acknowledgment (ASSESSMENT YEAR 2020-21)</li>
+    <li>ITR V acknowledgment (ASSESSMENT YEAR 2021-22)</li>
     <li>Computation of income/ Form 16</li>
-    <li>Bank statements for one financial year ( 1st April 2019- 31st March 2020)</li>
+    <li>Bank statements for one financial year ( 1st April 2020- 31st March 2021)</li>
   </ol>
   <ul>
     <li><strong>Engaged in Agriculture</strong></li>
   </ul>
   <ol>
-    <li>Original Income Certificate from Mandal Revenue Officer gross income for the financial year 2019-2020 (ASSESSMENT YEAR 2020-21)</li>
-    <li>Bank statements for one financial year ( 1st April 2019- 31st March 2020)</li>
+    <li>Original Income Certificate from Mandal Revenue Officer gross income for the financial year 2020-2021 (ASSESSMENT YEAR 2021-22)</li>
+    <li>Bank statements for one financial year ( 1st April 2020- 31st March 2021)</li>
   </ol>
   <ul>
     <li><strong>Pensioners</strong></li>
@@ -89,11 +89,11 @@ export default function MCN() {
     <li><strong>Non earning parent </strong>(Ex: Homemaker)</li>
   </ul>
   <ol>
-    <li>ITR V acknowledgment (ASSESSMENT YEAR 2020-21)</li>
-    <li>Bank statements for one financial year ( 1st April 2019- 31st March 2020)</li>
+    <li>ITR V acknowledgment (ASSESSMENT YEAR 2021-22)</li>
+    <li>Bank statements for one financial year ( 1st April 2020- 31st March 2021)</li>
   </ol>
   <ul>
-    <li><strong> Cases</strong></li>
+    <li><strong> Misc Cases</strong></li>
     <li>In case of the demise of a parent, a copy of the death certificate must be attached.</li>
     <li>If parents are separated/divorced, they need to check with the committee for the documents requirements.</li>
     <li>In the case of an Educational Loan, a copy of the loan sanction letter should be submitted.</li>
@@ -104,7 +104,7 @@ export default function MCN() {
     <li><strong>Mere income statements</strong> and <strong>declarations</strong> by parents/their employers, notary affidavit, a certificate from bank, annual pension statements, etc., will not be accepted.</li>
     <li>Every document needs to be self-attested with a date of submission.(Signature on the first page of every document by your parents)</li>
     <li>Income certificates of<strong> BOTH </strong>parents must be provided irrespective of whether or not they are earning.</li>
-    <li>All the income statements should be for the Financial Year 2019-20 (Assessment Year 2020-21).</li>
+    <li>All the income statements should be for the Financial Year 2020-21 (Assessment Year 2021-22).</li>
     <li>Income statements for <strong>earlier years</strong> will be <strong>directly rejected.</strong></li>
     <li>If an application or the documents enclosed are found to be forged/ photoshopped, the applicant is <strong>liable for disciplinary action</strong> in addition to a fiscal penalty incommensurate with the nature of the offense.</li>
     <li>It is also mandatory to declare all the personal bank statements of the parent/guardian, which is linked to Aadhaar/PAN card numbers submitted.</li>
