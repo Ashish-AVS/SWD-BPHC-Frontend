@@ -17,7 +17,7 @@
 .babelrc
 .eslintignore
 .eslintrc.js
-
+.env
 
 package-lock.json
 
