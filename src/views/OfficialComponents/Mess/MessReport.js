@@ -3,9 +3,8 @@ import Datetime from "react-datetime";
 import {Redirect} from 'react-router-dom';
 import {saveAs} from 'file-saver';
 // @material-ui/core components
+import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 
 //Auth Components
 import { useAuth } from "context/auth";
@@ -23,7 +22,8 @@ import {
   primaryColor,
   defaultFont
 } from "assets/jss/material-kit-react.js";
-
+import axios from "axios";
+import AlertComponent from "components/Alert/Alert";
 
 const styles = {
   cardCategoryWhite: {
@@ -104,9 +104,6 @@ const styles = {
       marginTop: "0px"
     }}
 };
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const useStyles = makeStyles(styles);
 
@@ -115,117 +112,54 @@ export default function MessReport() {
  const token=JSON.parse(localStorage.getItem("officialtokens"));
  
   //const [sendingData,setSendingData]=React.useState(false);
-  const [reportData,setReportData]=React.useState([]);
-  const [sendingData,setSendingData]=React.useState(false);
-  const [postDate,setPostDate]=React.useState("");
-  const [success,setSuccess]=React.useState(false);
+  const [mealCount,setmealCount]=
+  React.useState({
+    brkfast:0,
+    lunch:0,
+    snacks:0,
+    dnr:0
+  });
+  const [sendingData, setSendingData]=React.useState(true)
+  const [postDate,setPostDate]=React.useState(moment().format('YYYY-MM-DD'));
   const {onOfficialLogin}=useAuth();
   const classes = useStyles();
-  const [err,setErr]=React.useState(false);
-  const [errMsg,setErrMsg]=React.useState('');
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setErr(false);
-    setSuccess(false);
+  const [err, setErr]=React.useState(false);
+  const [msg, setMsg]=React.useState('')
+  const tomorrow = moment().add(1, 'day');
+  const disableFutureDt = current => {
+    return current.isBefore(tomorrow);
   };
- const date = new Date();
- const date1= date.toLocaleDateString();
-  React.useEffect(()=>{
-  
-    //setRecievedData(false);
+  React.useEffect(()=>{  
+    if(sendingData===true)
     try{
       const SendData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/messgrace/upcoming`,{
+        const res =await axios.post(`${BaseUrl}/api/o/messlog/getCount`,{
+          date:postDate
+        },{
           headers:{Authorization:`Bearer ${token}`}
         })
-         const res = await result.json();
-        if (res.err === false) {
-          setReportData(res.data);
-          //setRecievedData(true);
-          //setSendingData(false);
+         
+        if (res.data.err === false) {
+          setmealCount(res.data.data);
+          console.log(res.data.data)
         }
-        else if (res.err === true && result.status === 401) {
+        else if (res.data.err === true && res.status === 401) {
           logout();
         }
-        else if (res.err === true) {
+        else if (res.data.err === true) {
           setErr(true);
-          setErrMsg(res.msg);
-        }}
+          setMsg(res.data.msg);
+        }
+        setSendingData(false)
+      }
       SendData();
-      
     }
     catch(err){
-      console.log(err);
-      
+      console.log(err);  
     } 
   
-  },[])
-  React.useEffect(()=>{
-  
-    if(sendingData===true){
-    try{
-      const SendData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/messgrace/export?date=${postDate}`,{
-          headers:{Authorization:`Bearer ${token}`,
-          Accept: "text/csv"}
-        })
-        const res= await result.text();
-        if(result.status===201||result.status===200||result.status===304){
-          const csvBlob=new Blob([res],{type:'text/csv'});
-          saveAs(csvBlob,`GraceData-${date1}.csv`);
-          setSuccess(true);
-        }
-        else {
-          setErr(true);
-          setErrMsg('Error in Downloading!');
-        }
-        }
-      SendData();
-      setSendingData(false);
-      
-    }
-    catch(err){
-      console.log(err);
-      
-    }
-  }
-  
-  })
-
- /* React.useEffect(()=>{
-   if(messUpdate===true){
-    try{
-      const sendData=async ()=>{
-        const result =await fetch(`${BaseUrl}/api/o/messmenu`,{
-            method:"post",
-            headers:{'Content-Type':"application/json",
-            Authorization:`Bearer ${token}`},
-            body:JSON.stringify({
-              messno:1,
-              menu:JSON.stringify(messMenuData)
-            })
-           })
-         const res = await result.json();
-        if(result.status===200||result.status===201){
-          console.log("hi");
-          setMenuUpdated(true);
-          setMessUpdate(false);
-        }
-      
-    }
-      sendData();
-      
-    }
-    catch(err){
-      console.log(err);
-      
-    } 
-  }
-  },[messUpdate,token,messMenuData])
-  
-  */
+  },[sendingData])
+ 
  const logout=()=>{
   localStorage.removeItem("officialtokens");
   onOfficialLogin(false);  
@@ -240,11 +174,11 @@ export default function MessReport() {
         <GridItem xs={12} sm={12} md={10}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>MESS REPORT</b></h4>
+              <h4 className={classes.cardTitleWhite}><b>MESS MEAL REPORT</b></h4>
               
             </CardHeader>
             <CardBody>
-            <h3 style={{display:"flex",justifyContent:"center"}}><b>Download Report</b></h3>
+            <h3 style={{display:"flex",justifyContent:"center"}}><b>MESS MEAL COUNT</b></h3>
             
               <GridContainer  direction="row"  justify="center"  alignItems="center">
                   <GridItem xs={12} sm={12} md={4}>
@@ -256,7 +190,9 @@ export default function MessReport() {
                    dateFormat="DD-MM-YYYY" 
                    timeFormat={false}
                    className={classes.input+" "+classes.underline}
-                   
+                   defaultValue={Date.now()}
+                   isValidDate={disableFutureDt}
+                   value={postDate}
                    onChange={(e)=>{
                     const date = new Date(`${e}`);
                     const {Date1,Month,Year}={
@@ -280,63 +216,41 @@ export default function MessReport() {
                 </FormControl>
                 
               </GridItem>
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={12} sm={12} md={2}>
                 
-                    <Button color="success" onClick={()=>{
+                    <Button color="success" round onClick={()=>{
                       setSendingData(true)
                       }}>
-                      Download CSV
+                      Submit
                     </Button>
                   
                 </GridItem>
                 
               </GridContainer> 
               <h3 style={{display:"flex",justifyContent:"center",marginTop:'40px'}}><b>Meal Count</b></h3>             
-             <GridContainer spacing={2} justify="center" alignItems="center">
-               <GridItem xs={12} sm={12} md={3}>
-                 <h4><b>Breakfast</b></h4><br/>
-                    <h4>{reportData.breakfast}</h4>
-               </GridItem>
-               <GridItem xs={12} sm={12} md={3}>
-               <h4><b>Lunch</b></h4><br/>
-                 <h4>{reportData.lunch}</h4>
-               </GridItem>
-               <GridItem xs={12} sm={12} md={3}>
-               <h4><b>Snacks </b></h4><br/>
-                    <h4>{reportData.snacks}</h4>
-               </GridItem>
-               <GridItem xs={12} sm={12} md={3}>
-               <h4><b>Dinner </b></h4><br/>
-                    <h4>{reportData.dinner}</h4>
-               </GridItem>
+             <GridContainer justify="center" alignItems="center">
+                <GridItem xs={12} sm={12} md={2}>
+                  <h4><b>Breakfast</b></h4>
+                  <h4>{mealCount.brkfast}</h4>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={2}>
+                  <h4><b>Lunch</b></h4>
+                  <h4>{mealCount.lunch}</h4>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={2}>
+                  <h4><b>Snacks </b></h4>
+                  <h4>{mealCount.snacks}</h4>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={2}>
+                  <h4><b>Dinner </b></h4>
+                  <h4>{mealCount.dnr}</h4>
+                </GridItem>
              </GridContainer>
             </CardBody>
           </Card>
         </GridItem>
-       
       </GridContainer>
-      <Snackbar
-           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
-            open={success}
-            autoHideDuration={4000}
-            onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              severity="success">
-              File Download completed
-        </Alert>
-          </Snackbar>
-          <Snackbar
-           anchorOrigin={{horizontal:'left',vertical:'bottom'}}
-            open={err}
-            autoHideDuration={4000}
-            onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              severity="error">
-              {errMsg}
-        </Alert>
-          </Snackbar>
+      <AlertComponent type="error" isOpen={err} msg={msg} handleclose={()=>setErr(false)} />
     </div>
   );
 }

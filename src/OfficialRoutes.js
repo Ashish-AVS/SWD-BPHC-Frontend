@@ -20,6 +20,7 @@ import BlockIcon from "@material-ui/icons/Block";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import DescriptionIcon from "@material-ui/icons/Description";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
+import AssignmentIcon from '@material-ui/icons/Assignment';
 // import FoodBankIcon from '@material-ui/icons/FoodBank';
 
 // core components/views for Official layout
@@ -57,14 +58,6 @@ const dashboardRoutes = [
     name: "Mess Menu",
     icon: FastfoodIcon,
     component: MessMenu,
-    layout: "/official",
-  },
-  {
-    path: "/mess/report",
-    id: "messlog",
-    name: "Mess Report",
-    icon: FastfoodIcon,
-    component: MessReport,
     layout: "/official",
   },
   {
@@ -179,6 +172,14 @@ const dashboardRoutes = [
     component: MessReg,
     layout: "/official",
   },
+  {
+    path: "/mess/report",
+    id: "messlog",
+    name: "Mess Report",
+    icon: AssignmentIcon,
+    component: MessReport,
+    layout: "/official",
+  }
 
   /*
   {
