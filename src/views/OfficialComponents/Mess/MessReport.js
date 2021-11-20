@@ -130,33 +130,36 @@ export default function MessReport() {
     return current.isBefore(tomorrow);
   };
   React.useEffect(()=>{  
-    if(sendingData===true)
-    try{
-      const SendData=async ()=>{
-        const res =await axios.post(`${BaseUrl}/api/o/messlog/getCount`,{
-          date:postDate
-        },{
-          headers:{Authorization:`Bearer ${token}`}
-        })
-         
-        if (res.data.err === false) {
-          setmealCount(res.data.data);
-          console.log(res.data.data)
+    if(sendingData===true){
+
+      try{
+        const SendData=async ()=>{
+          const res =await axios.post(`${BaseUrl}/api/o/messlog/getCount`,{
+            date:postDate
+          },{
+            headers:{Authorization:`Bearer ${token}`}
+          })
+           
+          if (res.data.err === false) {
+            setmealCount(res.data.data);
+            console.log(res.data.data)
+          }
+          else if (res.data.err === true && res.status === 401) {
+            logout();
+          }
+          else if (res.data.err === true) {
+            setErr(true);
+            setMsg(res.data.msg);
+          }
+          setSendingData(false)
         }
-        else if (res.data.err === true && res.status === 401) {
-          logout();
-        }
-        else if (res.data.err === true) {
-          setErr(true);
-          setMsg(res.data.msg);
-        }
-        setSendingData(false)
+        SendData();
       }
-      SendData();
+      catch(err){
+        console.log(err);  
+      } 
+      setSendingData(false)
     }
-    catch(err){
-      console.log(err);  
-    } 
   
   },[sendingData])
  
