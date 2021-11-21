@@ -1,12 +1,13 @@
 import React from "react";
+import BarcodeReader from 'react-barcode-reader';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import FormControl from '@material-ui/core/FormControl';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
-import InfoIcon from '@material-ui/icons/Info';
+import FormControl from "@material-ui/core/FormControl";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import InputLabel from "@material-ui/core/InputLabel";
+import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
+import InfoIcon from "@material-ui/icons/Info";
 
 //import Check from "@material-ui/icons/Check";
 
@@ -21,12 +22,8 @@ import CardBody from "components/Card/CardBody.js";
 //import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 //import Clearfix from "components/Clearfix/Clearfix.js";
 
-import {BaseUrl} from "variables/BaseUrl";
-import {
-  primaryColor,
-  defaultFont
-} from "assets/jss/material-kit-react.js";
-
+import { BaseUrl } from "variables/BaseUrl";
+import { primaryColor, defaultFont } from "assets/jss/material-kit-react.js";
 
 const styles = {
   cardCategoryWhite: {
@@ -34,13 +31,12 @@ const styles = {
     margin: "0",
     fontSize: "14px",
     marginTop: "0",
-    marginBottom: "0"
+    marginBottom: "0",
   },
   typo: {
     paddingLeft: "20%",
     marginBottom: "30px",
     position: "relative",
-    
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -49,7 +45,7 @@ const styles = {
     fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
-    textDecoration: "none"
+    textDecoration: "none",
   },
   input: {
     color: "#495057",
@@ -59,32 +55,32 @@ const styles = {
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       fontWeight: "400",
       lineHeight: "1.42857",
-      opacity: "1"
+      opacity: "1",
     },
     "&::placeholder": {
-      color: "#AAAAAA"
-    }
+      color: "#AAAAAA",
+    },
   },
   formControl: {
     margin: "0 0 17px 0",
     paddingTop: "27px",
     position: "relative",
     "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
-      color: "#495057"
-    }
+      color: "#495057",
+    },
   },
   underline: {
     "&:hover:not($disabled):before,&:before": {
       borderColor: "#D2D2D2 !important",
-      borderWidth: "1px !important"
+      borderWidth: "1px !important",
     },
     "&:after": {
-      borderColor: primaryColor
-    }
+      borderColor: primaryColor,
+    },
   },
   label: {
     color: "rgba(0, 0, 0, 0.26)",
-    top:"-17px",
+    top: "-17px",
     fontSize: "14px",
     transition: "0.3s ease all",
     lineHeight: "1.428571429",
@@ -92,8 +88,8 @@ const styles = {
     paddingLeft: "0",
     letterSpacing: "normal",
     "& + $underline": {
-      marginTop: "0px"
-    }
+      marginTop: "0px",
+    },
   },
   labelRoot: {
     ...defaultFont,
@@ -104,115 +100,133 @@ const styles = {
     top: "10px",
     letterSpacing: "unset",
     "& + $underline": {
-      marginTop: "0px"
-    }}
+      marginTop: "0px",
+    },
+  },
 };
 
 const useStyles = makeStyles(styles);
 
 export default function Search() {
+  const token = JSON.parse(localStorage.getItem("officialtokens"));
+  const data = JSON.parse(atob(token.split(".")[1]));
+  const [uid, setUid] = React.useState();
+  const [SendReq, setSendReq] = React.useState(false);
+  const [entryData, setEntryData] = React.useState({});
+  const [recievedData, setRecievedData] = React.useState(false);
+  const [err, setErr] = React.useState(false);
+  const [removeData, setRemoveData] = React.useState(false);
+  const [timer, setTimer] = React.useState(false);
+  const classes = useStyles();
+  let t;
 
- const token=JSON.parse(localStorage.getItem("officialtokens"));
- const data= JSON.parse(atob(token.split('.')[1]));
- const [uid,setUid]=React.useState();
- const [SendReq,setSendReq]=React.useState(false);
- const [entryData,setEntryData]=React.useState({});
- const [recievedData,setRecievedData]=React.useState(false);
- const [err,setErr]=React.useState(false);
- const [removeData,setRemoveData]=React.useState(false);
- const [timer,setTimer]=React.useState(false);
-const classes = useStyles();
-let t;  
-  
-  React.useEffect(()=>{
-      if(SendReq===true){
-        try{
-         
-          setRemoveData(true);
-          setErr(false);
-            const sendData=async ()=>{
-              const result =await fetch(`${BaseUrl}/api/o/maingate/log`,{
-                  method:"post",
-                  headers:{
-                    'Content-Type':"application/json",
-                     Authorization:`Bearer ${token}`
-                    },
-                  body:JSON.stringify({
-                    id:data.id,
-                    uid:uid,
-                    token:token,
-                    action:"enter"
-                  })
-                 })
-               const res = await result.json();
-              if(res.err===false){
-                setRemoveData(false);
-                setEntryData(res.data);
-                setRecievedData(true);
-                setTimer(true);
-              }
-              else if(res.err===true)
-              setRemoveData(false);
-              setEntryData(res.data);
-              setRecievedData(true);
-              setErr(true)
-              setTimer(true);
+  React.useEffect(() => {
+    if (SendReq === true) {
+      try {
+        setRemoveData(true);
+        setErr(false);
+        const sendData = async () => {
+          const result = await fetch(`${BaseUrl}/api/o/maingate/log`, {
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              id: data.id,
+              uid: uid,
+              token: token,
+              action: "enter",
+            }),
+          });
+          const res = await result.json();
+          if (res.err === false) {
+            setRemoveData(false);
+            setEntryData(res.data);
+            setRecievedData(true);
+            setTimer(true);
+            setErr(false);
+          } else if (res.err === true) {
+            setErr(true);
+            setRemoveData(false);
           }
-            sendData();
-            setSendReq(false);
-          }
-          catch(err){
-            console.log(err);
-            
-          } 
-          
-      }
-  },[SendReq,uid,token,data])
-
-
-  React.useEffect(()=>{
-    if(timer===true){
-      removeDiv();
-      return ()=>{
-        removeTimer();
-        setTimer(false);
+          setEntryData(res.data);
+          setRecievedData(true);
+          setTimer(true);
+        };
+        sendData();
+        setSendReq(false);
+      } catch (err) {
+        console.log(err);
       }
     }
-  })
+  }, [SendReq, uid, token, data]);
 
-const removeTimer=()=>{
-  clearTimeout(t);
-}
+  React.useEffect(() => {
+    if (timer === true) {
+      removeDiv();
+      return () => {
+        removeTimer();
+        setTimer(false);
+      };
+    }
+  });
 
- const removeDiv=()=>{
-  t= setTimeout(()=>{
-     setRemoveData(true);
-   },5000)
- }
- const onChange=(e)=>{setUid(e.target.value)}
-  
+  React.useEffect(() => {
+    var userInput = document.getElementById("uid");
+    userInput.addEventListener("keyup", function (event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        setSendReq(true);
+      }
+    });
+  });
+
+  const removeTimer = () => {
+    clearTimeout(t);
+  };
+
+  const removeDiv = () => {
+    t = setTimeout(() => {
+      setRemoveData(true);
+    }, 10000);
+  };
+  const onChange = (e) => {
+    setUid(e.target.value);
+  };
 
   return (
-      <div>
-          <div className={classes.typo} style={{ marginTop: "-50px" }}>
-              <h2><strong>BITS-PILANI,HYDERABAD CAMPUS</strong></h2>
-          </div>
-          <GridContainer justify="center" alignItems="center">
-              <GridItem xs={12} sm={12} md={8}>
+    <div>
+      <div className={classes.typo} style={{ marginTop: "-50px" }}>
+        <h2>
+          <strong>BITS-PILANI,HYDERABAD CAMPUS</strong>
+        </h2>
+      </div>
+      <GridContainer justify="center" alignItems="center">
+        <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}><b>MAIN GATE </b></h4>
-
+              <h4 className={classes.cardTitleWhite}>
+                <b>MAIN GATE </b>
+              </h4>
             </CardHeader>
             <CardBody>
-              <h5 style={{ display: "flex", justifyContent: "center" }}><b>ENTRY POINT</b></h5>
+              <h5 style={{ display: "flex", justifyContent: "center" }}>
+                <b>ENTRY POINT</b>
+              </h5>
 
               <GridContainer justify="center" alignItems="center">
-                <GridItem xs={12} sm={12} md={12}>
-                  <GridContainer direction="row" justify="center" alignItems="center">
+                <GridItem xs={12} sm={12} md={5}>
+                  <GridContainer
+                    direction="row"
+                    justify="center"
+                    alignItems="center"
+                  >
                     <GridItem>
                       <FormControl variant="outlined">
-                        <InputLabel htmlFor="component-outlined">Student UID</InputLabel>
+                        <InputLabel htmlFor="component-outlined">
+                          Student UID
+                        </InputLabel>
                         <OutlinedInput
                           id="component-outlined"
                           onChange={onChange}
@@ -223,84 +237,175 @@ const removeTimer=()=>{
                                 event.preventDefault();
                                 document.getElementById("submit").click();
                               }
-                            }
+                            },
                           }}
-                          label="Student UID" />
+                          label="Student UID"
+                        />
                       </FormControl>
                     </GridItem>
                   </GridContainer>
                 </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                  <GridContainer direction="row" justify="center" alignItems="center" >
+                <GridItem xs={12} sm={12} md={4}>
+                  <GridContainer
+                    direction="row"
+                    justify="left"
+                    alignItems="center"
+                  >
                     <GridItem>
-                      <Button color="success" id="submit" onClick={() => { setSendReq(true) }}>
+                      <Button
+                        color="success"
+                        id="submit"
+                        onClick={() => {
+                          setSendReq(true);
+                        }}
+                      >
                         Submit
-                       </Button>
+                      </Button>
                     </GridItem>
-
                   </GridContainer>
-
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
-                  {(recievedData === true) && (err === false) && (removeData === false) ?
-                    <div style={{ background: "#a1d993", borderRadius: '16px', border: '1px solid black' }}>
-                      <GridContainer direction="row"  >
+                  {recievedData === true &&
+                  err === false &&
+                  removeData === false ? (
+                    <div
+                      style={{
+                        background: (err) ?  "#a1d993" : "#a1d993",
+                        borderRadius: "16px",
+                        border: "1px solid black",
+                      }}
+                    >
+                      <GridContainer direction="row">
                         <GridItem xs={12} sm={12} md={7}>
-                          <div ><GridContainer direction="column" justify="center" alignItems="center" >
-                            <GridItem xs={12} sm={12} md={12} >
-                              <h3 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "600" }}> {entryData.name}</span></h3>
-                            </GridItem >
-                            <GridItem xs={12} sm={12} md={12}>
-                              <h4 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{entryData.id}</span></h4>
-                            </GridItem>
-                          </GridContainer></div>
+                          <div>
+                            <GridContainer
+                              direction="column"
+                              justify="center"
+                              alignItems="center"
+                            >
+                              <GridItem xs={12} sm={12} md={12}>
+                                <h3 style={{ color: "#2d4d25" }}>
+                                  <span style={{ fontWeight: "600" }}>
+                                    {" "}
+                                    {entryData.name}
+                                  </span>
+                                </h3>
+                              </GridItem>
+                              <GridItem xs={12} sm={12} md={12}>
+                                <h4 style={{ color: "#2d4d25" }}>
+                                  <span style={{ fontWeight: "400" }}>ID</span>{" "}
+                                  :
+                                  <span style={{ fontWeight: "500" }}>
+                                    {entryData.id}
+                                  </span>
+                                </h4>
+                              </GridItem>
+                            </GridContainer>
+                          </div>
                         </GridItem>
                         <GridItem xs={12} sm={12} md={5}>
-                          <div ><GridContainer direction="column" justify="center" alignItems="center" >
-                            <GridItem xs={12} sm={12} md={12} >
-                              <h3 style={{ color: "#2d4d25" }}><span style={{ fontWeight: "600" }}> YOU CAN ENTER</span></h3>
-                            </GridItem >
-                            <GridItem xs={12} sm={12} md={12}>
-                              <DoneOutlineIcon fontSize="large" />
-                            </GridItem>
-                          </GridContainer></div>
+                          <div>
+                            <GridContainer
+                              direction="column"
+                              justify="center"
+                              alignItems="center"
+                            >
+                              <GridItem xs={12} sm={12} md={12}>
+                                <h3 style={{ color: "#2d4d25" }}>
+                                  <span style={{ fontWeight: "600" }}>
+                                    {" "}
+                                    YOU CAN ENTER
+                                  </span>
+                                </h3>
+                              </GridItem>
+                              <GridItem xs={12} sm={12} md={12}>
+                                <DoneOutlineIcon fontSize="large" />
+                              </GridItem>
+                            </GridContainer>
+                          </div>
                         </GridItem>
                       </GridContainer>
                     </div>
-                    :
-                    (recievedData === true) && (err === true) && (removeData === false) ?
-                      <div style={{ background: "#FFCC00", borderRadius: '16px', border: '1px solid black' }}>
-                        <GridContainer direction="row"  >
-                          <GridItem xs={12} sm={12} md={7}>
-                            <div ><GridContainer direction="column" justify="center" alignItems="center" >
-                              <GridItem xs={12} sm={12} md={12} >
-                                <h3 style={{ color: "#914d03" }}><span style={{ fontWeight: "600" }}> {entryData.name}</span></h3>
-                              </GridItem >
+                  ) : recievedData === true &&
+                    err === true &&
+                    removeData === false ? (
+                    <div
+                      style={{
+                        background: "#FFCC00",
+                        borderRadius: "16px",
+                        border: "1px solid black",
+                      }}
+                    >
+                      <GridContainer direction="row">
+                        <GridItem xs={12} sm={12} md={7}>
+                          <div>
+                            <GridContainer
+                              direction="column"
+                              justify="center"
+                              alignItems="center"
+                            >
                               <GridItem xs={12} sm={12} md={12}>
-                                <h4 style={{ color: "#914d03" }}><span style={{ fontWeight: "400" }}>ID</span> :<span style={{ fontWeight: "500" }}>{entryData.id}</span></h4>
+                                <h3 style={{ color: "#914d03" }}>
+                                  <span style={{ fontWeight: "600" }}>
+                                    {" "}
+                                    {entryData.name}
+                                  </span>
+                                </h3>
                               </GridItem>
-                            </GridContainer></div>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={5}>
-                            <div ><GridContainer direction="column" justify="center" alignItems="center" >
-                              <GridItem xs={12} sm={12} md={12} >
-                                <h4 style={{ color: "#914d03" }}><span style={{ fontWeight: "600" }}> NO EXIT RECORD FOUND</span></h4>
-                              </GridItem >
+                              <GridItem xs={12} sm={12} md={12}>
+                                <h4 style={{ color: "#914d03" }}>
+                                  <span style={{ fontWeight: "400" }}>ID</span>{" "}
+                                  :
+                                  <span style={{ fontWeight: "500" }}>
+                                    {entryData.id}
+                                  </span>
+                                </h4>
+                              </GridItem>
+                            </GridContainer>
+                          </div>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={5}>
+                          <div>
+                            <GridContainer
+                              direction="column"
+                              justify="center"
+                              alignItems="center"
+                            >
+                              <GridItem xs={12} sm={12} md={12}>
+                                <h4 style={{ color: "#914d03" }}>
+                                  <span style={{ fontWeight: "600" }}>
+                                    {" "}
+                                    NO EXIT RECORD FOUND
+                                  </span>
+                                </h4>
+                              </GridItem>
                               <GridItem xs={12} sm={12} md={12}>
                                 <InfoIcon fontSize="large" />
                               </GridItem>
-                            </GridContainer></div>
-                          </GridItem>
-                        </GridContainer>
-                      </div> : null}
+                            </GridContainer>
+                          </div>
+                        </GridItem>
+                      </GridContainer>
+                    </div>
+                  ) : null}
                 </GridItem>
-
               </GridContainer>
             </CardBody>
           </Card>
-              </GridItem>
-
-          </GridContainer>
-      </div>
+        </GridItem>
+      </GridContainer>
+      <BarcodeReader
+        onError={(err) => {
+          // setSuccess(0);
+          // setMsg('Error reading this barcode');
+        }}
+        onScan={(data) => {
+          if (!SendReq) {
+            setUid(data);
+            setSendReq(true);
+          }
+        }} 
+      />
+    </div>
   );
 }
