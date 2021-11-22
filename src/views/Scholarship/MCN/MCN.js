@@ -90,6 +90,7 @@ export default function MCN() {
   </ul>
   <ol>
     <li>ITR V acknowledgment (ASSESSMENT YEAR 2021-22)</li>
+    <li>Computation of income (ASSESSMENT YEAR 2021-22)</li>
     <li>Bank statements for one financial year ( 1st April 2020- 31st March 2021)</li>
   </ol>
   <ul>
@@ -97,6 +98,8 @@ export default function MCN() {
     <li>In case of the demise of a parent, a copy of the death certificate must be attached.</li>
     <li>If parents are separated/divorced, they need to check with the committee for the documents requirements.</li>
     <li>In the case of an Educational Loan, a copy of the loan sanction letter should be submitted.</li>
+    <li>Make sure that Aadhar / PAN card is linked with ITR V and then submit it. </li>
+
   </ul>
   <p><strong>NOTE</strong></p>
   <ol>
