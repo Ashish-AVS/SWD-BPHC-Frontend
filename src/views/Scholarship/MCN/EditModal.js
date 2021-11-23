@@ -118,9 +118,9 @@ if(sendingData===true){
         let attachedFile = mcnData.upload;
         let attachedFileSize = attachedFile.size / (1024*1024);
         let attachedFileType = attachedFile.type;
-        if (attachedFileSize >= 15) {
+        if (attachedFileSize >= 20) {
           setErr(true);
-          setErrMsg("File size exceeded, limit is 15 MB");
+          setErrMsg("File size exceeded, limit is 20 MB");
           return;
         }
         if (!attachedFileType.includes("zip")) {
