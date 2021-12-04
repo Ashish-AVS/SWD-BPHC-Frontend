@@ -232,7 +232,7 @@ export default function Scholarship() {
                      <Button 
                     round 
                     color="primary" 
-                    disabled={!mcnPortalOn||downloading} 
+                    disabled={downloading} 
                     onClick={async ()=>{
                       setDownloading(true)
                       try{
