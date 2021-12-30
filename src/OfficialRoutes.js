@@ -25,6 +25,7 @@ import HowToRegIcon from "@material-ui/icons/HowToReg";
 // core components/views for Official layout
 
 import Search from "views/OfficialComponents/Search/Search";
+// import Entry from "views/OfficialComponents/HostelManagement/InventoryEntry";
 import Entry from "views/OfficialComponents/Maingate/MaingateEntry";
 import MessMenu from "views/OfficialComponents/Mess/MessMenu";
 import MessGrace from "views/OfficialComponents/Mess/MessGrace";
@@ -41,6 +42,8 @@ import DocGen from "views/OfficialComponents/DocGen/DocGen";
 import Leave from "views/OfficialComponents/Leave/Leave";
 import MessLog from "views/OfficialComponents/MessLog/MessLog";
 import MessReg from "views/OfficialComponents/MessReg/MessReg";
+import InventoryEntry from "views/OfficialComponents/HostelManagement/InventoryEntry";
+import StudentSearch from "views/OfficialComponents/HostelManagement/StudentSearch";
 
 const dashboardRoutes = [
   {
@@ -177,6 +180,22 @@ const dashboardRoutes = [
     name: "Mess Registration",
     icon: HowToRegIcon,
     component: MessReg,
+    layout: "/official",
+  },
+  {
+    path: "/inventory",
+    id: "inventory",
+    name: "Student Inventory Entry",
+    icon: HowToRegIcon,
+    component: InventoryEntry,
+    layout: "/official",
+  },
+  {
+    path: "/hostel-search",
+    id: "hostelSearch",
+    name: "Hostel Search",
+    icon: HowToRegIcon,
+    component: StudentSearch,
     layout: "/official",
   },
 
