@@ -1,32 +1,32 @@
 import React from "react";
-
+import Datetime from "react-datetime";
+import { Redirect } from "react-router-dom";
+import { saveAs } from "file-saver";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import FormControl from "@material-ui/core/FormControl";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import DoneOutlineIcon from "@material-ui/icons/DoneOutline";
-import InfoIcon from "@material-ui/icons/Info";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-//import Check from "@material-ui/icons/Check";
-
+//Auth Components
+import { useAuth } from "context/auth";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-//import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-//import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-//import Clearfix from "components/Clearfix/Clearfix.js";
-
+import FormControl from "@material-ui/core/FormControl";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from '@material-ui/icons/Edit';
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 import { BaseUrl } from "variables/BaseUrl";
 import { primaryColor, defaultFont } from "assets/jss/material-kit-react.js";
-
-const options = ["ABSENT", "PRESENT"];
 
 const styles = {
   cardCategoryWhite: {
@@ -107,330 +107,257 @@ const styles = {
     },
   },
 };
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles(styles);
 
-export default function Search() {
+export default function InventoryEntry() {
   const token = JSON.parse(localStorage.getItem("officialtokens"));
-  const data = JSON.parse(atob(token.split(".")[1]));
-  const [uid, setUid] = React.useState();
-  const [SendReq, setSendReq] = React.useState(false);
-  const [entryData, setEntryData] = React.useState({});
-  const [recievedData, setRecievedData] = React.useState(false);
-  const [err, setErr] = React.useState(false);
-  const [removeData, setRemoveData] = React.useState(false);
-  const [timer, setTimer] = React.useState(false);
+
+  //const [sendingData,setSendingData]=React.useState(false);
+  const [sendingData, setSendingData] = React.useState(false);
+  const [postDate, setPostDate] = React.useState("");
+  const [success, setSuccess] = React.useState(false);
+  const { onOfficialLogin } = useAuth();
   const classes = useStyles();
-  let t;
-
+  const [err, setErr] = React.useState(false);
+  const [edit, setEdit] = React.useState(false);
+  const [errMsg, setErrMsg] = React.useState("");
+  const handleClose = (event, reason) => {
+    // if (reason === "clickaway") {
+    //   return;
+    // }
+    // setErr(false);
+    // setSuccess(false);
+  };
+  const date = new Date();
+  const date1 = date.toLocaleDateString();
   React.useEffect(() => {
-    if (SendReq === true) {
-      try {
-        setRemoveData(true);
-        setErr(false);
-        const sendData = async () => {
-          //   const result =await fetch(`${BaseUrl}/api/o/maingate/log`,{
-          const result = await fetch(`${BaseUrl}/api/o/maingate/log`, {
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              id: data.id,
-              uid: uid,
-              token: token,
-              action: "enter",
-            }),
-          });
-          const res = await result.json();
-          if (res.err === false) {
-            setRemoveData(false);
-            setEntryData(res.data);
-            setRecievedData(true);
-            setTimer(true);
-          } else if (res.err === true) setRemoveData(false);
-          setEntryData(res.data);
-          setRecievedData(true);
-          setErr(true);
-          setTimer(true);
-        };
-        sendData();
-        setSendReq(false);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, [SendReq, uid, token, data]);
-
+    //setRecievedData(false);
+    // try{
+    //   const SendData=async ()=>{
+    //     const result =await fetch(`${BaseUrl}/api/o/messgrace/upcoming`,{
+    //       headers:{Authorization:`Bearer ${token}`}
+    //     })
+    //      const res = await result.json();
+    //     if (res.err === false) {
+    //       setGraceData(res.data);
+    //       //setRecievedData(true);
+    //       //setSendingData(false);
+    //     }
+    //     else if (res.err === true && result.status === 401) {
+    //       logout();
+    //     }
+    //     else if (res.err === true) {
+    //       setErr(true);
+    //       setErrMsg(res.msg);
+    //     }}
+    //   SendData();
+    // }
+    // catch(err){
+    //   console.log(err);
+    // }
+  }, []);
   React.useEffect(() => {
-    if (timer === true) {
-      removeDiv();
-      return () => {
-        removeTimer();
-        setTimer(false);
-      };
-    }
+    // if (sendingData === true) {
+    //   try {
+    //     const SendData = async () => {
+    //       const result = await fetch(
+    //         `${BaseUrl}/api/o/messgrace/export?date=${postDate}`,
+    //         {
+    //           headers: { Authorization: `Bearer ${token}`, Accept: "text/csv" },
+    //         }
+    //       );
+    //       const res = await result.text();
+    //       if (
+    //         result.status === 201 ||
+    //         result.status === 200 ||
+    //         result.status === 304
+    //       ) {
+    //         const csvBlob = new Blob([res], { type: "text/csv" });
+    //         saveAs(csvBlob, `GraceData-${date1}.csv`);
+    //         setSuccess(true);
+    //       } else {
+    //         setErr(true);
+    //         setErrMsg("Error in Downloading!");
+    //       }
+    //     };
+    //     SendData();
+    //     setSendingData(false);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
   });
-
-  const removeTimer = () => {
-    clearTimeout(t);
+  const logout = () => {
+    // localStorage.removeItem("officialtokens");
+    onOfficialLogin(false);
+    return <Redirect exact to="/" />;
   };
-
-  const removeDiv = () => {
-    t = setTimeout(() => {
-      setRemoveData(true);
-    }, 5000);
-  };
-  const onChange = (e) => {
-    setUid(e.target.value);
-  };
-
   return (
     <div>
       <div className={classes.typo} style={{ marginTop: "-50px" }}>
         <h2>
-          <strong>BITS-PILANI,HYDERABAD CAMPUS</strong>
+          <strong>BITS PILANI , HYDERABAD CAMPUS</strong>
         </h2>
       </div>
       <GridContainer justify="center" alignItems="center">
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={10}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>
-                <b>Inventory</b>
+                <b>Student Inventory </b>
               </h4>
             </CardHeader>
             <CardBody>
-              <h5 style={{ display: "flex", justifyContent: "center" }}>
-                <b>INVENTORY ENTRY</b>
-              </h5>
+              {/* <h3 style={{ display: "flex", justifyContent: "center" }}>
+                <b>EXPORT GRACE</b>
+              </h3> */}
 
-              <GridContainer justify="center" alignItems="center">
-                <GridItem xs={12} sm={12} md={12}>
-                  <GridContainer
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
-                  >
-                    <GridItem>
-                      <FormControl variant="outlined">
-                        <GridContainer
-                          rowSpacing={1}
-                          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                          direction="row"
-                          justify="center"
-                          alignItems="center"
-                        >
-                          <GridItem>
-                            <TextField
-                              id="standard-basic"
-                              label="UID"
-                              variant="standard"
-                              style={{ width: "25ch" }}
-                            ></TextField>
-                          </GridItem>
-
-                          <GridItem>
-                            <TextField
-                              id="standard-basic"
-                              label="Table"
-                              variant="standard"
-                              style={{ width: "25ch" }}
-                              select
-                            >
-                              {options.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          </GridItem>
-
-                          <GridItem>
-                            <TextField
-                              id="standard-basic"
-                              label="Chair"
-                              variant="standard"
-                              style={{ width: "25ch" }}
-                              select
-                            >
-                              {options.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          </GridItem>
-                          <GridItem>
-                            <TextField
-                              id="standard-basic"
-                              label="Whiteboard"
-                              variant="standard"
-                              select
-                              style={{ width: "25ch" }}
-                            >
-                              {options.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                          </GridItem>
-                        </GridContainer>
-                      </FormControl>
-                    </GridItem>
-                  </GridContainer>
+              <GridContainer
+                direction="row"
+                justify="center"
+                alignItems="center"
+              >
+                <GridItem xs={12} sm={12} md={4}>
+                  <FormControl fullWidth className={classes.formControl}>
+                    <InputLabel className={classes.label}>Enter Room Number</InputLabel>
+                    <TextField
+                      id="standard-basic"
+                      label="Room Number"
+                      variant="standard"
+                      style={{ width: "25ch" }}
+                    ></TextField>
+                    {/* <Datetime
+                      dateFormat="DD-MM-YYYY"
+                      timeFormat={false}
+                      className={classes.input + " " + classes.underline}
+                      onChange={(e) => {
+                        const date = new Date(`${e}`);
+                        const { Date1, Month, Year } = {
+                          Date1: date.getDate(),
+                          Month: date.getMonth() + 1,
+                          Year: date.getFullYear(),
+                        };
+                        if (Month > 9) {
+                          if (Date1 < 10) {
+                            setPostDate(`${Year}-${Month}-0${Date1}`);
+                          } else setPostDate(`${Year}-${Month}-${Date1}`);
+                        } else {
+                          if (Date1 < 10)
+                            setPostDate(`${Year}-0${Month}-0${Date1}`);
+                          else setPostDate(`${Year}-0${Month}-${Date1}`);
+                        }
+                      }}
+                    /> */}
+                  </FormControl>
                 </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                  <GridContainer
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
+                <GridItem xs={12} sm={12} md={6}>
+                  <Button
+                    color="success"
+                    onClick={() => {
+                      // setSendingData(true);
+                    }}
                   >
-                    <GridItem>
-                      <Button
-                        color="success"
-                        id="submit"
-                        onClick={() => {
-                          setSendReq(true);
-                        }}
+                    Show Inventory
+                  </Button>
+                </GridItem>
+              </GridContainer>
+              <h3
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "80px",
+                }}
+              >
+                <b>Inventory</b>
+              </h3>
+              <GridContainer spacing={2} justify="center" alignItems="center">
+                <GridItem xs={12} sm={12} md={6}>
+                  <h4>
+                    <b>Student Data</b>
+                  </h4>
+                  <br />
+                  <h4>Name</h4>
+                  <h4>Phone Number</h4>
+                  <h4>Email</h4>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <h4 style={{ marginRight: "1.125rem" }}>
+                    <b>Edit Inventory</b>
+                    <IconButton
+                      // value="check"
+                      // selected={edit}
+                      onClick={() => setEdit((prevState) => !prevState)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </h4>
+                  <br />
+                  {["Table", "Chair", "Bed", "Whiteboard"].map(
+                    (item, index) => (
+                      <RadioGroup
+                        row
+                        aria-label="table"
+                        name="row-radio-buttons-group"
+                        key={index}
                       >
-                        Submit
-                      </Button>
-                    </GridItem>
-                  </GridContainer>
-                </GridItem>
-                <GridItem xs={12} sm={12} md={12}>
-                  {recievedData === true &&
-                  err === false &&
-                  removeData === false ? (
-                    <div
-                      style={{
-                        background: "#a1d993",
-                        borderRadius: "16px",
-                        border: "1px solid black",
-                      }}
-                    >
-                      <GridContainer direction="row">
-                        <GridItem xs={12} sm={12} md={7}>
-                          <div>
-                            <GridContainer
-                              direction="column"
-                              justify="center"
-                              alignItems="center"
-                            >
-                              <GridItem xs={12} sm={12} md={12}>
-                                <h3 style={{ color: "#2d4d25" }}>
-                                  <span style={{ fontWeight: "600" }}>
-                                    {" "}
-                                    {entryData.name}
-                                  </span>
-                                </h3>
-                              </GridItem>
-                              <GridItem xs={12} sm={12} md={12}>
-                                <h4 style={{ color: "#2d4d25" }}>
-                                  <span style={{ fontWeight: "400" }}>ID</span>{" "}
-                                  :
-                                  <span style={{ fontWeight: "500" }}>
-                                    {entryData.id}
-                                  </span>
-                                </h4>
-                              </GridItem>
-                            </GridContainer>
-                          </div>
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={5}>
-                          <div>
-                            <GridContainer
-                              direction="column"
-                              justify="center"
-                              alignItems="center"
-                            >
-                              <GridItem xs={12} sm={12} md={12}>
-                                <h3 style={{ color: "#2d4d25" }}>
-                                  <span style={{ fontWeight: "600" }}>
-                                    {" "}
-                                    YOU CAN ENTER
-                                  </span>
-                                </h3>
-                              </GridItem>
-                              <GridItem xs={12} sm={12} md={12}>
-                                <DoneOutlineIcon fontSize="large" />
-                              </GridItem>
-                            </GridContainer>
-                          </div>
-                        </GridItem>
-                      </GridContainer>
-                    </div>
-                  ) : recievedData === true &&
-                    err === true &&
-                    removeData === false ? (
-                    <div
-                      style={{
-                        background: "#FFCC00",
-                        borderRadius: "16px",
-                        border: "1px solid black",
-                      }}
-                    >
-                      <GridContainer direction="row">
-                        <GridItem xs={12} sm={12} md={7}>
-                          <div>
-                            <GridContainer
-                              direction="column"
-                              justify="center"
-                              alignItems="center"
-                            >
-                              <GridItem xs={12} sm={12} md={12}>
-                                <h3 style={{ color: "#914d03" }}>
-                                  <span style={{ fontWeight: "600" }}>
-                                    {" "}
-                                    {entryData.name}
-                                  </span>
-                                </h3>
-                              </GridItem>
-                              <GridItem xs={12} sm={12} md={12}>
-                                <h4 style={{ color: "#914d03" }}>
-                                  <span style={{ fontWeight: "400" }}>ID</span>{" "}
-                                  :
-                                  <span style={{ fontWeight: "500" }}>
-                                    {entryData.id}
-                                  </span>
-                                </h4>
-                              </GridItem>
-                            </GridContainer>
-                          </div>
-                        </GridItem>
-                        <GridItem xs={12} sm={12} md={5}>
-                          <div>
-                            <GridContainer
-                              direction="column"
-                              justify="center"
-                              alignItems="center"
-                            >
-                              <GridItem xs={12} sm={12} md={12}>
-                                <h4 style={{ color: "#914d03" }}>
-                                  <span style={{ fontWeight: "600" }}>
-                                    {" "}
-                                    NO EXIT RECORD FOUND
-                                  </span>
-                                </h4>
-                              </GridItem>
-                              <GridItem xs={12} sm={12} md={12}>
-                                <InfoIcon fontSize="large" />
-                              </GridItem>
-                            </GridContainer>
-                          </div>
-                        </GridItem>
-                      </GridContainer>
-                    </div>
-                  ) : null}
+                        <h4 style={{ minWidth: "100px" }}> {item} </h4>
+                        <FormControlLabel
+                          value="0"
+                          control={<Radio />}
+                          label="0"
+                          labelPlacement="bottom"
+                          disabled={edit}
+                          // checked={false}
+                        />
+                        <FormControlLabel
+                          value="1"
+                          control={<Radio />}
+                          label="1"
+                          labelPlacement="bottom"
+                          disabled={edit}
+                          // checked={false}
+                        />
+                        <FormControlLabel
+                          value="2"
+                          control={<Radio />}
+                          label="2"
+                          labelPlacement="bottom"
+                          disabled={edit}
+                          // checked={false}
+                        />
+                      </RadioGroup>
+                    )
+                  )}
                 </GridItem>
               </GridContainer>
             </CardBody>
           </Card>
         </GridItem>
       </GridContainer>
+      <Snackbar
+        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        open={success}
+        autoHideDuration={4000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="success">
+          File Download completed
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        open={err}
+        autoHideDuration={4000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="error">
+          {errMsg}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
