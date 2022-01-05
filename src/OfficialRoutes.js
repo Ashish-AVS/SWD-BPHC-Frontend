@@ -21,6 +21,7 @@ import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import DescriptionIcon from "@material-ui/icons/Description";
 import HowToRegIcon from "@material-ui/icons/HowToReg";
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import DevicesIcon from '@material-ui/icons/Devices';
 // import FoodBankIcon from '@material-ui/icons/FoodBank';
 
 // core components/views for Official layout
@@ -42,6 +43,8 @@ import DocGen from "views/OfficialComponents/DocGen/DocGen";
 import Leave from "views/OfficialComponents/Leave/Leave";
 import MessLog from "views/OfficialComponents/MessLog/MessLog";
 import MessReg from "views/OfficialComponents/MessReg/MessReg";
+import Inventory from "views/OfficialComponents/Inventory/Inventory";
+
 
 const dashboardRoutes = [
   {
@@ -179,7 +182,16 @@ const dashboardRoutes = [
     icon: AssignmentIcon,
     component: MessReport,
     layout: "/official",
+  },
+  {
+    path: "/inventory",
+    id: "inventory",
+    name: "Inventory",
+    icon: DevicesIcon,
+    component: Inventory,
+    layout: "/official",
   }
+  
 
   /*
   {
