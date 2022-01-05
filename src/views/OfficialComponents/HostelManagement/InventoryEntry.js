@@ -22,7 +22,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import IconButton from "@material-ui/core/IconButton";
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from "@material-ui/icons/Edit";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import { BaseUrl } from "variables/BaseUrl";
@@ -223,7 +223,9 @@ export default function InventoryEntry() {
               >
                 <GridItem xs={12} sm={12} md={4}>
                   <FormControl fullWidth className={classes.formControl}>
-                    <InputLabel className={classes.label}>Enter Room Number</InputLabel>
+                    <InputLabel className={classes.label}>
+                      Enter Room Number
+                    </InputLabel>
                     <TextField
                       id="standard-basic"
                       label="Room Number"
@@ -280,9 +282,16 @@ export default function InventoryEntry() {
                     <b>Student Data</b>
                   </h4>
                   <br />
-                  <h4>Name</h4>
-                  <h4>Phone Number</h4>
-                  <h4>Email</h4>
+                  <img
+                    src="https://picsum.photos/175"
+                    alt="HEHEHEHE"
+                    style={{ width: "175px", alignItems:"center"}}
+                  />
+                  <h4>Name: Beta</h4>
+                  <h4>Phone Number: Bete Ka Number</h4>
+                  <h4>Email: f123455@pilani.bits-hyderabad.ac.in</h4>
+                  <h4>Parent: Papa</h4>
+                  <h4>Parent's Contact: Papa Ka Number</h4>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <h4 style={{ marginRight: "1.125rem" }}>
