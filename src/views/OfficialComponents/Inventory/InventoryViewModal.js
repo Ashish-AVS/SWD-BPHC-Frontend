@@ -50,7 +50,7 @@ export default function ItemDetailsModal({
   const [err, setErr] = React.useState(false)
   const [succes, setSuccess] = React.useState(false)
   const [msg, setMsg] = React.useState("")
-
+  const [imgLink, setImgLink] = React.useState("")
   React.useEffect(() => {
 
     if (open === true) {
@@ -112,8 +112,6 @@ export default function ItemDetailsModal({
       }
       fetchDocData()
       fetchLogData()
-      console.log(data)
-      
       setInvData(prevData => ({
         ...prevData,
         item_asc: data.item_asc,
@@ -125,6 +123,7 @@ export default function ItemDetailsModal({
         item_purchased_for: data.item_purchased_for,
         item_type: data.item_type
       }))
+      setImgLink(data.item_img)
     }
 
   }, [open])
@@ -134,7 +133,6 @@ export default function ItemDetailsModal({
       try {
         const sendData = async () => {
           setLoading(true);
-          console.log(invData)
           const result = await fetch(`${BaseUrl}/api/o/inventory/edit`, {
             method: 'post',
             headers: {
@@ -147,18 +145,11 @@ export default function ItemDetailsModal({
             })
           })
           const res = await result.json();
-          // console.log(res)
           setMsg(res.msg)
           if (res.err === false) {
-            console.log("here")
             setUpdated(true);
-            console.log("orhere")
-            
-            setAllowEditing(false);
-            console.log("ororhere")
-            
+            setAllowEditing(false);            
             setSuccess(true)
-            // setOpen(false);
           }
           else if (res.err === true) {
             setErr(true)
@@ -226,7 +217,7 @@ export default function ItemDetailsModal({
       >
         <GridContainer >
           <GridItem xs={4} sm={4} md={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img src={invData.item_img || '#'} alt="An Img here" style={{ maxWidth: '300px', maxHeight: '250px', border: '2px solid black', borderRadius: '2px' }} />
+            <img src={imgLink} alt="An Img here" style={{ maxWidth: '300px', maxHeight: '250px', border: '2px solid black', borderRadius: '2px' }} />
           </GridItem>
           <GridItem xs={4} sm={4} md={8}>
             <h3 style={{ textAlign: 'center' }}><b>ITEM DETAILS</b></h3>

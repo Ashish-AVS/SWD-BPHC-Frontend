@@ -171,6 +171,7 @@ export default function Outstation() {
             logout();
           }
           if (res.data.err) {
+            setMsg(res.data.msg)
             setErr(true)
           }
           else {
