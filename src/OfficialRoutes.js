@@ -183,7 +183,7 @@ const dashboardRoutes = [
     layout: "/official",
   },
   {
-    path: "/inventory",
+    path: "/hostel-inventory",
     id: "inventory",
     name: "Student Inventory Entry",
     icon: HowToRegIcon,
