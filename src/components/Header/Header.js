@@ -101,7 +101,6 @@ export default function Header(props) {
           <div className={classes.appResponsive}>
             {leftLinks}
             {rightLinks}
-            HELLO MATE
           </div>
         </Drawer>
       </Hidden>
