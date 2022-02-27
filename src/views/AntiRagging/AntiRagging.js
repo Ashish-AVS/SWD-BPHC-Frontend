@@ -20,6 +20,8 @@ import Footer from "components/Footer/Footer.js";
 import Img from 'assets/img/bitslogo.png'
 import {BaseUrl} from "variables/BaseUrl";
 
+import Header from "components/Header/Header"
+import HeaderLinks from "components/Header/HeaderLinks"
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
@@ -38,7 +40,19 @@ export default function AntiRagging() {
 
   return (
     <div>
-      <GridContainer justify="center" alignItems="center">
+      <Header
+        color="dark"
+        routes={[]}
+        brand="Student Welfare Division"
+        // leftLinks={}
+        brands="SWD"
+        rightLinks={<HeaderLinks />}
+        changeColorOnScroll={{
+          height: 200,
+          color: "white"
+        }}
+      />
+      <GridContainer justify="center" alignItems="center" style={{marginTop: "50px"}}>
       <GridItem xs={6} sm={6} md={3}>
       <a to="/">
       <img  src={Img} alt="..." className={imageClasses}  />
