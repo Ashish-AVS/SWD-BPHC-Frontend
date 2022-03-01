@@ -1,141 +1,141 @@
-import React from "react";
-import Datetime from "react-datetime";
-import { Redirect } from "react-router-dom";
-import { saveAs } from "file-saver";
+import React from 'react'
+import Datetime from 'react-datetime'
+import { Redirect } from 'react-router-dom'
+import { saveAs } from 'file-saver'
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { makeStyles } from '@material-ui/core/styles'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert from '@material-ui/lab/Alert'
 
-//Auth Components
-import { useAuth } from "context/auth";
+// Auth Components
+import { useAuth } from 'context/auth'
 // core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import Button from "components/CustomButtons/Button.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardBody from "components/Card/CardBody.js";
-import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import { BaseUrl } from "variables/BaseUrl";
-import { primaryColor, defaultFont } from "assets/jss/material-kit-react.js";
+import GridItem from 'components/Grid/GridItem.js'
+import GridContainer from 'components/Grid/GridContainer.js'
+import Button from 'components/CustomButtons/Button.js'
+import Card from 'components/Card/Card.js'
+import CardHeader from 'components/Card/CardHeader.js'
+import CardBody from 'components/Card/CardBody.js'
+import FormControl from '@material-ui/core/FormControl'
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import IconButton from '@material-ui/core/IconButton'
+import EditIcon from '@material-ui/icons/Edit'
+import MenuItem from '@material-ui/core/MenuItem'
+import InputLabel from '@material-ui/core/InputLabel'
+import { BaseUrl } from 'variables/BaseUrl'
+import { primaryColor, defaultFont } from 'assets/jss/material-kit-react.js'
 
 const styles = {
   cardCategoryWhite: {
-    color: "rgba(255,255,255,.62)",
-    margin: "0",
-    fontSize: "14px",
-    marginTop: "0",
-    marginBottom: "0",
+    color: 'rgba(255,255,255,.62)',
+    margin: '0',
+    fontSize: '14px',
+    marginTop: '0',
+    marginBottom: '0'
   },
   typo: {
-    paddingLeft: "20%",
-    marginBottom: "30px",
-    position: "relative",
+    paddingLeft: '20%',
+    marginBottom: '30px',
+    position: 'relative'
   },
   cardTitleWhite: {
-    color: "#FFFFFF",
-    marginTop: "0px",
-    minHeight: "auto",
-    fontWeight: "300",
+    color: '#FFFFFF',
+    marginTop: '0px',
+    minHeight: 'auto',
+    fontWeight: '300',
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-    marginBottom: "3px",
-    textDecoration: "none",
+    marginBottom: '3px',
+    textDecoration: 'none'
   },
   input: {
-    color: "#495057",
-    height: "unset",
-    "&,&::placeholder": {
-      fontSize: "14px",
+    color: '#495057',
+    height: 'unset',
+    '&,&::placeholder': {
+      fontSize: '14px',
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      fontWeight: "400",
-      lineHeight: "1.42857",
-      opacity: "1",
+      fontWeight: '400',
+      lineHeight: '1.42857',
+      opacity: '1'
     },
-    "&::placeholder": {
-      color: "#AAAAAA",
-    },
+    '&::placeholder': {
+      color: '#AAAAAA'
+    }
   },
   formControl: {
-    margin: "0 0 17px 0",
-    paddingTop: "27px",
-    position: "relative",
-    "& svg,& .fab,& .far,& .fal,& .fas,& .material-icons": {
-      color: "#495057",
-    },
+    margin: '0 0 17px 0',
+    paddingTop: '27px',
+    position: 'relative',
+    '& svg,& .fab,& .far,& .fal,& .fas,& .material-icons': {
+      color: '#495057'
+    }
   },
   underline: {
-    "&:hover:not($disabled):before,&:before": {
-      borderColor: "#D2D2D2 !important",
-      borderWidth: "1px !important",
+    '&:hover:not($disabled):before,&:before': {
+      borderColor: '#D2D2D2 !important',
+      borderWidth: '1px !important'
     },
-    "&:after": {
-      borderColor: primaryColor,
-    },
+    '&:after': {
+      borderColor: primaryColor
+    }
   },
   label: {
-    color: "rgba(0, 0, 0, 0.26)",
-    top: "-17px",
-    fontSize: "14px",
-    transition: "0.3s ease all",
-    lineHeight: "1.428571429",
-    fontWeight: "400",
-    paddingLeft: "0",
-    letterSpacing: "normal",
-    "& + $underline": {
-      marginTop: "0px",
-    },
+    color: 'rgba(0, 0, 0, 0.26)',
+    top: '-17px',
+    fontSize: '14px',
+    transition: '0.3s ease all',
+    lineHeight: '1.428571429',
+    fontWeight: '400',
+    paddingLeft: '0',
+    letterSpacing: 'normal',
+    '& + $underline': {
+      marginTop: '0px'
+    }
   },
   labelRoot: {
     ...defaultFont,
-    color: "#AAAAAA !important",
-    fontWeight: "400",
-    fontSize: "14px",
-    lineHeight: "1.42857",
-    top: "10px",
-    letterSpacing: "unset",
-    "& + $underline": {
-      marginTop: "0px",
-    },
-  },
-};
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+    color: '#AAAAAA !important',
+    fontWeight: '400',
+    fontSize: '14px',
+    lineHeight: '1.42857',
+    top: '10px',
+    letterSpacing: 'unset',
+    '& + $underline': {
+      marginTop: '0px'
+    }
+  }
+}
+function Alert (props) {
+  return <MuiAlert elevation={6} variant='filled' {...props} />
 }
 
-const useStyles = makeStyles(styles);
+const useStyles = makeStyles(styles)
 
-export default function InventoryEntry() {
-  const token = JSON.parse(localStorage.getItem("officialtokens"));
+export default function InventoryEntry () {
+  const token = JSON.parse(localStorage.getItem('officialtokens'))
 
-  //const [sendingData,setSendingData]=React.useState(false);
-  const [sendingData, setSendingData] = React.useState(false);
-  const [postDate, setPostDate] = React.useState("");
-  const [success, setSuccess] = React.useState(false);
-  const { onOfficialLogin } = useAuth();
-  const classes = useStyles();
-  const [err, setErr] = React.useState(false);
-  const [edit, setEdit] = React.useState(false);
-  const [errMsg, setErrMsg] = React.useState("");
+  // const [sendingData,setSendingData]=React.useState(false);
+  const [sendingData, setSendingData] = React.useState(false)
+  const [postDate, setPostDate] = React.useState('')
+  const [success, setSuccess] = React.useState(false)
+  const { onOfficialLogin } = useAuth()
+  const classes = useStyles()
+  const [err, setErr] = React.useState(false)
+  const [edit, setEdit] = React.useState(false)
+  const [errMsg, setErrMsg] = React.useState('')
   const handleClose = (event, reason) => {
     // if (reason === "clickaway") {
     //   return;
     // }
     // setErr(false);
     // setSuccess(false);
-  };
-  const date = new Date();
-  const date1 = date.toLocaleDateString();
+  }
+  const date = new Date()
+  const date1 = date.toLocaleDateString()
   React.useEffect(() => {
-    //setRecievedData(false);
+    // setRecievedData(false);
     // try{
     //   const SendData=async ()=>{
     //     const result =await fetch(`${BaseUrl}/api/o/messgrace/upcoming`,{
@@ -159,7 +159,7 @@ export default function InventoryEntry() {
     // catch(err){
     //   console.log(err);
     // }
-  }, []);
+  }, [])
   React.useEffect(() => {
     // if (sendingData === true) {
     //   try {
@@ -190,23 +190,23 @@ export default function InventoryEntry() {
     //     console.log(err);
     //   }
     // }
-  });
+  })
   const logout = () => {
     // localStorage.removeItem("officialtokens");
-    onOfficialLogin(false);
-    return <Redirect exact to="/" />;
-  };
+    onOfficialLogin(false)
+    return <Redirect exact to='/' />
+  }
   return (
     <div>
-      <div className={classes.typo} style={{ marginTop: "-50px" }}>
+      <div className={classes.typo} style={{ marginTop: '-50px' }}>
         <h2>
           <strong>BITS PILANI , HYDERABAD CAMPUS</strong>
         </h2>
       </div>
-      <GridContainer justify="center" alignItems="center">
+      <GridContainer justify='center' alignItems='center'>
         <GridItem xs={12} sm={12} md={10}>
           <Card>
-            <CardHeader color="primary">
+            <CardHeader color='primary'>
               <h4 className={classes.cardTitleWhite}>
                 <b>Student Inventory </b>
               </h4>
@@ -217,9 +217,9 @@ export default function InventoryEntry() {
               </h3> */}
 
               <GridContainer
-                direction="row"
-                justify="center"
-                alignItems="center"
+                direction='row'
+                justify='center'
+                alignItems='center'
               >
                 <GridItem xs={12} sm={12} md={4}>
                   <FormControl fullWidth className={classes.formControl}>
@@ -227,11 +227,11 @@ export default function InventoryEntry() {
                       Enter Room Number
                     </InputLabel>
                     <TextField
-                      id="standard-basic"
-                      label="Room Number"
-                      variant="standard"
-                      style={{ width: "25ch" }}
-                    ></TextField>
+                      id='standard-basic'
+                      label='Room Number'
+                      variant='standard'
+                      style={{ width: '25ch' }}
+                    />
                     {/* <Datetime
                       dateFormat="DD-MM-YYYY"
                       timeFormat={false}
@@ -258,7 +258,7 @@ export default function InventoryEntry() {
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <Button
-                    color="success"
+                    color='success'
                     onClick={() => {
                       // setSendingData(true);
                     }}
@@ -269,23 +269,23 @@ export default function InventoryEntry() {
               </GridContainer>
               <h3
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "80px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginTop: '80px'
                 }}
               >
                 <b>Inventory</b>
               </h3>
-              <GridContainer spacing={2} justify="center" alignItems="center">
+              <GridContainer spacing={2} justify='center' alignItems='center'>
                 <GridItem xs={12} sm={12} md={6}>
                   <h4>
                     <b>Student Data</b>
                   </h4>
                   <br />
                   <img
-                    src="https://picsum.photos/175"
-                    alt="HEHEHEHE"
-                    style={{ width: "175px", alignItems:"center"}}
+                    src='https://picsum.photos/175'
+                    alt='HEHEHEHE'
+                    style={{ width: '175px', alignItems: 'center' }}
                   />
                   <h4>Name: Beta</h4>
                   <h4>Phone Number: Bete Ka Number</h4>
@@ -294,7 +294,7 @@ export default function InventoryEntry() {
                   <h4>Parent's Contact: Papa Ka Number</h4>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
-                  <h4 style={{ marginRight: "1.125rem" }}>
+                  <h4 style={{ marginRight: '1.125rem' }}>
                     <b>Edit Inventory</b>
                     <IconButton
                       // value="check"
@@ -305,36 +305,36 @@ export default function InventoryEntry() {
                     </IconButton>
                   </h4>
                   <br />
-                  {["Table", "Chair", "Bed", "Whiteboard"].map(
+                  {['Table', 'Chair', 'Bed', 'Whiteboard'].map(
                     (item, index) => (
                       <RadioGroup
                         row
-                        aria-label="table"
-                        name="row-radio-buttons-group"
+                        aria-label='table'
+                        name='row-radio-buttons-group'
                         key={index}
                       >
-                        <h4 style={{ minWidth: "100px" }}> {item} </h4>
+                        <h4 style={{ minWidth: '100px' }}> {item} </h4>
                         <FormControlLabel
-                          value="0"
+                          value='0'
                           control={<Radio />}
-                          label="0"
-                          labelPlacement="bottom"
+                          label='0'
+                          labelPlacement='bottom'
                           disabled={edit}
                           // checked={false}
                         />
                         <FormControlLabel
-                          value="1"
+                          value='1'
                           control={<Radio />}
-                          label="1"
-                          labelPlacement="bottom"
+                          label='1'
+                          labelPlacement='bottom'
                           disabled={edit}
                           // checked={false}
                         />
                         <FormControlLabel
-                          value="2"
+                          value='2'
                           control={<Radio />}
-                          label="2"
-                          labelPlacement="bottom"
+                          label='2'
+                          labelPlacement='bottom'
                           disabled={edit}
                           // checked={false}
                         />
@@ -348,25 +348,25 @@ export default function InventoryEntry() {
         </GridItem>
       </GridContainer>
       <Snackbar
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         open={success}
         autoHideDuration={4000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="success">
+        <Alert onClose={handleClose} severity='success'>
           File Download completed
         </Alert>
       </Snackbar>
       <Snackbar
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         open={err}
         autoHideDuration={4000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="error">
+        <Alert onClose={handleClose} severity='error'>
           {errMsg}
         </Alert>
       </Snackbar>
     </div>
-  );
+  )
 }

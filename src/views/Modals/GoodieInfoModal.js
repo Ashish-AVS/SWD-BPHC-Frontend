@@ -1,168 +1,154 @@
-import React from "react";
-import {Redirect} from "react-router-dom";
+import React from 'react'
+import { Redirect } from 'react-router-dom'
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Slide from "@material-ui/core/Slide";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import Close from "@material-ui/icons/Close";
-import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from '@material-ui/core/styles'
+import Slide from '@material-ui/core/Slide'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogActions from '@material-ui/core/DialogActions'
+import Close from '@material-ui/icons/Close'
+import IconButton from '@material-ui/core/IconButton'
 
+// Core Components
+import Button from 'components/CustomButtons/Button.js'
 
+// Auth Components
+import { useAuth } from 'context/auth'
 
-//Core Components
-import Button from "components/CustomButtons/Button.js";
+import { BaseUrl } from 'variables/BaseUrl'
 
-//Auth Components
-import { useAuth } from "context/auth";
+import styles from 'assets/jss/material-kit-react/modalStyle'
 
-import {BaseUrl} from "variables/BaseUrl";
+const useStyles = makeStyles(styles)
+const Transition = React.forwardRef(function Transition (props, ref) {
+  return <Slide direction='down' ref={ref} {...props} />
+})
 
-import styles from "assets/jss/material-kit-react/modalStyle";
+Transition.displayName = 'Transition'
+export default function CancelModal ({
+  open,
+  setOpen,
+  goodieId,
+  goodieType
+}) {
+  const classes = useStyles()
 
-const useStyles = makeStyles(styles);
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="down" ref={ref} {...props} />;
-});
+  const { uid } = JSON.parse(localStorage.getItem('data'))
+  const token = JSON.parse(localStorage.getItem('tokens'))
+  const [goodieDetails, setGoodieDetails] = React.useState({})
+  const [recievedData, setRecievedData] = React.useState(false)
+  const { onLogin } = useAuth()
 
-Transition.displayName = "Transition";
-export default function CancelModal({
-    open, 
-    setOpen,
-    goodieId,
-    goodieType
-   }){
-const classes=useStyles();
+  React.useEffect(() => {
+    setRecievedData(false)
 
-const {uid}=JSON.parse(localStorage.getItem("data"));
-const token=JSON.parse(localStorage.getItem("tokens"));
-const [goodieDetails,setGoodieDetails]=React.useState({});
-const [recievedData,setRecievedData]=React.useState(false);
-const { onLogin } = useAuth();
-
-
-React.useEffect(()=>{
-   setRecievedData(false);
-    
-   try{
-    
-    const sendData=async ()=>{
-      
-      const result =await fetch(`${BaseUrl}/api/goodies/info?uid=${uid}&g_id=${goodieId}`,{
-          headers:{'Content-Type':"application/json",
-          Authorization:token},
-         })
-     const res = await result.json();
-        if(res.err===false){ 
-         setGoodieDetails(res.data);
-         setRecievedData(true);                      
+    try {
+      const sendData = async () => {
+        const result = await fetch(`${BaseUrl}/api/goodies/info?uid=${uid}&g_id=${goodieId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+          }
+        })
+        const res = await result.json()
+        if (res.err === false) {
+          setGoodieDetails(res.data)
+          setRecievedData(true)
+        } else if (res.err === true && result.status === 401) {
+          logout()
         }
-        else if(res.err===true && result.status===401){ 
-          logout();
-        }
-    }
-      
-    sendData();
-    //console.log(totalQty);
-   
-      
-    }
-    catch(err){
-      console.log(err);
-    }
+      }
 
-},[uid,token,goodieId])
+      sendData()
+      // console.log(totalQty);
+    } catch (err) {
+      console.log(err)
+    }
+  }, [uid, token, goodieId])
 
-const logout=()=>{
-  localStorage.removeItem("tokens");
-  localStorage.removeItem("data");
-  onLogin(false);  
-  return (<Redirect exact to='/login-page' />);
-}
+  const logout = () => {
+    localStorage.removeItem('tokens')
+    localStorage.removeItem('data')
+    onLogin(false)
+    return (<Redirect exact to='/login-page' />)
+  }
 
-    return(
-        <Dialog
-                  classes={{
-                    root: classes.center,
-                    paper: classes.modal
-                  }}
-                  
-                  fullWidth={true}
-                  open={open}
-                  TransitionComponent={Transition}
-                  keepMounted
-                  onClose={() => setOpen(false)}
-                  aria-labelledby="classic-modal-slide-title"
-                  aria-describedby="classic-modal-slide-description"
-                >
-                  <DialogTitle
-                    id="classic-modal-slide-title"
-                    disableTypography
-                    className={classes.modalHeader}
-                  >
-                    <IconButton
-                      className={classes.modalCloseButton}
-                      key="close"
-                      aria-label="Close"
-                      color="inherit"
-                      onClick={() => setOpen(false)}
-                    >
-                      <Close className={classes.modalClose} />
-                    </IconButton>
-                    <h3 className={classes.modalTitle}><strong>Goodie Sales Detail</strong></h3>
-                  </DialogTitle>
-                  <DialogContent
-                    id="classic-modal-slide-description"
-                    className={classes.modalBody}
-                  >
-                      <div>
-                  <h4>Here is the sales detail of your goodie till now:</h4>
-                    
-                    {goodieType===0 && recievedData===true?
-                    <div>
-                        <p>XS- {goodieDetails.xs}</p>
-                        <p>S- {goodieDetails.s}</p>
-                        <p>M- {goodieDetails.m}</p>
-                        <p>L- {goodieDetails.l}</p>
-                        <p>XL- {goodieDetails.xl}</p>
-                        <p>XXL- {goodieDetails.xxl}</p>
-                        <p>XXXL- {goodieDetails.xxxl}</p>
-                    <h5>Net Quantity Ordered- {goodieDetails.net_quantity}</h5>
-                    <h5>Net Amount - ₹ {goodieDetails.total_amount}</h5>
-                    </div>
-                    :
-                    goodieType===1 && recievedData===true?
-                    <div>
-                    <h5>Quantity Ordered- {goodieDetails.net_quantity} </h5>
-                    <h5>Net Amount - ₹ {goodieDetails.total_amount}</h5>
-                    </div>
-                    :
-                    goodieType===2 && recievedData===true?
-                    <div>
-                    <h5>Net Amount Raised- ₹{goodieDetails.total_amount}</h5>
-                    </div>
-                    :
-                    <p>Loading Information...</p>
-                }
-                       
-                    </div>
-                  
-                  </DialogContent>
-                  <DialogActions className={classes.modalFooter}>
-                
-                  
-                    
-                    <Button
-                      onClick={() => setOpen(false)}
-                      color="danger"
-                      solid="true"
-                      round
-                    >
-                      close
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-    );
+  return (
+    <Dialog
+      classes={{
+        root: classes.center,
+        paper: classes.modal
+      }}
+
+      fullWidth
+      open={open}
+      TransitionComponent={Transition}
+      keepMounted
+      onClose={() => setOpen(false)}
+      aria-labelledby='classic-modal-slide-title'
+      aria-describedby='classic-modal-slide-description'
+    >
+      <DialogTitle
+        id='classic-modal-slide-title'
+        disableTypography
+        className={classes.modalHeader}
+      >
+        <IconButton
+          className={classes.modalCloseButton}
+          key='close'
+          aria-label='Close'
+          color='inherit'
+          onClick={() => setOpen(false)}
+        >
+          <Close className={classes.modalClose} />
+        </IconButton>
+        <h3 className={classes.modalTitle}><strong>Goodie Sales Detail</strong></h3>
+      </DialogTitle>
+      <DialogContent
+        id='classic-modal-slide-description'
+        className={classes.modalBody}
+      >
+        <div>
+          <h4>Here is the sales detail of your goodie till now:</h4>
+
+          {goodieType === 0 && recievedData === true
+            ? <div>
+              <p>XS- {goodieDetails.xs}</p>
+              <p>S- {goodieDetails.s}</p>
+              <p>M- {goodieDetails.m}</p>
+              <p>L- {goodieDetails.l}</p>
+              <p>XL- {goodieDetails.xl}</p>
+              <p>XXL- {goodieDetails.xxl}</p>
+              <p>XXXL- {goodieDetails.xxxl}</p>
+              <h5>Net Quantity Ordered- {goodieDetails.net_quantity}</h5>
+              <h5>Net Amount - ₹ {goodieDetails.total_amount}</h5>
+            </div>
+            : goodieType === 1 && recievedData === true
+              ? <div>
+                <h5>Quantity Ordered- {goodieDetails.net_quantity} </h5>
+                <h5>Net Amount - ₹ {goodieDetails.total_amount}</h5>
+              </div>
+              : goodieType === 2 && recievedData === true
+                ? <div>
+                  <h5>Net Amount Raised- ₹{goodieDetails.total_amount}</h5>
+                </div>
+                : <p>Loading Information...</p>}
+
+        </div>
+
+      </DialogContent>
+      <DialogActions className={classes.modalFooter}>
+
+        <Button
+          onClick={() => setOpen(false)}
+          color='danger'
+          solid='true'
+          round
+        >
+          close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
 }
