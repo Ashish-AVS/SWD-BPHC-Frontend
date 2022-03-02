@@ -309,8 +309,8 @@ export default function Counsellor () {
                     >
                       <MenuItem value=''>SELECT DATE</MenuItem>
                       {dateValues.map(item => {
-                          return <MenuItem value={item}>{item}</MenuItem>
-                        })}
+                        return <MenuItem value={item}>{item}</MenuItem>
+                      })}
                     </Select>
                   </FormControl>
                 </GridItem>
@@ -325,8 +325,8 @@ export default function Counsellor () {
                     >
                       <MenuItem value=''>Select</MenuItem>
                       {slotData.map(item => {
-                          if (bookData.date === item.date) { return <MenuItem value={item.slot}>{item.slotTime}</MenuItem> }
-                        })}
+                        if (bookData.date === item.date) { return <MenuItem value={item.slot}>{item.slotTime}</MenuItem> }
+                      })}
                     </Select>
                   </FormControl>
                 </GridItem>

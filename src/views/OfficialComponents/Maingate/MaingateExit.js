@@ -195,124 +195,124 @@ export default function Search () {
               <GridContainer justify='center' alignItems='center'>
                 <GridItem xs={12} sm={12} md={12}>
                   <GridContainer direction='row' justify='center' alignItems='center'>
-                <GridItem>
-                    <FormControl variant='outlined'>
-                      <InputLabel htmlFor='component-outlined'>Student UID</InputLabel>
-                      <OutlinedInput
+                    <GridItem>
+                      <FormControl variant='outlined'>
+                        <InputLabel htmlFor='component-outlined'>Student UID</InputLabel>
+                        <OutlinedInput
                           id='component-outlined'
                           onChange={onChange}
                           inputProps={{
-                              id: 'uid',
-                              onKeyPress: (event) => {
-                                if (event.keyCode === 13 || event.which === 13) {
-                                  event.preventDefault()
-                                  document.getElementById('submit').click()
-                                }
+                            id: 'uid',
+                            onKeyPress: (event) => {
+                              if (event.keyCode === 13 || event.which === 13) {
+                                event.preventDefault()
+                                document.getElementById('submit').click()
                               }
-                            }}
+                            }
+                          }}
                           label='Student UID'
                         />
-                    </FormControl>
-                  </GridItem>
-              </GridContainer>
+                      </FormControl>
+                    </GridItem>
+                  </GridContainer>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
                   <GridContainer direction='row' justify='center' alignItems='center'>
-                <GridItem>
-                    <Button
-                      color='success' id='submit' onClick={() => { setSendReq(true) }}
-                    >
-                                        Submit
-                    </Button>
-                  </GridItem>
+                    <GridItem>
+                      <Button
+                        color='success' id='submit' onClick={() => { setSendReq(true) }}
+                      >
+                        Submit
+                      </Button>
+                    </GridItem>
 
-              </GridContainer>
+                  </GridContainer>
 
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
                   {(recievedData === true) && (exitData.error === false) && (blacklist === false)
-                ? <div style={{ background: '#a1d993', borderRadius: '16px', border: '1px solid black' }}>
-                    <GridContainer direction='row'>
-                      <GridItem xs={12} sm={12} md={7}>
+                    ? <div style={{ background: '#a1d993', borderRadius: '16px', border: '1px solid black' }}>
+                      <GridContainer direction='row'>
+                        <GridItem xs={12} sm={12} md={7}>
                           <div><GridContainer direction='column' justify='center' alignItems='center'>
-                              <GridItem xs={12} sm={12} md={12}>
-                                  <h3 style={{ color: '#2d4d25' }}><span style={{ fontWeight: '600' }}> {exitData.name}</span></h3>
-                                </GridItem>
-                              <GridItem xs={12} sm={12} md={12}>
-                                  <h4 style={{ color: '#2d4d25' }}><span style={{ fontWeight: '400' }}>ID</span> :<span style={{ fontWeight: '500' }}>{exitData.id}</span></h4>
-                                </GridItem>
-                                 </GridContainer>
-                            </div>
-                        </GridItem>
-                      <GridItem xs={12} sm={12} md={5}>
-                          <div><GridContainer direction='column' justify='center' alignItems='center'>
-                              <GridItem xs={12} sm={12} md={12}>
-                                  <h3 style={{ color: '#2d4d25' }}><span style={{ fontWeight: '600' }}> YOU CAN EXIT</span></h3>
-                                </GridItem>
-                              <GridItem xs={12} sm={12} md={12}>
-                                  <DoneOutlineIcon fontSize='large' />
-                                </GridItem>
-                                 </GridContainer>
-                            </div>
-                        </GridItem>
-                    </GridContainer>
-                  </div>
-                : (recievedData === true) && (exitData.error === true) && (blacklist === false)
-                    ? <div style={{ background: '#FFCC00', borderRadius: '16px', border: '1px solid black' }}>
-                        <GridContainer direction='row'>
-                          <GridItem xs={12} sm={12} md={7}>
-                              <div><GridContainer direction='column' justify='center' alignItems='center'>
-                                  <GridItem xs={12} sm={12} md={12}>
-                                      <h3 style={{ color: '#914d03' }}><span style={{ fontWeight: '600' }}> {exitData.name}</span></h3>
-                                    </GridItem>
-                                  <GridItem xs={12} sm={12} md={12}>
-                                      <h4 style={{ color: '#914d03' }}><span style={{ fontWeight: '400' }}>ID</span> :<span style={{ fontWeight: '500' }}>{exitData.id}</span></h4>
-                                    </GridItem>
-                                     </GridContainer>
-                                </div>
+                            <GridItem xs={12} sm={12} md={12}>
+                              <h3 style={{ color: '#2d4d25' }}><span style={{ fontWeight: '600' }}> {exitData.name}</span></h3>
                             </GridItem>
-                          <GridItem xs={12} sm={12} md={5}>
-                              <div><GridContainer direction='column' justify='center' alignItems='center'>
-                                  <GridItem xs={12} sm={12} md={12}>
-                                      <h4 style={{ color: '#914d03' }}><span style={{ fontWeight: '600' }}> NO ENTRY RECORD FOUND</span></h4>
-                                    </GridItem>
-                                  <GridItem xs={12} sm={12} md={12}>
-                                      <InfoIcon fontSize='large' />
-                                    </GridItem>
-                                     </GridContainer>
-                                </div>
+                            <GridItem xs={12} sm={12} md={12}>
+                              <h4 style={{ color: '#2d4d25' }}><span style={{ fontWeight: '400' }}>ID</span> :<span style={{ fontWeight: '500' }}>{exitData.id}</span></h4>
                             </GridItem>
-                        </GridContainer>
-                      </div>
-                    : (recievedData === true) && (exitData.error === true) && (blacklist === true)
-                        ? <div style={{ background: '#9e0b03', borderRadius: '16px', border: '1px solid black' }}>
-                            <GridContainer direction='row'>
-                              <GridItem xs={12} sm={12} md={7}>
-                                  <div><GridContainer direction='column' justify='center' alignItems='center'>
-                                      <GridItem xs={12} sm={12} md={12}>
-                                          <h3 style={{ color: 'white' }}>{exitData.name}</h3>
-                                        </GridItem>
-                                      <GridItem xs={12} sm={12} md={12}>
-                                          <h4 style={{ color: 'white' }}>ID :<span style={{ fontWeight: '500' }}>{exitData.id}</span></h4>
-                                        </GridItem>
-                                         </GridContainer>
-                                    </div>
-                                </GridItem>
-                              <GridItem xs={12} sm={12} md={5}>
-                                  <div><GridContainer direction='column' spacing={2} justify='center' alignItems='center'>
-                                      <GridItem xs={12} sm={12} md={12}>
-                                          <h4 style={{ color: 'white' }}><span style={{ fontWeight: '600' }}> YOU ARE BLACKLISTED</span></h4>
-                                        </GridItem>
-                                      <GridItem xs={12} sm={12} md={12}>
-                                          <CancelIcon fontSize='large' color='inherit' />
-                                        </GridItem>
-                                         </GridContainer>
-                                    </div>
-                                </GridItem>
-                            </GridContainer>
+                          </GridContainer>
                           </div>
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={5}>
+                          <div><GridContainer direction='column' justify='center' alignItems='center'>
+                            <GridItem xs={12} sm={12} md={12}>
+                              <h3 style={{ color: '#2d4d25' }}><span style={{ fontWeight: '600' }}> YOU CAN EXIT</span></h3>
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={12}>
+                              <DoneOutlineIcon fontSize='large' />
+                            </GridItem>
+                          </GridContainer>
+                          </div>
+                        </GridItem>
+                      </GridContainer>
+                      </div>
+                    : (recievedData === true) && (exitData.error === true) && (blacklist === false)
+                        ? <div style={{ background: '#FFCC00', borderRadius: '16px', border: '1px solid black' }}>
+                          <GridContainer direction='row'>
+                            <GridItem xs={12} sm={12} md={7}>
+                              <div><GridContainer direction='column' justify='center' alignItems='center'>
+                                <GridItem xs={12} sm={12} md={12}>
+                                  <h3 style={{ color: '#914d03' }}><span style={{ fontWeight: '600' }}> {exitData.name}</span></h3>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12}>
+                                  <h4 style={{ color: '#914d03' }}><span style={{ fontWeight: '400' }}>ID</span> :<span style={{ fontWeight: '500' }}>{exitData.id}</span></h4>
+                                </GridItem>
+                              </GridContainer>
+                              </div>
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={5}>
+                              <div><GridContainer direction='column' justify='center' alignItems='center'>
+                                <GridItem xs={12} sm={12} md={12}>
+                                  <h4 style={{ color: '#914d03' }}><span style={{ fontWeight: '600' }}> NO ENTRY RECORD FOUND</span></h4>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={12}>
+                                  <InfoIcon fontSize='large' />
+                                </GridItem>
+                              </GridContainer>
+                              </div>
+                            </GridItem>
+                          </GridContainer>
+                          </div>
+                        : (recievedData === true) && (exitData.error === true) && (blacklist === true)
+                            ? <div style={{ background: '#9e0b03', borderRadius: '16px', border: '1px solid black' }}>
+                              <GridContainer direction='row'>
+                                <GridItem xs={12} sm={12} md={7}>
+                                  <div><GridContainer direction='column' justify='center' alignItems='center'>
+                                    <GridItem xs={12} sm={12} md={12}>
+                                      <h3 style={{ color: 'white' }}>{exitData.name}</h3>
+                                    </GridItem>
+                                    <GridItem xs={12} sm={12} md={12}>
+                                      <h4 style={{ color: 'white' }}>ID :<span style={{ fontWeight: '500' }}>{exitData.id}</span></h4>
+                                    </GridItem>
+                                  </GridContainer>
+                                  </div>
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={5}>
+                                  <div><GridContainer direction='column' spacing={2} justify='center' alignItems='center'>
+                                    <GridItem xs={12} sm={12} md={12}>
+                                      <h4 style={{ color: 'white' }}><span style={{ fontWeight: '600' }}> YOU ARE BLACKLISTED</span></h4>
+                                    </GridItem>
+                                    <GridItem xs={12} sm={12} md={12}>
+                                      <CancelIcon fontSize='large' color='inherit' />
+                                    </GridItem>
+                                  </GridContainer>
+                                  </div>
+                                </GridItem>
+                              </GridContainer>
+                              </div>
 
-                        : null}
+                            : null}
                 </GridItem>
                 {/* <GridItem xs={12} sm={12} md={12}>
 

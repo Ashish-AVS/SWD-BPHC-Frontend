@@ -38,23 +38,25 @@ export default function Documents () {
   const [errMsg, setErrMsg] = React.useState('')
   const { onLogin } = useAuth()
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/doc/list`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (res.err === false) {
-          setDoc(res.data)
-          setIsFetching(false)
-        } else if (res.err === true && result.status === 401) {
-          logout()
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/doc/list`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (res.err === false) {
+            setDoc(res.data)
+            setIsFetching(false)
+          } else if (res.err === true && result.status === 401) {
+            logout()
+          }
         }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [])
   const [sendingData, setSendingData] = React.useState(false)
   const { uid } = JSON.parse(localStorage.getItem('data'))

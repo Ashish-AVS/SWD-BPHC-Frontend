@@ -152,34 +152,36 @@ export default function Outstation () {
   }
 
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/outstation/`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (res.err === false) {
-          setData(
-            res.data.map((info, index) => {
-              let badge = null
-              if (info.approved === -1) {
-                badge = <Badge color='danger'>Rejected</Badge>
-              } else if (info.approved === 0) {
-                badge = <Badge color='warning'>Pending</Badge>
-              } else if (info.approved === 1) {
-                badge = <Badge color='success'>Approved</Badge>
-              }
-              return { sno: index + 1, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, duration: `${info.duration} Days`, approved: badge, status: info.approved }
-            })
-          )
-        } else if (res.err === true && result.status === 401) {
-          logout()
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/outstation/`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (res.err === false) {
+            setData(
+              res.data.map((info, index) => {
+                let badge = null
+                if (info.approved === -1) {
+                  badge = <Badge color='danger'>Rejected</Badge>
+                } else if (info.approved === 0) {
+                  badge = <Badge color='warning'>Pending</Badge>
+                } else if (info.approved === 1) {
+                  badge = <Badge color='success'>Approved</Badge>
+                }
+                return { sno: index + 1, outstation_id: info.outstation_id, location: info.location, from: info.from, to: info.to, duration: `${info.duration} Days`, approved: badge, status: info.approved }
+              })
+            )
+          } else if (res.err === true && result.status === 401) {
+            logout()
+          }
         }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [uid, token, reqSent, isUpdated])
   React.useEffect(() => {
     if (sendingData === true) {

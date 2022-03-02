@@ -84,18 +84,18 @@ function PorModal ({ open, setOpen, porData }) {
                         <MaterialTable
                           title='SWD Nucleus'
                           columns={[{ title: 'Name', field: 'name' },
-                                    { title: 'User ID', field: 'uid' },
-                                    { title: 'Phone No.', field: 'phone' },
-                                    { title: 'Designation', field: 'designation' }]}
+                            { title: 'User ID', field: 'uid' },
+                            { title: 'Phone No.', field: 'phone' },
+                            { title: 'Designation', field: 'designation' }]}
                           data={porData.swd}
 
                           options={{
 
-                                    search: true,
-                                    pageSize: 10,
-                                    emptyRowsWhenPaging: false
+                            search: true,
+                            pageSize: 10,
+                            emptyRowsWhenPaging: false
 
-                                  }}
+                          }}
                         />
                       </GridItem>
                     </GridContainer>

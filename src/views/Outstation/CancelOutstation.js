@@ -40,7 +40,7 @@ export default function CancelModal ({
   const [sendingData, setSendingData] = React.useState(false)
 
   React.useEffect(() => {
-    if (sendingData === true) {
+    if (sendingData === true && navigator.onLine) {
       try {
         const sendData = async () => {
           setLoading(true)

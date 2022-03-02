@@ -31,7 +31,6 @@ import GraceModal from 'views/Modals/GraceModal'
 import ComplaintsModal from 'views/Modals/ComplaintsModal'
 import MenuModal from 'views/Modals/MenuModal'
 import { BaseUrl } from 'variables/BaseUrl'
-
 // import { official,
 //   department,
 //   techassocs,
@@ -40,14 +39,11 @@ import { BaseUrl } from 'variables/BaseUrl'
 //   sports,
 //   clubs,
 //   others } from "variables/general.js";
-
 import styles from 'assets/jss/material-dashboard-react/views/dashboardStyle.js'
-
 const useStyles = makeStyles(styles)
 const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide direction='down' ref={ref} {...props} />
 })
-
 Transition.displayName = 'Transition'
 export default function Dashboard () {
   const [Modal, openModal] = React.useState(false)
@@ -66,22 +62,24 @@ export default function Dashboard () {
     return (<Redirect exact to='/login-page' />)
   }
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await axios.get(`${BaseUrl}/api/mess/menu?uid=${uid}`, {
-          headers: {
-            Authorization: token
+    if (window.navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await axios.get(`${BaseUrl}/api/mess/menu?uid=${uid}`, {
+            headers: {
+              Authorization: token
+            }
+          })
+          // const res = await result.json();
+          if (result.data.err === false) { setMessDetails(result.data.data) } else if (result.data.err === true && result.status === 401) {
+            logout()
           }
-        })
-        // const res = await result.json();
-        if (result.data.err === false) { setMessDetails(result.data.data) } else if (result.data.err === true && result.status === 401) {
-          logout()
         }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [uid, token])
 
   React.useEffect(() => {

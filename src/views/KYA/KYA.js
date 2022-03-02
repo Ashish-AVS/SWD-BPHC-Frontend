@@ -34,22 +34,24 @@ export default function FAQ () {
   )
   let data
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/kya`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (result.status === 200 || result.status === 201) {
-          console.log(res.data.kya)
-          setFaqData(res.data.kya)
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/kya`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (result.status === 200 || result.status === 201) {
+            console.log(res.data.kya)
+            setFaqData(res.data.kya)
           // setDataLoaded(true)
-        } else if (result.status === 401) { alert(res.msg) }
+          } else if (result.status === 401) { alert(res.msg) }
+        }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [])
 
   const contentData1 = []

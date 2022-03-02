@@ -35,19 +35,21 @@ export default function FAQ () {
     classes.imgFluid1
   )
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/kya`)
-        const res = await result.json()
-        if (result.status === 200 || result.status === 201) {
-          setFaqData(res.data.faqs)
-          setDataLoaded(true)
-        } else if (result.status === 401) { alert(res.msg) }
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/kya`)
+          const res = await result.json()
+          if (result.status === 200 || result.status === 201) {
+            setFaqData(res.data.faqs)
+            setDataLoaded(true)
+          } else if (result.status === 401) { alert(res.msg) }
+        }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [])
 
   return (

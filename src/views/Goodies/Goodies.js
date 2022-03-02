@@ -38,35 +38,37 @@ export default function Goodies () {
   const [error, isError] = React.useState(false)
   const [addGoodie, setAddGoodie] = React.useState(false)
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/goodies`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        // console.log(res);
-        if (res.err === false) {
-          setGoodie(res.data)
-          setIsFetching(false)
-        } else if (res.err === true && result.status === 401) {
-          logout()
-        } else {
-          isError(true)
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/goodies`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          // console.log(res);
+          if (res.err === false) {
+            setGoodie(res.data)
+            setIsFetching(false)
+          } else if (res.err === true && result.status === 401) {
+            logout()
+          } else {
+            isError(true)
+          }
         }
-      }
-      const fetchDeduction = async () => {
-        const result = await fetch(`${BaseUrl}/api/deductions`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (res.err === false) { setDeductions(res.data) }
-      }
+        const fetchDeduction = async () => {
+          const result = await fetch(`${BaseUrl}/api/deductions`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (res.err === false) { setDeductions(res.data) }
+        }
 
-      fetchData()
-      fetchDeduction()
-    } catch (err) {
-      console.log(err)
-    }
+        fetchData()
+        fetchDeduction()
+      } catch (err) {
+        console.log(err)
+      }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [isUpdated, user.uid, token])
   const logout = () => {
     localStorage.removeItem('tokens')
@@ -128,14 +130,14 @@ export default function Goodies () {
                   return (
                     <GridContainer justify='center' alignItems='center'>
                       <GridItem xs={12} sm={12} md={12}>
-                     <Button
-                    size='lg' round color='rose' onClick={() => {
-                      setAddGoodie(true)
-                    }}
-                  >
-                    Add New Goodie
-                  </Button>
-                   </GridItem>
+                        <Button
+                          size='lg' round color='rose' onClick={() => {
+                            setAddGoodie(true)
+                          }}
+                        >
+                          Add New Goodie
+                        </Button>
+                      </GridItem>
                     </GridContainer>
                   )
                 }

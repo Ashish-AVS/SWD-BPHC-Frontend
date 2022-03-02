@@ -169,20 +169,20 @@ export default function GraceModal ({ Grace, openGrace, uid }) {
                     isValidDate={valid}
                     timeFormat={false}
                     onChange={(e) => {
-                        const date = new Date(`${e.toLocaleString()}`)
-                        const { Date1, Month, Year } = {
-                          Date1: date.getDate(),
-                          Month: date.getMonth() + 1,
-                          Year: date.getFullYear()
-                        }
-                        if (Month > 9) {
-                          if (Date1 < 10) {
-                            setPostDate(`${Year}-${Month}-0${Date1}`)
-                          } else { setPostDate(`${Year}-${Month}-${Date1}`) }
-                        } else {
-                          if (Date1 < 10) { setPostDate(`${Year}-0${Month}-0${Date1}`) } else { setPostDate(`${Year}-0${Month}-${Date1}`) }
-                        }
-                      }}
+                      const date = new Date(`${e.toLocaleString()}`)
+                      const { Date1, Month, Year } = {
+                        Date1: date.getDate(),
+                        Month: date.getMonth() + 1,
+                        Year: date.getFullYear()
+                      }
+                      if (Month > 9) {
+                        if (Date1 < 10) {
+                          setPostDate(`${Year}-${Month}-0${Date1}`)
+                        } else { setPostDate(`${Year}-${Month}-${Date1}`) }
+                      } else {
+                        if (Date1 < 10) { setPostDate(`${Year}-0${Month}-0${Date1}`) } else { setPostDate(`${Year}-0${Month}-${Date1}`) }
+                      }
+                    }}
                     inputProps={{ placeholder: 'Select Date Here' }}
                   />
                 </FormControl>

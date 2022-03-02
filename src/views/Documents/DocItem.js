@@ -25,7 +25,7 @@ export default function DocItem ({ docTitle, docKey }) {
   const [loading, setLoading] = React.useState(false)
 
   React.useEffect(() => {
-    if (sendingData === true) {
+    if (sendingData === true && navigator.onLine) {
       setLoading(true)
       try {
         const sendData = async () => {
@@ -44,7 +44,7 @@ export default function DocItem ({ docTitle, docKey }) {
       } catch (err) {
         console.log(err)
       }
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [sendingData, uid, docKey, token])
   return (
     <GridItem xs={12} sm={6} md={4}>

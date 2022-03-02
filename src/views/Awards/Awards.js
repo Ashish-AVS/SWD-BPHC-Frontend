@@ -16,7 +16,6 @@ import { Snackbar } from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert'
 import { is } from '@babel/types'
 import { name } from 'file-loader'
-
 const styles = {
   cardCategoryWhite: {
     color: 'rgba(255,255,255,.62)',
@@ -41,7 +40,6 @@ const styles = {
     textDecoration: 'none'
   }
 }
-
 const useStyles = makeStyles(styles)
 
 export default function Awards () {

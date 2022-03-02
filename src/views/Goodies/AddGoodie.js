@@ -147,7 +147,7 @@ export default function AddGoodie ({ setVisible, setIsUpdated }) {
     return current.isAfter(yesterday)
   }
   React.useEffect(() => {
-    if (sendingData === true) {
+    if (sendingData === true && navigator.onLine) {
       try {
         const sendData = async () => {
           const result = await fetch(`${BaseUrl}/api/goodies/add`, {
@@ -214,7 +214,7 @@ export default function AddGoodie ({ setVisible, setIsUpdated }) {
       } catch (err) {
         console.log(err)
       }
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [sendingData])
 
   function onChange (e) {

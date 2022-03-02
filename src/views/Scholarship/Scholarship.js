@@ -93,7 +93,7 @@ export default function Scholarship () {
   const [successMsg, setSuccessMsg] = React.useState('')
 
   React.useEffect(() => {
-    if (status === 0) {
+    if (status === 0 && (navigator.onLine)) {
       //* ********  MCN API CALL ****************//
       try {
         const SendData = async () => {
@@ -134,7 +134,7 @@ export default function Scholarship () {
       } catch (err) {
         console.log(err)
       }
-    } else if (status === 1) {
+    } else if (status === 1 && navigator.onLine) {
       //* ********* SAF API CALL *****************//
       try {
         const SendData = async () => {
@@ -175,7 +175,7 @@ export default function Scholarship () {
       } catch (err) {
         console.log(err)
       }
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [updated, status])
 
   return (
@@ -202,8 +202,8 @@ export default function Scholarship () {
                       ? <Card>
                         <MCNContent />
                         <CardFooter style={{ display: 'flex', justifyContent: 'center' }}>
-                            {!mcnAppln
-                          ? <Button
+                          {!mcnAppln
+                            ? <Button
                                 round
                                 color='info'
                                 disabled={!mcnPortalOn}
@@ -212,8 +212,8 @@ export default function Scholarship () {
                                 }}
                               >
                               Apply For MCN
-                              </Button>
-                          : <GridContainer spacing={4} direction='column' justify='center' alignItems='center'>
+                            </Button>
+                            : <GridContainer spacing={4} direction='column' justify='center' alignItems='center'>
                               <GridItem xs={12} sm={12} md={12} style={{ marginBottom: '50px' }}>
                                 <Button
                                   round
@@ -285,14 +285,14 @@ export default function Scholarship () {
                                 </Button>
                               </GridItem>
                             </GridContainer>}
-                          </CardFooter>
+                        </CardFooter>
                         <br />
                         <center>
-                            To stay up to date with your application and to receive notifications on changes in your application status,
-                            download the SWD Android app from the Google Play Store. <br />
-                            <a
-                          href='https://play.google.com/store/apps/details?id=in.ac.bits_hyderabad.swd.swd&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
-                          style={{
+                          To stay up to date with your application and to receive notifications on changes in your application status,
+                          download the SWD Android app from the Google Play Store. <br />
+                          <a
+                            href='https://play.google.com/store/apps/details?id=in.ac.bits_hyderabad.swd.swd&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'
+                            style={{
                               paddingTop: '5px',
                               paddingBottom: '5px',
                               paddingLeft: '5px',
@@ -303,40 +303,40 @@ export default function Scholarship () {
                               fontSize: '14px',
                               textDecoration: 'none'
                             }}
-                        >
-                          <img alt='Get it on Google Play' style={{ width: '13%' }} src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' />
-                        </a>
-                          </center>
+                          >
+                            <img alt='Get it on Google Play' style={{ width: '13%' }} src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' />
+                          </a>
+                        </center>
                         <MCNApplyModal
-                            open={openMcnApply}
-                            setOpen={setOpenMcnApply}
-                            setUpdated={setUpdated}
-                            setSuccess={setSuccess}
-                            setErr={setErr}
-                            setErrMsg={setErrMsg}
-                            setSuccessMsg={setSuccessMsg}
-                          />
+                          open={openMcnApply}
+                          setOpen={setOpenMcnApply}
+                          setUpdated={setUpdated}
+                          setSuccess={setSuccess}
+                          setErr={setErr}
+                          setErrMsg={setErrMsg}
+                          setSuccessMsg={setSuccessMsg}
+                        />
                         <MCNEditModal
-                            open={openMcnEdit}
-                            setOpen={setOpenMcnEdit}
-                            data={mcnApplnData}
-                            setUpdated={setUpdated}
-                            setSuccess={setSuccess}
-                            setErr={setErr}
-                            setErrMsg={setErrMsg}
-                            setSuccessMsg={setSuccessMsg}
-                          />
+                          open={openMcnEdit}
+                          setOpen={setOpenMcnEdit}
+                          data={mcnApplnData}
+                          setUpdated={setUpdated}
+                          setSuccess={setSuccess}
+                          setErr={setErr}
+                          setErrMsg={setErrMsg}
+                          setSuccessMsg={setSuccessMsg}
+                        />
 
                         <MCNDeleteModal
-                            open={openMcnDelete}
-                            setOpen={setOpenMcnDelete}
-                            setUpdated={setUpdated}
-                            setSuccess={setSuccess}
-                            setErr={setErr}
-                            setAppln={setMcnAppln}
-                            setErrMsg={setErrMsg}
-                            setSuccessMsg={setSuccessMsg}
-                          />
+                          open={openMcnDelete}
+                          setOpen={setOpenMcnDelete}
+                          setUpdated={setUpdated}
+                          setSuccess={setSuccess}
+                          setErr={setErr}
+                          setAppln={setMcnAppln}
+                          setErrMsg={setErrMsg}
+                          setSuccessMsg={setSuccessMsg}
+                        />
                         </Card>
                       : null}
                   </div>
@@ -350,8 +350,8 @@ export default function Scholarship () {
                       ? <Card>
                         <SAFContent />
                         <CardFooter style={{ display: 'flex', justifyContent: 'center' }}>
-                            {!safAppln
-                          ? <Button
+                          {!safAppln
+                            ? <Button
                                 round
                                 color='info'
                                 disabled={!safPortalOn}
@@ -360,8 +360,8 @@ export default function Scholarship () {
                                 }}
                               >
                               Apply For SAF
-                              </Button>
-                          : <GridContainer spacing={4} direction='column' justify='center' alignItems='center'>
+                            </Button>
+                            : <GridContainer spacing={4} direction='column' justify='center' alignItems='center'>
                               <GridItem xs={12} sm={12} md={12} style={{ marginBottom: '50px' }}>
                                 <Button
                                   round
@@ -432,37 +432,37 @@ export default function Scholarship () {
                                 </Button>
                               </GridItem>
                             </GridContainer>}
-                          </CardFooter>
+                        </CardFooter>
                         <SAFApplyModal
-                            open={openSafApply}
-                            setOpen={setOpenSafApply}
-                            setUpdated={setUpdated}
-                            setSuccess={setSuccess}
-                            setErr={setErr}
-                            setErrMsg={setErrMsg}
-                            setSuccessMsg={setSuccessMsg}
-                          />
+                          open={openSafApply}
+                          setOpen={setOpenSafApply}
+                          setUpdated={setUpdated}
+                          setSuccess={setSuccess}
+                          setErr={setErr}
+                          setErrMsg={setErrMsg}
+                          setSuccessMsg={setSuccessMsg}
+                        />
                         <SAFEditModal
-                            open={openSafEdit}
-                            setOpen={setOpenSafEdit}
-                            data={safApplnData}
-                            setUpdated={setUpdated}
-                            setSuccess={setSuccess}
-                            setErr={setErr}
-                            setErrMsg={setErrMsg}
-                            setSuccessMsg={setSuccessMsg}
-                          />
+                          open={openSafEdit}
+                          setOpen={setOpenSafEdit}
+                          data={safApplnData}
+                          setUpdated={setUpdated}
+                          setSuccess={setSuccess}
+                          setErr={setErr}
+                          setErrMsg={setErrMsg}
+                          setSuccessMsg={setSuccessMsg}
+                        />
 
                         <SAFDeleteModal
-                            open={openSafDelete}
-                            setOpen={setOpenSafDelete}
-                            setUpdated={setUpdated}
-                            setSuccess={setSuccess}
-                            setErr={setErr}
-                            setAppln={setSafAppln}
-                            setErrMsg={setErrMsg}
-                            setSuccessMsg={setSuccessMsg}
-                          />
+                          open={openSafDelete}
+                          setOpen={setOpenSafDelete}
+                          setUpdated={setUpdated}
+                          setSuccess={setSuccess}
+                          setErr={setErr}
+                          setAppln={setSafAppln}
+                          setErrMsg={setErrMsg}
+                          setSuccessMsg={setSuccessMsg}
+                        />
                         </Card>
                       : null}
                   </div>

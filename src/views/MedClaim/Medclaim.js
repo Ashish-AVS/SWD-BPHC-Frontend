@@ -62,22 +62,24 @@ export default function Medclaim () {
   const token = JSON.parse(localStorage.getItem('tokens'))
 
   React.useEffect(() => {
-    try {
-      const fetchData1 = async () => {
-        const result = await fetch(`${BaseUrl}/api/ll/insurance`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (res.err === false) {
-          setMedData(res.data)
-        } else if (res.err === true) {
-          alert(res.msg)
+    if (navigator.onLine) {
+      try {
+        const fetchData1 = async () => {
+          const result = await fetch(`${BaseUrl}/api/ll/insurance`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (res.err === false) {
+            setMedData(res.data)
+          } else if (res.err === true) {
+            alert(res.msg)
+          }
         }
+        fetchData1()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData1()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [])
   return (
     <div>

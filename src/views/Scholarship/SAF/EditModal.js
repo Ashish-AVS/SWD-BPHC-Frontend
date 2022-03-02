@@ -308,16 +308,16 @@ export default function EditModal ({
                   <CustomInput
                     labelText={<p>Father's Name<span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.fname,
-                        name: 'fname',
-                        type: 'text',
-                        disabled: !edit
+                      defaultValue: safData.fname,
+                      name: 'fname',
+                      type: 'text',
+                      disabled: !edit
 
-                      }}
+                    }}
                   />
                 </GridItem>
 
@@ -325,31 +325,31 @@ export default function EditModal ({
                   <CustomInput
                     labelText={<p>Mother's Name <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.mname,
-                        name: 'mname',
-                        type: 'text',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.mname,
+                      name: 'mname',
+                      type: 'text',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText={<p>Father's Occupation <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.fprof,
-                        name: 'fprof',
-                        type: 'text',
-                        disabled: !edit
+                      defaultValue: safData.fprof,
+                      name: 'fprof',
+                      type: 'text',
+                      disabled: !edit
 
-                      }}
+                    }}
                   />
                 </GridItem>
 
@@ -357,60 +357,60 @@ export default function EditModal ({
                   <CustomInput
                     labelText={<p>Mother's Profession <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.mprof,
-                        name: 'mprof',
-                        type: 'text',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.mprof,
+                      name: 'mprof',
+                      type: 'text',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText={<p>Father's Income(in ₹) <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
 
-                        defaultValue: safData.fsalary,
-                        name: 'fsalary',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.fsalary,
+                      name: 'fsalary',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText={<p>Mother's Income(in ₹) <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.msalary,
-                        name: 'msalary',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.msalary,
+                      name: 'msalary',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText={<p>Father's Income Certificate<span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.fcert,
-                        name: 'fcert',
-                        type: 'text',
-                        disabled: !edit
+                      defaultValue: safData.fcert,
+                      name: 'fcert',
+                      type: 'text',
+                      disabled: !edit
 
-                      }}
+                    }}
                   />
                 </GridItem>
 
@@ -418,29 +418,29 @@ export default function EditModal ({
                   <CustomInput
                     labelText={<p>Mother's Income Certificate <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.mcert,
-                        name: 'mcert',
-                        type: 'text',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.mcert,
+                      name: 'mcert',
+                      type: 'text',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText={<p>Phone Number<span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.phone,
-                        name: 'phone',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.phone,
+                      name: 'phone',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
 
@@ -448,30 +448,30 @@ export default function EditModal ({
                   <CustomInput
                     labelText={<p>Bank Account Number<span style={{ color: 'red' }}>**</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.bank_ac_no,
-                        name: 'bank_ac_no',
-                        type: 'text',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.bank_ac_no,
+                      name: 'bank_ac_no',
+                      type: 'text',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
                   <CustomInput
                     labelText={<p>Current CGPA <span style={{ color: 'red' }}>*</span></p>}
                     formControlProps={{
-                        fullWidth: true
-                      }}
+                      fullWidth: true
+                    }}
                     onChange={onChange}
                     inputProps={{
-                        defaultValue: safData.cgpa,
-                        name: 'cgpa',
-                        type: 'number',
-                        disabled: !edit
-                      }}
+                      defaultValue: safData.cgpa,
+                      name: 'cgpa',
+                      type: 'number',
+                      disabled: !edit
+                    }}
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={6}>
@@ -482,38 +482,38 @@ export default function EditModal ({
                     disabled={!edit}
                     checked={safData.loan}
                     onChange={(e) => {
-                        const { checked } = e.target
-                        if (checked) {
-                          setSafData(prevData => ({
-                            ...prevData,
-                            loan: 1
-                          }))
-                        } else {
-                          setSafData(prevData => ({
-                            ...prevData,
-                            loan: 0
-                          }))
-                        }
-                      }}
+                      const { checked } = e.target
+                      if (checked) {
+                        setSafData(prevData => ({
+                          ...prevData,
+                          loan: 1
+                        }))
+                      } else {
+                        setSafData(prevData => ({
+                          ...prevData,
+                          loan: 0
+                        }))
+                      }
+                    }}
                     labelPlacement='start'
                   />
                 </GridItem>
                 <GridItem xs={12} sm={12} md={8}>
                   {!edit
                     ? <TextField
-                          id='outlined-multiline-static'
-                          label='Submitted Documents'
-                          inputProps={{
-                              readOnly: true
-                            }}
-                          multiline
-                          rows={4}
-                          defaultValue={safData.attached}
-                          variant='outlined'
-                          value={safData.attached}
-                          onChange={onChange}
-                          fullWidth
-                        />
+                        id='outlined-multiline-static'
+                        label='Submitted Documents'
+                        inputProps={{
+                          readOnly: true
+                        }}
+                        multiline
+                        rows={4}
+                        defaultValue={safData.attached}
+                        variant='outlined'
+                        value={safData.attached}
+                        onChange={onChange}
+                        fullWidth
+                      />
                     : null}
                 </GridItem>
               </GridContainer>
@@ -541,129 +541,129 @@ export default function EditModal ({
                   <h5 style={{ display: 'flex', justifyContent: 'center' }}><b>Submitted Documents <span style={{ color: 'red' }}>*</span></b></h5>
                   <FormGroup aria-label='position' column style={{ display: 'flex', justifyContent: 'flex-start' }}>
                     <FormControlLabel
-                        control={<Checkbox color='primary' />}
-                        label="Father/Guardian's ITR"
-                        value="Father/Guardian's ITR"
-                        name='fitr'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label="Father/Guardian's ITR"
+                      value="Father/Guardian's ITR"
+                      name='fitr'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label="Mother/Guardian's ITR"
-                        name='mitr'
-                        value="Mother/Guardian's ITR"
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label="Mother/Guardian's ITR"
+                      name='mitr'
+                      value="Mother/Guardian's ITR"
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label='Bank Statement of Father/Guardian'
-                        value='Bank Statement of Father/Guardian'
-                        name='fbs'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label='Bank Statement of Father/Guardian'
+                      value='Bank Statement of Father/Guardian'
+                      name='fbs'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label='Bank Statement of Mother/Guardian'
-                        value='Bank Statement of Mother/Guardian'
-                        name='mbs'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label='Bank Statement of Mother/Guardian'
+                      value='Bank Statement of Mother/Guardian'
+                      name='mbs'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label='Pension Certificate(if applicable)'
-                        value='Pension Certificate'
-                        name='pc'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label='Pension Certificate(if applicable)'
+                      value='Pension Certificate'
+                      name='pc'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label='Form 16(if applicable)'
-                        value='Form 16'
-                        name='f16'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label='Form 16(if applicable)'
+                      value='Form 16'
+                      name='f16'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label="Tehsildar's Income Certificate(if applicable)"
-                        value="Tehsildar's Income Certificate"
-                        name='tehsil'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label="Tehsildar's Income Certificate(if applicable)"
+                      value="Tehsildar's Income Certificate"
+                      name='tehsil'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label='Computation of Income(Father)'
-                        value='Computation of Income(Father)'
-                        name='fci'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label='Computation of Income(Father)'
+                      value='Computation of Income(Father)'
+                      name='fci'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
                     <FormControlLabel
 
-                        control={<Checkbox color='primary' />}
-                        label='Computation of Income(Mother)'
-                        value='Computation of Income(Mother)'
-                        name='mci'
-                        onChange={onCheckChange}
-                        labelPlacement='end'
-                      />
+                      control={<Checkbox color='primary' />}
+                      label='Computation of Income(Mother)'
+                      value='Computation of Income(Mother)'
+                      name='mci'
+                      onChange={onCheckChange}
+                      labelPlacement='end'
+                    />
 
                   </FormGroup>
                 </GridItem>
                 <GridItem xs={12} sm={12} md={12}>
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={2}>
-                        <FormGroup aria-label='position' row style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'row' }}>
-                            <FormControlLabel
-                                 control={<Checkbox color='primary' />}
-                                 label='Others'
-                                 value='Others'
-                                 name='mci'
-                                 onChange={(e) => {
-                                   const { checked } = e.target
-                                   if (checked === true) {
-                                     setOthers(true)
-                                   } else {
-                                     setOthers(false)
-                                     setSafData(prevState => ({
-                                       ...prevState,
-                                       others: ''
-                                     }))
-                                   }
-                                 }}
-                                 labelPlacement='end'
-                               />
-                          </FormGroup>
-                      </GridItem>
+                      <FormGroup aria-label='position' row style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'row' }}>
+                        <FormControlLabel
+                          control={<Checkbox color='primary' />}
+                          label='Others'
+                          value='Others'
+                          name='mci'
+                          onChange={(e) => {
+                            const { checked } = e.target
+                            if (checked === true) {
+                              setOthers(true)
+                            } else {
+                              setOthers(false)
+                              setSafData(prevState => ({
+                                ...prevState,
+                                others: ''
+                              }))
+                            }
+                          }}
+                          labelPlacement='end'
+                        />
+                      </FormGroup>
+                    </GridItem>
                     <GridItem xs={12} sm={12} md={8}>
-                        {others
-                            ? <TextField
-                                   id='outlined-multiline-static'
-                                   label='Other Documents(with reasons)'
-                                   name='others'
-                                   multiline
-                                   rows={4}
-                                   defaultValue=''
-                                   variant='outlined'
-                                   value={safData.others}
-                                   onChange={onChange}
-                                   fullWidth
-                                 />
-                            : null}
-                      </GridItem>
+                      {others
+                        ? <TextField
+                            id='outlined-multiline-static'
+                            label='Other Documents(with reasons)'
+                            name='others'
+                            multiline
+                            rows={4}
+                            defaultValue=''
+                            variant='outlined'
+                            value={safData.others}
+                            onChange={onChange}
+                            fullWidth
+                          />
+                        : null}
+                    </GridItem>
                   </GridContainer>
 
                 </GridItem>

@@ -61,51 +61,53 @@ export default function Deductions () {
   const classes = useStyles()
   const [empty, setEmpty] = React.useState(false)
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/deductions?uid=${uid}`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-
-        if (res.err === false) {
-          if (res.data.length === 0) {
-            setEmpty(true)
-          } else {
-            setDeduction(res.data.map((item) => {
-              const OrderedOn = new Date(parseInt(item.time))
-              let goodieDetails = ''
-              if (item.g_type === 0) {
-                goodieDetails = parseInt(item.xs) ? `${goodieDetails} XS-${item.xs}` : goodieDetails
-                goodieDetails = parseInt(item.s) ? `${goodieDetails} S-${item.s}` : goodieDetails
-                goodieDetails = parseInt(item.m) ? `${goodieDetails} M-${item.m}` : goodieDetails
-                goodieDetails = parseInt(item.l) ? `${goodieDetails} L-${item.l}` : goodieDetails
-                goodieDetails = parseInt(item.xl) ? `${goodieDetails} XL-${item.xl}` : goodieDetails
-                goodieDetails = parseInt(item.xxl) ? `${goodieDetails} XXL-${item.xxl}` : goodieDetails
-                goodieDetails = parseInt(item.xxxl) ? `${goodieDetails} XXXL-${item.xxxl}` : goodieDetails
-              } else if (item.g_type === 1) {
-                goodieDetails = ` Qty - ${item.net_quantity} `
-              } else if (item.g_type === 2) {
-                goodieDetails = 'Fund'
-              }
-              const data = []
-              data.push(item.g_name, goodieDetails, item.total_amount, OrderedOn.toDateString())
-              return data
-            })
-            )
-          }
-          res.data.forEach(element => {
-            setTotAmt(totAmt => totAmt + parseInt(element.total_amount))
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/deductions?uid=${uid}`, {
+            headers: { Authorization: token }
           })
-          setIsFetching(false)
-        } else if (res.err === true && result.status === 401) {
-          logout()
+          const res = await result.json()
+
+          if (res.err === false) {
+            if (res.data.length === 0) {
+              setEmpty(true)
+            } else {
+              setDeduction(res.data.map((item) => {
+                const OrderedOn = new Date(parseInt(item.time))
+                let goodieDetails = ''
+                if (item.g_type === 0) {
+                  goodieDetails = parseInt(item.xs) ? `${goodieDetails} XS-${item.xs}` : goodieDetails
+                  goodieDetails = parseInt(item.s) ? `${goodieDetails} S-${item.s}` : goodieDetails
+                  goodieDetails = parseInt(item.m) ? `${goodieDetails} M-${item.m}` : goodieDetails
+                  goodieDetails = parseInt(item.l) ? `${goodieDetails} L-${item.l}` : goodieDetails
+                  goodieDetails = parseInt(item.xl) ? `${goodieDetails} XL-${item.xl}` : goodieDetails
+                  goodieDetails = parseInt(item.xxl) ? `${goodieDetails} XXL-${item.xxl}` : goodieDetails
+                  goodieDetails = parseInt(item.xxxl) ? `${goodieDetails} XXXL-${item.xxxl}` : goodieDetails
+                } else if (item.g_type === 1) {
+                  goodieDetails = ` Qty - ${item.net_quantity} `
+                } else if (item.g_type === 2) {
+                  goodieDetails = 'Fund'
+                }
+                const data = []
+                data.push(item.g_name, goodieDetails, item.total_amount, OrderedOn.toDateString())
+                return data
+              })
+              )
+            }
+            res.data.forEach(element => {
+              setTotAmt(totAmt => totAmt + parseInt(element.total_amount))
+            })
+            setIsFetching(false)
+          } else if (res.err === true && result.status === 401) {
+            logout()
+          }
         }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [token, uid])
   const logout = () => {
     localStorage.removeItem('tokens')

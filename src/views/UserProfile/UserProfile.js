@@ -141,38 +141,40 @@ export default function UserProfile () {
   // const [valueChanged,setValueChanged]=React.useState(false);
   const [updatingProfile, setUpdatingProfile] = React.useState(false)
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await fetch(`${BaseUrl}/api/usr/profile`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (res.err === false) {
-          setProfile(res.data.profile)
-          setHostels(res.data.hostels)
-          setIsFetching(false)
-        } else if (res.err === true && result.status === 401) {
-          setIsSessionError(true)
-          logout()
+    if (navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await fetch(`${BaseUrl}/api/usr/profile`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (res.err === false) {
+            setProfile(res.data.profile)
+            setHostels(res.data.hostels)
+            setIsFetching(false)
+          } else if (res.err === true && result.status === 401) {
+            setIsSessionError(true)
+            logout()
+          }
         }
-      }
-      fetchData()
-      const fetchData1 = async () => {
-        const result = await fetch(`${BaseUrl}/api/ll/mentor`, {
-          headers: { Authorization: token }
-        })
-        const res = await result.json()
-        if (res.err === false) {
-          setMentorData(res.data)
-        } else if (res.err === true && result.status === 401) {
-          setIsSessionError(true)
-          logout()
+        fetchData()
+        const fetchData1 = async () => {
+          const result = await fetch(`${BaseUrl}/api/ll/mentor`, {
+            headers: { Authorization: token }
+          })
+          const res = await result.json()
+          if (res.err === false) {
+            setMentorData(res.data)
+          } else if (res.err === true && result.status === 401) {
+            setIsSessionError(true)
+            logout()
+          }
         }
+        fetchData1()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData1()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [uid, token])
 
   React.useEffect(() => {

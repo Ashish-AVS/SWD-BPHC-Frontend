@@ -35,7 +35,8 @@ import { BaseUrl } from 'variables/BaseUrl'
 import { GoogleLogin } from 'react-google-login'
 
 const useStyles = makeStyles(styles)
-
+window.localStorage.removeItem('tokens')
+window.localStorage.removeItem('data')
 const data = {
   name: '',
   id: '',

@@ -47,22 +47,24 @@ export default function Dashboard () {
   const [roomDetails, setRoomDetails] = React.useState([])
   const token = JSON.parse(localStorage.getItem('tokens'))
   React.useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const result = await axios.get(`${BaseUrl}/api/rooms`, {
-          headers: {
-            Authorization: token
+    if (window.navigator.onLine) {
+      try {
+        const fetchData = async () => {
+          const result = await axios.get(`${BaseUrl}/api/rooms`, {
+            headers: {
+              Authorization: token
+            }
+          })
+          // const res = await result.json();
+          if (result.data.err === false) { setRoomDetails(result.data.data) } else {
+            alert(result.data.err)
           }
-        })
-        // const res = await result.json();
-        if (result.data.err === false) { setRoomDetails(result.data.data) } else {
-          alert(result.data.err)
         }
+        fetchData()
+      } catch (err) {
+        console.log(err)
       }
-      fetchData()
-    } catch (err) {
-      console.log(err)
-    }
+    } else { window.location.assign('/login-page/'); alert('session expired') }
   }, [])
 
   //   React.useEffect(()=>{

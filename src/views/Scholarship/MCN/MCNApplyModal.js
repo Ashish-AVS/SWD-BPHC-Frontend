@@ -473,17 +473,17 @@ export default function GraceModal ({
                     value='Others'
                     name='mci'
                     onChange={(e) => {
-                        const { checked } = e.target
-                        if (checked === true) {
-                          setOthers(true)
-                        } else {
-                          setOthers(false)
-                          setMcnData(prevState => ({
-                            ...prevState,
-                            others: ''
-                          }))
-                        }
-                      }}
+                      const { checked } = e.target
+                      if (checked === true) {
+                        setOthers(true)
+                      } else {
+                        setOthers(false)
+                        setMcnData(prevState => ({
+                          ...prevState,
+                          others: ''
+                        }))
+                      }
+                    }}
                     labelPlacement='end'
                   />
                 </FormGroup>
