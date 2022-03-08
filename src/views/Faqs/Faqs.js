@@ -87,10 +87,11 @@ export default function FAQ () {
                                     expandIcon={<ExpandMoreIcon />}
                                     aria-controls='panel1a-content'
                                     id='panel1a-header'
+                                    style={{'border-bottom': '1px solid black', margin: 'none', 'min-height': '48px'}}
                                   >
-                                    <b>{qa.q}</b>
+                                    <b style={{'font-weight': 'bold'}}>{qa.q}</b>
                                   </AccordionSummary>
-                                  <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '400' }}>
+                                  <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '15px', fontWeight: '200', padding: '16px 32px' }}>
                                     <Autolinker text={qa.a} />
                                   </AccordionDetails>
                                 </Accordion>
