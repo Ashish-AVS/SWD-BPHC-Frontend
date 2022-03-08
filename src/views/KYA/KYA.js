@@ -64,20 +64,18 @@ export default function FAQ () {
             return (
               <div>
                 {/* <strong><h3 style={{display:"flex",justifyContent:'center'}}>{content.main_topic.toUpperCase()}</h3></strong> */}
-                <Accordion style={{ marginTop: '5px', background: '#e8eaed' }}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls='panel1a-content'
-                    id='panel1a-header'
-                    style={{ fontSize: '14px' }}
-                  >
-                    <b>{content.question}</b>
-                  </AccordionSummary>
-                  <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '400', background: '#f5f7fa' }}>
-                    <Autolinker text={content.ans} />
-                  </AccordionDetails>
-                </Accordion>
-
+                <Accordion style={{ marginTop: '5px'}}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls='panel1a-content'
+                        style={{'border-bottom': '1px solid black', margin: 'none', 'min-height': '48px'}}
+                      >
+                        <b style={{'font-weight': 'bold !important'}}>{content.question}</b>
+                      </AccordionSummary>
+                      <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '15px', fontWeight: '200', padding: '16px 32px', background: '#e8e8e8' }}>
+                        <Autolinker text={content.answer} />
+                      </AccordionDetails>
+                    </Accordion>
               </div>
             )
           })
@@ -99,11 +97,11 @@ export default function FAQ () {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls='panel1a-content'
                   id='panel1a-header'
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '14px', borderBottom: '1px solid black' }}
                 >
-                  <b>{content.topic}</b>
+                  <b style={{fontWeight: 'bold'}}>{content.topic}</b>
                 </AccordionSummary>
-                <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '400', background: '#f5f7fa' }}>
+                <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '15px', fontWeight: '200', background: '#e8e8e8', padding: '16px 32px' }}>
                   <Autolinker text={content.text} />
                 </AccordionDetails>
               </Accordion>
@@ -134,7 +132,7 @@ export default function FAQ () {
                     >
                       <b>{item.course_no}</b>
                     </AccordionSummary>
-                    <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '400', background: '#f5f7fa' }}>
+                    <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '200', background: '#e8e8e8', padding: '16px 32px' }}>
                       <Autolinker text={item.advice} />
                     </AccordionDetails>
                   </Accordion>
@@ -167,7 +165,7 @@ export default function FAQ () {
                         >
                           <b>{item.topic}</b>
                         </AccordionSummary>
-                        <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '400', background: '#f5f7fa' }}>
+                        <AccordionDetails style={{ whiteSpace: 'pre-wrap', fontSize: '17.5px', fontWeight: '200', background: '#e8e8e8', padding: '16px 32px' }}>
                           <Autolinker text={item.text} />
                         </AccordionDetails>
                       </Accordion>
@@ -193,7 +191,7 @@ export default function FAQ () {
 
   return (
     <div>
-      <div className={classes.typo} style={{ marginTop: '-50px' }}>
+      <div className={classes.typo} style={{ marginTop: '-50px', width: '100%', textAlign: 'center', 'paddingLeft': '0' }}>
         <h2><strong>STUDENT WELFARE DIVISION</strong></h2>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
